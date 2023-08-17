@@ -15,30 +15,31 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 
-//en este script van las paginas
-app.get("/", (req, res) => {
-    console.log("recibido");
-    const file = path.join(process.cwd(), 'views', 'index.html');
+const formarPagina = (pagina) => {//devuelve una pagina entera, juntando la cabecera, lo principal y el footer
+    const fileUp = path.join(process.cwd(), 'views', 'up.html');
+    const stringifiedUp = readFileSync(fileUp, 'utf8');
+    const fileDown = path.join(process.cwd(), 'views', 'down.html');
+    const stringifiedDown = readFileSync(fileDown, 'utf8');
+    const file = path.join(process.cwd(), 'views', pagina);
     const stringified = readFileSync(file, 'utf8');
-    res.end(stringified);
+    const final = stringifiedUp + stringified + stringifiedDown;
+    console.log(final);
+    return final;
+}
+
+//en este script van las paginas
+app.get("/", (req, res) => {//inicio
+    console.log("recibido");
+    res.send(formarPagina('inicio.html'));
 });
 app.get("/rooms", (req, res) => {
-    res.send("rooms");
-    // const file = path.join(process.cwd(), 'views', 'index.html');
-    // const stringified = readFileSync(file, 'utf8');
-    // res.end(stringified);
+    res.send(formarPagina('inicio.html'));
 });
 app.get("/account", (req, res) => {
-    res.send("account");
-    // const file = path.join(process.cwd(), 'views', 'index.html');
-    // const stringified = readFileSync(file, 'utf8');
-    // res.end(stringified);
+    res.send(formarPagina('inicio.html'));
 });
 app.get("/about", (req, res) => {
-    res.send("about");
-    // const file = path.join(process.cwd(), 'views', 'index.html');
-    // const stringified = readFileSync(file, 'utf8');
-    // res.end(stringified);
+    res.send(formarPagina('inicio.html'));
 });
 
 
