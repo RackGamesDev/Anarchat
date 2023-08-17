@@ -23,7 +23,6 @@ const formarPagina = (pagina) => {//devuelve una pagina entera, juntando la cabe
     const file = path.join(process.cwd(), 'views', pagina);
     const stringified = readFileSync(file, 'utf8');
     const final = stringifiedUp + stringified + stringifiedDown;
-    console.log(final);
     return final;
 }
 
@@ -33,13 +32,13 @@ app.get("/", (req, res) => {//inicio
     res.send(formarPagina('inicio.html'));
 });
 app.get("/rooms", (req, res) => {
-    res.send(formarPagina('inicio.html'));
+    res.send(formarPagina('rooms.html'));
 });
 app.get("/account", (req, res) => {
-    res.send(formarPagina('inicio.html'));
+    res.send(formarPagina('account.html'));
 });
 app.get("/about", (req, res) => {
-    res.send(formarPagina('inicio.html'));
+    res.send(formarPagina('about.html'));
 });
 
 

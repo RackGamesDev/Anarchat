@@ -12,6 +12,9 @@ html *{
     text-align: center;
     align-content: center;
 }
+.hidden{
+    visibility: hidden;
+}
 
 @keyframes transicion-barra-item {/*transicion de los items de la barra*/
     from{
