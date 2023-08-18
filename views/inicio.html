@@ -1,6 +1,27 @@
-<p>inicio</p>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<div id="caja-start" class="centrar">
+    <h1><b>Wellcome to Anarchat!</b></h1>
+    <div id="con-cuenta"><!--si no tienes iniciada sesion sale este div-->
+        <h2>Hey user X, Why not chatting with someone?</h2>
+        <br>
+        <a href="/rooms">Enter the Rooms section</a>
+        <br><br><br>
+        <img src="https://imgur.com/18zqPqm.png" alt="img">
+    </div>
+    <br><br>
+    <div id="sin-cuenta"><!--si tienes iniciada sesion sale este div-->
+        <h2>Stop right there!</h2>
+        <p>Papers, please! First you will need an <b>account</b></p>
+        <p>It's super easy to create one, you just need a <b>name</b> and a <b>password</b></p>
+        <br>
+        <a href="/signin">Click here to create a new Anarcat account</a>
+        <br><br><br>
+        <a href="/login">Click here to login with an Anarcat account</a>
+        <br> <br> <br>
+        <img src="https://imgur.com/eDb6sAS.png" alt="img">
+    </div>
+</div>
 
 <script>
     document.getElementById("btn-start").classList.add("barra-item-activado");
+    console.log(window.innerWidth);
 </script>

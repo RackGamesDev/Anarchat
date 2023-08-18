@@ -49,9 +49,7 @@ app.use("/", rutaRecursos);
 
 app.get("/*", (req, res) => {
     console.log("no");
-    const file = path.join(process.cwd(), 'views', 'err404.html');
-    const stringified = readFileSync(file, 'utf8');
-    res.end(stringified);
+    res.send(formarPagina('err404.html'));
 });
 
 app.listen(PORT, () => console.log("levantado en " + PORT));

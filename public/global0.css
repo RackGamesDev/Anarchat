@@ -1,8 +1,29 @@
-/*.root{
-    
-}*/
+:root{
+    --colorBarraNo: #425c6d;/*fondo de los items de la barra cuando no estan seleccionados*/
+    --colorBarraSi: #7ea2b9;/*fondo de los items de la barra cuando si estan seleccionados*/
+    --colorLetraBarraNo: white;/*letra de los items de la barra cuando no estan seleccionados*/
+    --colorLetraBarraSi: black;/*letra de los items de la barra cuando si estan seleccionados*/
+    --colorBarra: #6096ba;/*color de fondo de la barra de navegacion*/
+    --colorBarraSeleccionado: #2fcfcf;/*color de fondo del item seleccionado de la barra*/
+
+    --colorFondoAbajo: #141414;/*el fondo de abajo del todo*/
+    --colorLetraAbajo: white;/*la letra del fondo de abajo del todo*/
+
+    --colorFondo: white;/*color de fondo*/
+    --colorFondo2: #e2efff;/*color de fondo de otras cosas*/
+    --colorLetra1: black;/*color de letra tipo 1*/
+    --colorLetra2: #181818;/*color de letra tipo 2*/
+    --colorLetra3: white;/*color de letra tipo 2*/
+    --colorBorde: black;/*el color de los bordes*/
+
+    --colorBoton: #3e4142;/*color de fondo de los botones*/
+}
 html *{
     font-family:'Courier New', Courier, monospace;
+    background-color: var(--colorFondo);
+}
+main img{
+    border: 2px solid black;
 }
 #logo-principal{/*imagen del logo de la pagina principal*/
     height: 100%;
@@ -18,12 +39,12 @@ html *{
 
 @keyframes transicion-barra-item {/*transicion de los items de la barra*/
     from{
-        background-color: #425c6d;
-        color: white;
+        background-color: var(--colorBarraNo);
+        color: var(--colorLetraBarraNo);
     }
     to{
-        background-color: #7ea2b9;
-        color: black;
+        background-color: var(--colorBarraSi);
+        color: var(--colorLetraBarraSi);
     }
 }
 @keyframes animacion-barra{/*animacion de la barra al empezar*/
@@ -35,7 +56,7 @@ html *{
     }
 }
 #barra{/*barra de navegacion*/
-    background-color: #6096ba;
+    background-color: var(--colorBarra);
     display: flex;
     position: sticky;
     left: 0;
@@ -55,28 +76,85 @@ html *{
     width: 25%;
     text-align: center;
     font-size: 1.5rem;
-    background-color: #425c6d;
+    background-color: var(--colorBarraNo);
+    justify-content: center;
 
-    color: white;
+    color: var(--colorLetraBarraNo);
     transition-property: color background-color;
     transition-duration: 0.3s;
     transition-timing-function: ease-in-out;
 }
 .barra-item:hover:not(.barra-item-activado){/*pasando el raton por un item de la barra*/
-    background-color: #7ea2b9;
-    color: black;
+    background-color: var(--colorBarraSi);
+    color: var(--colorLetraBarraSi);;
 }
 .barra-item-activado{/*si estas en esa seccion cambia el item de la barra*/
-    background-color: rgb(47, 207, 207);
-    border: 1px solid black;
+    background-color: var(--colorBarraSeleccionado);
+    border: 1px solid var(--colorBorde);
 }
 
 #footer{/*cuadro de abajo del todo*/
-    background-color: rgb(36, 36, 36);
-    color: white;
     text-align: center;
 }
 #footer>p{/*texto del footer*/
+    background-color: var(--colorFondoAbajo);
     font-size: 1.2rem;
     padding: 15px;
+    color: var(--colorLetraAbajo);
+}
+#footer a{/*enlace del footer*/
+    background-color: var(--colorFondoAbajo);
+    color: var(--colorLetraAbajo);
+}
+.texto-gigante{/*hay algunos textos gigantes*/
+    font-size: 5rem;
+    margin: 2px;
+}
+.centrar{/*simplemente centrar el texto*/
+    text-align: center;
+}
+
+
+#caja-start{/*la caja principal del menu de inicio*/
+    color: var(--colorLetra1);
+}
+#caja-start a{/*enlaces/botones de inicio*/
+    text-decoration: none;
+    padding: 10px;
+    background-color: var(--colorBoton);
+    color: var(--colorLetra3);
+    margin: 10px;
+    font-size: 1.5rem;
+    border: 2px solid var(--colorBorde);
+}
+
+
+
+
+
+
+@media (max-width: 782px){/*para dispositivos verticales*/
+    #logo-arriba{
+        visibility: hidden;
+        width: 0%;
+        height: 0%;
+        position: absolute;
+    }
+    #footer>p{
+        padding: 4px;
+        font-size: 1rem;
+    }
+    #barra{
+        height: 50px;
+    }
+    .barra-item{
+        margin: 4px;
+        padding: 4px;
+        font-size: 1rem;
+    }
+    #caja-start a{
+        font-size: 0.9rem;
+        padding: 2px;
+        margin: 1px;
+    }
 }
