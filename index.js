@@ -40,6 +40,18 @@ app.get("/account", (req, res) => {
 app.get("/about", (req, res) => {
     res.send(formarPagina('about.html'));
 });
+app.get("/login", (req, res) => {
+    res.send(formarPagina('login.html'));
+});
+app.get("/signin", (req, res) => {
+    res.send(formarPagina('signin.html'));
+});
+app.get("/loginSuccess", (req, res) => {
+    res.send(formarPagina('loginSuccess.html'));
+});
+app.get("/logout", (req, res) => {
+    res.send(formarPagina('logout.html'));
+});
 
 
 import ruta from './routes/rutas.js'

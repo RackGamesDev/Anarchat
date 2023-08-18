@@ -1,0 +1,113 @@
+<div class="centrar">
+    <h1>Name yourself!</h1>
+    <h2>You only need a name and a password, you can change it later</h2>
+    <form id="datos">
+        <h3><b>Name</b></h3><input type="text" name="nombre" id="nombre" placeholder=""><!--nombre-->
+        <br>
+        <h3><br><b>Password</b></h3><input type="password" name="contrasegna" id="contrasegna"><!--contrasegna-->
+        <h3><br><b>Password again</b></h3><input type="password" name="contrasegna2" id="contrasegna2"><!--contrasegna2-->
+        <br>
+        <p><input type="checkbox" name="verContrasegna" id="checkContrasegna">Visible</p><!--contrasegna visible-->
+        <br><br>
+        <input type="button" name="terminar" value="I'm ready" id="boton"><!--verificar-->
+    </form>
+    <br><br>
+    <div class="caja-error hidden borde" id="caja-error">
+        <p>The password and the name must be both at least 8 characters long, the name cannot be the password and both password boxes must containt the same text</p>
+    </div>
+    <br>
+    <img src="https://imgur.com/u8lWL5P.png" alt="img">
+</div>
+<br><br><br>
+
+<script>
+    document.getElementById("btn-account").classList.add("barra-item-activado");
+    document.getElementById("logo-arriba").remove();
+    document.querySelector("title").innerHTML = "Anarchat - Sign in";
+
+    const $nombre = document.getElementById("nombre");
+    const $contrasegna = document.getElementById("contrasegna");
+    const $contrasegna2 = document.getElementById("contrasegna2");
+    const $boton = document.getElementById("boton");
+    const $check = document.getElementById("checkContrasegna");
+    const $cajaError = document.getElementById("caja-error");
+
+    $check.checked = false;
+    $check.addEventListener("change", (e) => {
+        if($check.checked){
+            $contrasegna.type="text";
+            $contrasegna2.type="text";
+        } else {
+            $contrasegna.type="password";
+            $contrasegna2.type="password";
+        }
+    });
+
+    const enviar = async (nombre, contrasegna) => {//ENVIAR DATOS
+        console.log("exito");
+    }
+
+    $boton.addEventListener("click", () => {//VERIFICAR DATOS
+        const nombre = $nombre.value;
+        const contrasegna = $contrasegna.value;
+        const contrasegna2 = $contrasegna2.value;
+        if(nombre.length < 7 || contrasegna.length < 7 || contrasegna2.length < 7 || contrasegna != contrasegna2 || nombre == contrasegna || nombre == contrasegna2){
+            $cajaError.classList.remove("hidden");
+        } else {
+            enviar(nombre, contrasegna);
+        }
+    });
+    
+
+    let rand = Math.floor(Math.random() * 15);
+    switch (rand){
+        case 0:
+            $nombre.placeholder = "Xx_MasterSlayer_xX";
+        break;
+        case 1:
+            $nombre.placeholder = "I_EpicMountain_I";        
+        break;
+        case 2:
+            $nombre.placeholder = "JosiasIV";
+        break;
+        case 3:
+            $nombre.placeholder = "TheGamerPro1945";
+        break;
+        case 4:
+            $nombre.placeholder = "ThisUser33";
+        break;
+        case 5:
+            $nombre.placeholder = "xX_TheFireMachine_Xx";
+        break;
+        case 6:
+            $nombre.placeholder = "CoolAnarchatExample9";
+        break;
+        case 7:
+            $nombre.placeholder = "pao";
+        break;
+        case 8:
+            $nombre.placeholder = "asdfasdg";
+        break;
+        case 9:
+            $nombre.placeholder = "SuperRandomUser999";
+        break;
+        case 10:
+            $nombre.placeholder = "UltraMegaExampleName1";
+        break;
+        case 11:
+            $nombre.placeholder = "ReyTilin87";
+        break;
+        case 12:
+            $nombre.placeholder = "BubbleDestructorDestroyer123";
+        break;
+        case 13:
+            $nombre.placeholder = "LegendaryPear1411";
+        break;
+        case 14:
+            $nombre.placeholder = "Nyhphyn555";
+        break;
+        case 15:
+            $nombre.placeholder = "The_Name";
+        break;
+    }
+</script>

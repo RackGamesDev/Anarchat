@@ -17,6 +17,7 @@
     --colorBorde: black;/*el color de los bordes*/
 
     --colorBoton: #3e4142;/*color de fondo de los botones*/
+    --colorError: red;/*color para cosas malas*/
 }
 html *{
     font-family:'Courier New', Courier, monospace;
@@ -35,6 +36,8 @@ main img{
 }
 .hidden{
     visibility: hidden;
+    width: 0px;
+    height: 0px;
 }
 
 @keyframes transicion-barra-item {/*transicion de los items de la barra*/
@@ -77,7 +80,6 @@ main img{
     text-align: center;
     font-size: 1.5rem;
     background-color: var(--colorBarraNo);
-    justify-content: center;
 
     color: var(--colorLetraBarraNo);
     transition-property: color background-color;
@@ -86,7 +88,7 @@ main img{
 }
 .barra-item:hover:not(.barra-item-activado){/*pasando el raton por un item de la barra*/
     background-color: var(--colorBarraSi);
-    color: var(--colorLetraBarraSi);;
+    color: var(--colorLetraBarraSi);
 }
 .barra-item-activado{/*si estas en esa seccion cambia el item de la barra*/
     background-color: var(--colorBarraSeleccionado);
@@ -129,8 +131,46 @@ main img{
 }
 
 
-
-
+form input[type="text"], form input[type="password"]{/*todos los text input*/
+    width: 300px;
+    font-size: 1.2rem;
+    border: 2px solid var(--colorBorde);
+}
+form input[type="button"]{/*todos los button input*/
+    font-size: 1.2rem;
+    border: 2px solid var(--colorBorde);
+    padding: 10px;
+    background-color: var(--colorBarraNo);
+    color: var(--colorLetraBarraNo);
+    transition-property: color background-color;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+}
+form input[type="button"]:hover{/*input boton cuando pasas el raton*/
+    background-color: var(--colorBarraSi);
+    color: var(--colorLetraBarraSi);
+}
+form input[type="checkbox"]{/*todos los checkbox input*/
+    height: 15px;
+    width: 15px;
+}
+.caja-error{/*cuando un form de error sale aqui dentro*/
+    background-color: var(--colorError);
+    border: 1px solid var(--colorBorde);
+}
+.caja-error>p{/*texto del error*/
+    padding: 10px;
+    background-color: var(--colorError);
+}
+.caja-error a{/*crear cuenta desde el error*/
+    text-decoration: none;
+    background-color: var(--colorBoton);
+    color: var(--colorLetra3);
+    margin: 10px;
+    font-size: 1.5rem;
+    border: 2px solid var(--colorBorde);
+    padding: 5px;
+}
 
 
 @media (max-width: 782px){/*para dispositivos verticales*/

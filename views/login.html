@@ -1,0 +1,53 @@
+<div class="centrar">
+    <h1>Who are you?</h1>
+    <h2>Login using only your name and your password</h2>
+    <form id="datos">
+        <h3><b>Name</b></h3><input type="text" name="nombre" id="nombre"><!--nombre-->
+        <br>
+        <h3><br><b>Password</b></h3><input type="password" name="contrasegna" id="contrasegna"><!--contrasegna-->
+        <br>
+        <p><input type="checkbox" name="verContrasegna" id="checkContrasegna">Visible</p><!--contrasegna visible-->
+        <br>
+        <input type="button" name="terminar" value="I'm ready" id="boton"><!--verificar-->
+    </form>
+    <br><br>
+    <div class="caja-error hidden borde" id="caja-error">
+        <p>There was an error with your login, maybe the password or the name are incorrects. Or you don't have an account <p><a href="/signin">You can create one here</a></p></p>
+        
+    </div>
+    <br>
+    <img src="https://imgur.com/5Sk4E74.png" alt="img">
+</div>
+<br><br><br>
+
+<script>
+    document.getElementById("btn-account").classList.add("barra-item-activado");
+    document.getElementById("logo-arriba").remove();
+    document.querySelector("title").innerHTML = "Anarchat - Log in";
+
+    const $nombre = document.getElementById("nombre");
+    const $contrasegna = document.getElementById("contrasegna");
+    const $boton = document.getElementById("boton");
+    const $check = document.getElementById("checkContrasegna");
+    const $cajaError = document.getElementById("caja-error");
+
+    $check.checked = false;
+    $check.addEventListener("change", (e) => {
+        if($check.checked){
+            $contrasegna.type="text";
+        } else {
+            $contrasegna.type="password";
+        }
+        console.log("aa");
+    });
+
+    const enviar = async () => {//ENVIAR DATOS
+
+    }
+
+    $boton.addEventListener("click", () => {//VERIFICAR DATOS
+        
+    });
+
+    
+</script>
