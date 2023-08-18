@@ -120,7 +120,7 @@ main img{
 #caja-start{/*la caja principal del menu de inicio*/
     color: var(--colorLetra1);
 }
-#caja-start a{/*enlaces/botones de inicio*/
+#caja-start a:not(.noborde){/*enlaces/botones de inicio*/
     text-decoration: none;
     padding: 10px;
     background-color: var(--colorBoton);
