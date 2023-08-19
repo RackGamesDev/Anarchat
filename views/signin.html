@@ -46,6 +46,29 @@
 
     const enviar = async (nombre, contrasegna) => {//ENVIAR DATOS
         console.log("exito");
+        const datos = {nombre: nombre, contrasegna: contrasegna, urlFoto: "", descripcion: "", modoOscuro: "false", salas: []}
+        await fetch("/b/user", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json; charset=utf-8"
+            },
+            body: JSON.stringify(datos)
+        });
+        res = await fetch("/b/userLogin", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json; charset=utf-8"
+            },
+            body: JSON.stringify(datos)
+        });
+        const status2 = await res.json();
+        if(status2.status == "ok"){
+            localStorage.setItem("user", status2.elId);//iniciar sesion
+            localStorage.setItem("dark", status.oscuro);
+            window.location.href = "/";
+        }
+        const status = await res.json();
+        window.location.href = "/";
     }
 
     $boton.addEventListener("click", () => {//VERIFICAR DATOS
@@ -84,7 +107,7 @@
             $nombre.placeholder = "CoolAnarchatExample9";
         break;
         case 7:
-            $nombre.placeholder = "pao";
+            $nombre.placeholder = "pao00000";
         break;
         case 8:
             $nombre.placeholder = "asdfasdg";

@@ -1,5 +1,7 @@
 <div id="con-cuenta"><!--si tienes iniciada sesion sale este div-->
-    <h1>this is your profile</h1>
+    <div id="zona-perfil">
+        <h1 id="nombrado">this is your profile</h1>
+    </div>
 
 </div>
 <div id="caja-start" class="centrar">
@@ -18,7 +20,21 @@
 <br><br><br>
 
 <script>
-    document.getElementById("btn-account").classList.add("barra-item-activado");
-    document.getElementById("logo-arriba").remove();
-    document.querySelector("title").innerHTML = "Anarchat - Account";
+    document.addEventListener("DOMContentLoaded", async () => {
+        document.getElementById("btn-account").classList.add("barra-item-activado");
+        document.getElementById("logo-arriba").remove();
+        document.querySelector("title").innerHTML = "Anarchat - Account";
+
+        if(localStorage.getItem("user") != undefined){
+            document.getElementById("sin-cuenta").remove();
+
+            //PONER DATOS
+            const pet = await fetch("/b/user/" + localStorage.getItem("user"));
+            const res = await pet.json();
+
+            document.getElementById("nombrado").innerHTML = "Hello " + res.nombre + ", this is your profile:";
+        } else {
+            document.getElementById("con-cuenta").remove();
+        }
+    });
 </script>

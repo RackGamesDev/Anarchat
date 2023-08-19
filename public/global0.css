@@ -19,6 +19,14 @@
     --colorBoton: #3e4142;/*color de fondo de los botones*/
     --colorError: red;/*color para cosas malas*/
 }
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+main{
+    min-height: 100%;
+}
 html *{
     font-family:'Courier New', Courier, monospace;
     background-color: var(--colorFondo);
@@ -50,14 +58,14 @@ main img{
         color: var(--colorLetraBarraSi);
     }
 }
-@keyframes animacion-barra{/*animacion de la barra al empezar*/
+/*@keyframes animacion-barra{animacion de la barra al empezar
     0%{
         height: 0%;
     }
     100%{
         height: 100%;
     }
-}
+}*/
 #barra{/*barra de navegacion*/
     background-color: var(--colorBarra);
     display: flex;
@@ -97,6 +105,9 @@ main img{
 
 #footer{/*cuadro de abajo del todo*/
     text-align: center;
+    bottom: 0;
+    left: 0;
+    width: 100%;
 }
 #footer>p{/*texto del footer*/
     background-color: var(--colorFondoAbajo);
@@ -171,6 +182,13 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     border: 2px solid var(--colorBorde);
     padding: 5px;
 }
+
+
+#zona-perfil{/*la caja en la que aparece el perfil*/
+
+}
+
+
 
 
 @media (max-width: 782px){/*para dispositivos verticales*/

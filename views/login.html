@@ -39,14 +39,37 @@
         } else {
             $contrasegna.type="password";
         }
-        console.log("aa");
     });
 
-    const enviar = async () => {//ENVIAR DATOS
+    const enviar = async (usuario, contrasegna) => {//ENVIAR DATOS
+        const datos = {nombre: usuario, contrasegna: contrasegna}
+        res = await fetch("/b/userLogin", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json; charset=utf-8"
+            },
+            body: JSON.stringify(datos)
+        });
+        const status = await res.json();
 
+        if(status.status == "ok"){
+            localStorage.setItem("user", status.elId);//iniciar sesion
+            localStorage.setItem("dark", status.oscuro);
+            window.location.href = "/";
+        } else {
+            $nombre.value = "";
+            $contrasegna.value = "";
+            $cajaError.classList.remove("hidden");
+        }
     }
 
     $boton.addEventListener("click", () => {//VERIFICAR DATOS
+        try{
+            enviar($nombre.value, $contrasegna.value);
+        } catch (err){
+            console.log(err);
+            window.location.href = "/err404";
+        }
         
     });
 

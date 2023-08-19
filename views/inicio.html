@@ -1,7 +1,8 @@
 <div id="caja-start" class="centrar">
-    <h1><b>Wellcome to Anarchat!</b></h1>
+    <br>
+    <h1 class="texto-gigante"><b>Wellcome to Anarchat!</b></h1>
     <div id="con-cuenta"><!--si tienes iniciada sesion sale este div-->
-        <h2>Hey user X, Why not chatting with someone?</h2>
+        <h2 id="nombrado">Hey user X, Why not chatting with someone?</h2>
         <br>
         <a href="/rooms">Enter the Rooms section</a>
         <br><br><br>
@@ -19,16 +20,28 @@
         <br> <br> <br>
         <img src="https://imgur.com/eDb6sAS.png" alt="img">
         <br>
-        <h1>About Anarchat</h1>
+    </div>
+    <h1>About Anarchat</h1>
         <p>Anarchat is a chatting website where you can contact anyone with an account, without restrinctions</p>
         <p>To do it, you have to create an account and join a room with other people, or create your own one</p>
         <br>
         <img src="https://imgur.com/TFDeQfr.png" alt="img">
         <br><br>
-    </div>
 </div>
 
 <script>
-    document.getElementById("btn-start").classList.add("barra-item-activado");
-    console.log(window.innerWidth);
+    document.addEventListener("DOMContentLoaded", async () => {
+        document.getElementById("btn-start").classList.add("barra-item-activado");
+        console.log(window.innerWidth);
+
+        if(localStorage.getItem("user") != undefined){
+            document.getElementById("sin-cuenta").remove();
+            const pet = await fetch("/b/user/" + localStorage.getItem("user"));
+            const res = await pet.json();
+            document.getElementById("nombrado").innerHTML = "Hey " + res.nombre + ", Why not chatting with someone?";
+        } else {
+            document.getElementById("con-cuenta").remove();
+        }
+
+    });
 </script>

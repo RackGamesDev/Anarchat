@@ -59,7 +59,6 @@ const formarPagina = (pagina) => {//devuelve una pagina entera, juntando la cabe
 
 //en esta parte van las paginas
 app.get("/", (req, res) => {//inicio
-    console.log("recibido");
     res.send(formarPagina('inicio.html'));
 });
 app.get("/rooms", (req, res) => {
@@ -93,54 +92,89 @@ app.use("/", rutaRecursos);
 
 //---------------------------------------------------------endpoints para backend:
 //EN ESTA PARTE VAN LOS ENDPOINTS:
+
 app.get("/b/user/:id", async (req, res) => {//conseguir los datos de un usuario, sin contrasegna
     //const cual = req.query.id;
     const { id } = req.params;
-    Usuario.findById(id)
-    .then((data) => {
-        //res.json(data);
-        res.send(data.nombre);
-    })
-    .catch((err) => {
-        console.log(err);
+    if(id != null){
+        Usuario.findById(id)
+        .then((data) => {
+            const dataFinal = {nombre: data.nombre, urlFoto: data.urlFoto, descripcion: data.descripcion, salas: data.salas}
+            res.json(dataFinal);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.redirect("/err404");
+        });
+    } else {
         res.redirect("/err404");
-    });
+    }
 });
 app.post("/b/user", async (req, res) => {//crear un usuario
     const user = Usuario(req.body);
-    user.save()
-    .then((data) => {
-        //res.json(data);
-        res.send("ok, toca el redirect");
-    })
-    .catch((err) => {
+    try{
+        if(user != null && user.nombre.length > 7 && user.contrasegna.length > 7 && user.nombre != user.contrasegna){
+            user.save()
+            .then((data) => {
+                res.redirect("/");
+            })
+            .catch((err) => {
+                console.log(err);
+                res.redirect("/err404");
+            });
+        } else {
+            res.redirect("/err404");
+        }
+    } catch(err){
         console.log(err);
         res.redirect("/err404");
-    });
+    }
+    //INICIAR SESION
 });
 app.delete("/b/user/:id", async (req, res) => {//eliminar un usuario, hace falta la contrasegna
     const { id } = req.params;
-    Usuario.deleteOne({_id: id})
-    .then((data) => {
-        res.send("ok");
-    })
-    .catch((err) => {
-        console.log(err);
+    if(id != null){
+        Usuario.deleteOne({_id: id})
+        .then((data) => {
+            res.send("ok");
+        })
+        .catch((err) => {
+            console.log(err);
+            res.redirect("/err404");
+        });
+    } else {
         res.redirect("/err404");
-    });
-    console.log("delete el " + id);
+    }
 });
 app.put("/b/user/:id", async (req, res) => {//actualizar cualquier dato que no sea ni el id ni la contrasegna del usuario
     const { id } = req.params;
-    const { nombre, descripcion } = req.body;
-    Usuario.updateOne({_id: id}, {$set: {nombre, descripcion}})
-    .then((data) => {
-        res.send("ok");
-    })
-    .catch((err) => {
-        console.log(err);
+    const { nombre, descripcion, urlFoto, modoOscuro } = req.body;
+    if(id != null && nombre != null && descripcion != null && urlFoto != null && modoOscuro != null){
+        Usuario.updateOne({_id: id}, {$set: {nombre, descripcion, urlFoto, modoOscuro}})
+        .then((data) => {
+            res.send("ok");
+        })
+        .catch((err) => {
+            console.log(err);
+            res.redirect("/err404");
+        });
+    } else {
         res.redirect("/err404");
-    });
+    }
+});
+app.post("/b/userlogin", async (req, res) => {//hacer login, comprueba si el usuario existe y en tal caso lo devuelve
+    const { nombre, contrasegna } = req.body;
+    if(nombre != null && contrasegna != null){
+        Usuario.findOne({nombre: nombre, contrasegna: contrasegna})
+        .then((data) => {
+            res.json({status: "ok", elId: data._id, oscuro: data.modoOscuro});
+        })
+        .catch((err) => {
+            res.json({status: "no", elId: ""});
+        });
+    } else {
+        res.redirect("/err404");
+    }
 });
 app.put("/b/userp", async (req, res) => {//actualizar contrasegna del usuario, necesita haber iniciado sesion
 

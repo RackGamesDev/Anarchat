@@ -1,10 +1,15 @@
     </main>
-<div id="footer">
+<footer id="footer">
     <p>Anarchat is a Yester/RackGames product and can be used in any way, for more information visit the <a href="https://anarchat.vercel.app/about">about section</a></p>
-</div>
+</footer>
 
 <script>
     //tema oscuro o claro
+    if(localStorage.getItem("dark") == "false" || localStorage.getItem("dark") == undefined){
+        console.log("MODO CLARO");
+    } else{
+        console.log("MODO OSCURO");
+    }
 </script>
 </body>
 </html>
