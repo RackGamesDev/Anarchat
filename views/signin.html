@@ -46,6 +46,38 @@
 
     const enviar = async (nombre, contrasegna) => {//ENVIAR DATOS
         console.log("exito");
+        const randPhoto = Math.floor(Math.random() * 8);
+        let randPhotoUrl = "";
+        switch(randPhoto){
+            case 0:
+                randPhotoUrl = "https://imgur.com/W3sed5q.png";
+            break;
+            case 1:
+                randPhotoUrl = "https://imgur.com/y18kY15.png";
+            break;
+            case 2:
+                randPhotoUrl = "https://imgur.com/Qp73z7k.png";
+            break;
+            case 3:
+                randPhotoUrl = "https://imgur.com/TEYhqIQ.png";
+            break;
+            case 4:
+                randPhotoUrl = "https://imgur.com/aVH5KS5.png";
+            break;
+            case 5:
+                randPhotoUrl = "https://imgur.com/WunDcYY.png";
+            break;
+            case 6:
+                randPhotoUrl = "https://imgur.com/Gqv7s3b.png";
+            break;
+            case 7:
+                randPhotoUrl = "https://imgur.com/JqPQvOQ.png";
+            break;
+            default:
+                randPhotoUrl = "https://imgur.com/W3sed5q.png";
+            break;
+            
+        }
         const datos = {nombre: nombre, contrasegna: contrasegna, urlFoto: "", descripcion: "", modoOscuro: "false", salas: []}
         await fetch("/b/user", {
             method: "POST",

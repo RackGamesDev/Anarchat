@@ -1,8 +1,28 @@
-<div id="con-cuenta"><!--si tienes iniciada sesion sale este div-->
+<div id="con-cuenta" class="centrar"><!--si tienes iniciada sesion sale este div-->
+    <h1 id="nombrado">this is your profile</h1>
     <div id="zona-perfil">
-        <h1 id="nombrado">this is your profile</h1>
+        
+        <div id="zona-datos-perfil">
+            <div id="perfil-dato">
+                <h2>Name:</h2>
+                <h2>Internal ID:</h2>
+                <h2>Password:</h2>
+                <h2>Current image URL</h2>
+                <h2>Dark mode</h2>
+            </div>
+            <div id="perfil-valor">
+                <h2 id="sitio-nombre">nombre</h2>
+                <h2 id="sitio-id">nombre</h2>
+                <h2 id="sitio-contrasegna"><a href="#">Edit...</a></h2>
+                <h2 id="url-imagen-ir"><a href="#">a</a></h2>
+                <h2><input type="checkbox" id="cambiar-oscuro">Switch</h2>
+            </div>
+        </div>
+        <h2>Description:</h2>
+        <br>
+        
     </div>
-
+<p id="sitio-descripcion">aaa</p>
 </div>
 <div id="caja-start" class="centrar">
     <div id="sin-cuenta"><!--si no tienes iniciada sesion sale este div-->
@@ -37,4 +57,6 @@
             document.getElementById("con-cuenta").remove();
         }
     });
+
+    
 </script>

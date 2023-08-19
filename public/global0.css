@@ -30,6 +30,7 @@ main{
 html *{
     font-family:'Courier New', Courier, monospace;
     background-color: var(--colorFondo);
+    color: var(--colorLetra1);
 }
 main img{
     border: 2px solid black;
@@ -185,8 +186,33 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 
 
 #zona-perfil{/*la caja en la que aparece el perfil*/
-
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
+#zona-datos-perfil{/*caja con todos los datos del perfil*/
+    width: 70%;
+    border: 2px solid var(--colorBorde);
+    position:unset;
+    left: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+}
+#zona-datos-perfil>div{/*ambas cajas de la seccion del perfil*/
+    margin: 10px;
+    width: 50%;
+}
+#zona-datos-perfil>#perfil-dato h2{/*caja de dato*/
+    text-align: right;
+}
+#zona-datos-perfil>#perfil-valor h2{/*caja de valor*/
+    text-align: left;
+    font-weight: lighter;
+}
+
 
 
 
@@ -214,5 +240,11 @@ form input[type="checkbox"]{/*todos los checkbox input*/
         font-size: 0.9rem;
         padding: 2px;
         margin: 1px;
+    }
+    #zona-perfil{
+        font-size: 0.8rem;
+    }
+    #zona-datos-perfil h2{
+        font-size: 1rem;
     }
 }
