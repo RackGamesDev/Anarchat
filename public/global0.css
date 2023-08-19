@@ -212,7 +212,9 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     text-align: left;
     font-weight: lighter;
 }
-
+#sitio-id{/*texto con tu id*/
+    font-size: 1rem;
+}
 
 
 

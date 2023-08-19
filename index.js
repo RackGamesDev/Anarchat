@@ -76,9 +76,6 @@ app.get("/login", (req, res) => {
 app.get("/signin", (req, res) => {
     res.send(formarPagina('signin.html'));
 });
-app.get("/loginSuccess", (req, res) => {
-    res.send(formarPagina('loginSuccess.html'));
-});
 app.get("/logout", (req, res) => {
     res.send(formarPagina('logout.html'));
 });

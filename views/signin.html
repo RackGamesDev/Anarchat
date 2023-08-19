@@ -78,7 +78,7 @@
             break;
             
         }
-        const datos = {nombre: nombre, contrasegna: contrasegna, urlFoto: "", descripcion: "", modoOscuro: "false", salas: []}
+        const datos = {nombre: nombre, contrasegna: contrasegna, urlFoto: randPhotoUrl, descripcion: "", modoOscuro: "false", salas: []}
         await fetch("/b/user", {
             method: "POST",
             headers: {
@@ -99,7 +99,7 @@
             localStorage.setItem("dark", status.oscuro);
             window.location.href = "/";
         }
-        const status = await res.json();
+        //const status = await res.json();
         window.location.href = "/";
     }
 

@@ -13,7 +13,7 @@
             <div id="perfil-valor">
                 <h2 id="sitio-nombre">nombre</h2>
                 <h2 id="sitio-id">nombre</h2>
-                <h2 id="sitio-contrasegna"><a href="#">Edit...</a></h2>
+                <h2><a href="#" id="sitio-contrasegna">Edit...</a></h2>
                 <h2 id="url-imagen-ir"><a href="#">a</a></h2>
                 <h2><input type="checkbox" id="cambiar-oscuro">Switch</h2>
             </div>
@@ -22,7 +22,7 @@
         <br>
         
     </div>
-<p id="sitio-descripcion">aaa</p>
+<input type="textarea" id="sitio-descripcion" readonly>
 </div>
 <div id="caja-start" class="centrar">
     <div id="sin-cuenta"><!--si no tienes iniciada sesion sale este div-->
@@ -52,7 +52,13 @@
             const pet = await fetch("/b/user/" + localStorage.getItem("user"));
             const res = await pet.json();
 
-            document.getElementById("nombrado").innerHTML = "Hello " + res.nombre + ", this is your profile:";
+            document.getElementById("nombrado").innerHTML = "Hello <i>" + res.nombre + "</i>, this is your profile:";
+            document.getElementById("sitio-nombre").innerHTML = res.nombre;
+            document.getElementById("sitio-id").innerHTML = localStorage.getItem("user");
+            document.getElementById("url-imagen-ir").innerHTML = res.urlFoto;
+            document.getElementById("url-imagen-ir").href = res.urlFoto;
+            document.getElementById("sitio-descripcion").innerHTML = res.descripcion;
+            document.getElementById("cambiar-oscuro").checked = localStorage.getItem("dark") == true;
         } else {
             document.getElementById("con-cuenta").remove();
         }
