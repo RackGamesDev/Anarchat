@@ -1,0 +1,27 @@
+###
+POST /b/user HTTP/1.1
+Content-Type: application/json
+
+{
+    "nombre":"X",
+    "contrasegna":"X",
+    "urlFoto":"X",
+    "descripcion":"X",
+    "modoOscuro":"X",
+    "salas":["X"]
+}
+
+###
+GET /b/user/X HTTP/1.1
+
+###
+PUT /b/user/X HTTP/1.1
+Content-Type: application/json
+
+{
+    "nombre":"X",
+    "descripcion":"X"
+}
+
+###
+DELETE /b/user/X HTTP/1.1
