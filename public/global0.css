@@ -272,7 +272,17 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     width: 40%;
 }
 
-
+#mas-salas{/*caja principal para las salas*/
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+#salas-privadas, #salas-publicas{/*ambas secciones de salas*/
+    margin: 10px 10%;
+    text-align: center;
+    border: 1px solid var(--colorBorde);
+    background-color: var(--colorFondo2);
+}
 
 
 @media (max-width: 782px){/*para dispositivos verticales*/
