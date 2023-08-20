@@ -1,5 +1,9 @@
-<div id="con-cuenta" class="centrar"><!--si tienes iniciada sesion sale este div-->
+<div id="error-perfil" class="caja-error centrar hidden">
+    <p>The name must contain at least 8 characters and the description cannot be longer than 128 characters, also, is recomended to set the profile photo via Imgur with a 128x128px image.</p>
+</div>
+<div id="con-cuenta" class="centrar elperfil"><!--si tienes iniciada sesion sale este div-->
     <h1 id="nombrado">this is your profile</h1>
+    <a href="#" id="display-foto-perfil-a" target="_blank"><img src="" alt="Your embed image" id="display-foto-perfil"></a>
     <div id="zona-perfil">
         
         <div id="zona-datos-perfil">
@@ -7,22 +11,23 @@
                 <h2>Name:</h2>
                 <h2>Internal ID:</h2>
                 <h2>Password:</h2>
-                <h2>Current image URL</h2>
-                <h2>Dark mode</h2>
+                <h2>Current image URL:</h2>
+                <h2>Dark mode:</h2>
             </div>
             <div id="perfil-valor">
-                <h2 id="sitio-nombre">nombre</h2>
+                <h2><input type="text" id="sitio-nombre"></h2>
                 <h2 id="sitio-id">nombre</h2>
-                <h2><a href="#" id="sitio-contrasegna">Edit...</a></h2>
-                <h2 id="url-imagen-ir"><a href="#">a</a></h2>
+                <h2><a href="/editPassword" id="sitio-contrasegna">Edit...</a></h2>
+                <h2><input type="text" value="aaa" id="url-imagen-ir"></h2>
                 <h2><input type="checkbox" id="cambiar-oscuro">Switch</h2>
             </div>
         </div>
-        <h2>Description:</h2>
-        <br>
-        
     </div>
-<input type="textarea" id="sitio-descripcion" readonly>
+    <h2>Description:</h2>
+    <div contenteditable="true" id="sitio-descripcion">
+    </div>
+    <input type="button" value="Save changes" id="boton-cambios-perfil">
+    <br><br>
 </div>
 <div id="caja-start" class="centrar">
     <div id="sin-cuenta"><!--si no tienes iniciada sesion sale este div-->
@@ -40,6 +45,7 @@
 <br><br><br>
 
 <script>
+    const $darkCheck = document.getElementById("cambiar-oscuro")
     document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("btn-account").classList.add("barra-item-activado");
         document.getElementById("logo-arriba").remove();
@@ -53,16 +59,26 @@
             const res = await pet.json();
 
             document.getElementById("nombrado").innerHTML = "Hello <i>" + res.nombre + "</i>, this is your profile:";
-            document.getElementById("sitio-nombre").innerHTML = res.nombre;
+            document.getElementById("sitio-nombre").value = res.nombre;
             document.getElementById("sitio-id").innerHTML = localStorage.getItem("user");
-            document.getElementById("url-imagen-ir").innerHTML = res.urlFoto;
-            document.getElementById("url-imagen-ir").href = res.urlFoto;
+            document.getElementById("url-imagen-ir").value = res.urlFoto;
             document.getElementById("sitio-descripcion").innerHTML = res.descripcion;
-            document.getElementById("cambiar-oscuro").checked = localStorage.getItem("dark") == true;
+            $darkCheck.checked = localStorage.getItem("dark") == "true";
+            document.getElementById("display-foto-perfil").src=res.urlFoto;
+            document.getElementById("display-foto-perfil-a").href=res.urlFoto;
         } else {
             document.getElementById("con-cuenta").remove();
         }
     });
-
+    $darkCheck.addEventListener("click", (e) => {
+        if($darkCheck.checked == true){
+            localStorage.setItem("dark", "true");
+        } else {
+            localStorage.setItem("dark", "false");
+        }
+    });
+    document.getElementById("guardar-cambios-perfil").addEventListener("click", (e)=>{
+        console.log("aaaadfas");
+    });
     
 </script>

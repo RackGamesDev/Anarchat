@@ -79,6 +79,9 @@ app.get("/signin", (req, res) => {
 app.get("/logout", (req, res) => {
     res.send(formarPagina('logout.html'));
 });
+app.get("/editPassword", (req, res) => {
+    res.send(formarPagina('editPassword.html'));
+});
 
 
 import ruta from './routes/rutas.js'
