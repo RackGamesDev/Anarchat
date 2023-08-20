@@ -6,7 +6,7 @@
         <br>
         <a href="/rooms">Enter the Rooms section</a>
         <br><br><br>
-        <img src="https://imgur.com/18zqPqm.png" alt="img">
+        <img src="https://imgur.com/yHXy0GR.png" alt="img">
     </div>
     <br><br>
     <div id="sin-cuenta"><!--si no tienes iniciada sesion sale este div-->
@@ -14,18 +14,18 @@
         <p>Papers, please! First you will need an <b>account</b></p>
         <p>It's super easy to create one, you just need a <b>name</b> and a <b>password</b></p>
         <br>
-        <a href="/signin">Click here to CREATE a new Anarcat account</a>
+        <a class="enlace-boton" href="/signin">Click here to CREATE a new Anarcat account</a>
         <br><br><br>
-        <a href="/login">Click here to LOGIN with an Anarcat account</a>
+        <a class="enlace-boton" href="/login">Click here to LOGIN with an Anarcat account</a>
         <br> <br> <br>
-        <img src="https://imgur.com/eDb6sAS.png" alt="img">
+        <img src="https://imgur.com/TuDYCfP.png" alt="img">
         <br>
     </div>
     <h1>About Anarchat</h1>
         <p>Anarchat is a chatting website where you can contact anyone with an account, without restrinctions</p>
         <p>To do it, you have to create an account and join a room with other people, or create your own one</p>
         <br>
-        <img src="https://imgur.com/TFDeQfr.png" alt="img">
+        <img src="https://imgur.com/e99SO1h.png" alt="img">
         <br><br>
 </div>
 
@@ -34,7 +34,7 @@
         document.getElementById("btn-start").classList.add("barra-item-activado");
         console.log(window.innerWidth);
 
-        if(localStorage.getItem("user") != undefined){
+        if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != "no"){
             document.getElementById("sin-cuenta").remove();
             const pet = await fetch("/b/user/" + localStorage.getItem("user"));
             const res = await pet.json();

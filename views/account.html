@@ -1,7 +1,8 @@
-<div id="error-perfil" class="caja-error centrar hidden">
-    <p>The name must contain at least 8 characters and the description cannot be longer than 128 characters, also, is recomended to set the profile photo via Imgur with a 128x128px image.</p>
-</div>
-<div id="con-cuenta" class="centrar elperfil"><!--si tienes iniciada sesion sale este div-->
+<br>
+<div id="con-cuenta" class="centrar elperfil hidden"><!--si tienes iniciada sesion sale este div-->
+    <div id="error-perfil" class="caja-error centrar hidden">
+        <p>The name must contain at least 8 characters and the description cannot be longer than 128 characters, also, is recomended to set the profile photo via Imgur with a 128x128px image.</p>
+    </div>
     <h1 id="nombrado">this is your profile</h1>
     <a href="#" id="display-foto-perfil-a" target="_blank"><img src="" alt="Your embed image" id="display-foto-perfil"></a>
     <div id="zona-perfil">
@@ -24,10 +25,17 @@
         </div>
     </div>
     <h2>Description:</h2>
-    <div contenteditable="true" id="sitio-descripcion">
-    </div>
+    <div contenteditable="true" id="sitio-descripcion"></div>
+    <input type="button" id="borrar-descripcion" value="Delete description" class="boton-normal">
+    <p id="contador-descripcion">0/128</p>
     <input type="button" value="Save changes" id="boton-cambios-perfil">
-    <br><br>
+    <br><br><br>
+    <span>
+        <a href="/logout" id="btn-logout">Logout</a>
+        <br><br>
+        <a href="/deleteAccount" id="btn-delete-account">Delete Account</a>
+    </span>
+    
 </div>
 <div id="caja-start" class="centrar">
     <div id="sin-cuenta"><!--si no tienes iniciada sesion sale este div-->
@@ -35,17 +43,28 @@
         <p>Papers, please! First you will need an <b>account</b></p>
         <p>It's super easy to create one, you just need a <b>name</b> and a <b>password</b></p>
         <br>
-        <a href="/signin">Click here to CREATE a new Anarcat account</a>
+        <a class="enlace-boton" href="/signin">Click here to CREATE a new Anarcat account</a>
         <br><br><br>
-        <a href="/login">Click here to LOGIN with an Anarcat account</a>
+        <a class="enlace-boton" href="/login">Click here to LOGIN with an Anarcat account</a>
         <br> <br> <br>
-        <img src="https://imgur.com/eDb6sAS.png" alt="img">
+        <img src="https://imgur.com/TuDYCfP.png" alt="img">
+        <br>
     </div>
 </div>
 <br><br><br>
 
 <script>
-    const $darkCheck = document.getElementById("cambiar-oscuro")
+    document.querySelector("title").innerHTML = "Anarchat - Account";
+if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != "no"){
+    document.getElementById("con-cuenta").classList.remove("hidden");
+    document.execCommand('insertHTML', false, '<br><br>');
+    const $darkCheck = document.getElementById("cambiar-oscuro");
+    const $sitioNombre = document.getElementById("sitio-nombre");
+    const $sitioDescripcion = document.getElementById("sitio-descripcion");
+    const $sitioUrlImagen = document.getElementById("url-imagen-ir");
+    const $contadorDescripcion = document.getElementById("contador-descripcion");
+    const $borrarDescripcion = document.getElementById("borrar-descripcion");
+    const $sitioId = document.getElementById("sitio-id");
     document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("btn-account").classList.add("barra-item-activado");
         document.getElementById("logo-arriba").remove();
@@ -59,26 +78,107 @@
             const res = await pet.json();
 
             document.getElementById("nombrado").innerHTML = "Hello <i>" + res.nombre + "</i>, this is your profile:";
-            document.getElementById("sitio-nombre").value = res.nombre;
-            document.getElementById("sitio-id").innerHTML = localStorage.getItem("user");
-            document.getElementById("url-imagen-ir").value = res.urlFoto;
-            document.getElementById("sitio-descripcion").innerHTML = res.descripcion;
+            $sitioNombre.value = res.nombre;
+            $sitioId.innerHTML = localStorage.getItem("user");
+            $sitioUrlImagen.value = res.urlFoto;
+            $sitioDescripcion.innerHTML = res.descripcion;
             $darkCheck.checked = localStorage.getItem("dark") == "true";
             document.getElementById("display-foto-perfil").src=res.urlFoto;
             document.getElementById("display-foto-perfil-a").href=res.urlFoto;
+            $contadorDescripcion.innerHTML = res.descripcion.length + "/128";
         } else {
             document.getElementById("con-cuenta").remove();
         }
     });
-    $darkCheck.addEventListener("click", (e) => {
+    const hacerImagenRandom = () => {//si no hay imagen especificada usar una random
+        const randPhoto = Math.floor(Math.random() * 8);
+        let randPhotoUrl = "";
+        switch(randPhoto){
+            case 0:
+                randPhotoUrl = "https://imgur.com/W3sed5q.png";
+            break;
+            case 1:
+                randPhotoUrl = "https://imgur.com/y18kY15.png";
+            break;
+            case 2:
+                randPhotoUrl = "https://imgur.com/Qp73z7k.png";
+            break;
+            case 3:
+                randPhotoUrl = "https://imgur.com/TEYhqIQ.png";
+            break;
+            case 4:
+                randPhotoUrl = "https://imgur.com/aVH5KS5.png";
+            break;
+            case 5:
+                randPhotoUrl = "https://imgur.com/WunDcYY.png";
+            break;
+            case 6:
+                randPhotoUrl = "https://imgur.com/Gqv7s3b.png";
+            break;
+            case 7:
+                randPhotoUrl = "https://imgur.com/JqPQvOQ.png";
+            break;
+            default:
+                randPhotoUrl = "https://imgur.com/W3sed5q.png";
+            break;
+        }
+        return randPhotoUrl;
+    }
+    function actualizarContadorDescripcion(){//actualizar el contador de descripcion
+        $contadorDescripcion.innerHTML = $sitioDescripcion.innerHTML.length + "/128";
+        if($sitioDescripcion.innerHTML.length > 128){
+            $contadorDescripcion.classList.add("txt-rojo");
+        } else {
+            $contadorDescripcion.classList.remove("txt-rojo");
+        }
+    }
+    let tiempoDescripcion = setInterval(actualizarContadorDescripcion, 50)
+    $borrarDescripcion.addEventListener("click", () => {//borrar descripcion
+        $sitioDescripcion.innerHTML = "";
+    })
+
+
+    let esDark = "false";
+    $darkCheck.addEventListener("click", (e) => {//cambiar modo oscuro o claro
         if($darkCheck.checked == true){
             localStorage.setItem("dark", "true");
+            esDark = "true";
         } else {
             localStorage.setItem("dark", "false");
         }
     });
-    document.getElementById("guardar-cambios-perfil").addEventListener("click", (e)=>{
-        console.log("aaaadfas");
+    document.getElementById("boton-cambios-perfil").addEventListener("click", async (e)=>{//intentar verificar
+        if($sitioNombre.value.length < 8 || $sitioDescripcion.innerHTML.length > 128){
+            document.getElementById("error-perfil").classList.remove("hidden");
+        } else {
+            if($sitioUrlImagen.value==""){
+                $sitioUrlImagen.value = hacerImagenRandom();
+            }
+
+            //cambiar datos:
+            const body = {
+                nombre: $sitioNombre.value,
+                descripcion: $sitioDescripcion.innerHTML,
+                urlFoto: $sitioUrlImagen.value,
+                modoOscuro: localStorage.getItem("dark")
+            }
+            const options = {
+                method: "PUT",
+                headers: {
+                    "Content-type": "application/json; charset=utf-8"
+                },
+                body: JSON.stringify(body)
+            }
+            await fetch("/b/user/" + $sitioId.innerHTML, options).
+            then(() => window.location.href = "/account")
+            .catch(() => window.location.href = "/err404");
+        }
     });
+} else {
+    document.getElementById("sin-cuenta").classList.remove("hidden");
+    document.getElementById("logo-arriba").remove();
+    document.getElementById("btn-account").classList.add("barra-item-activado");
+}
+    
     
 </script>

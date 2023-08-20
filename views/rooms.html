@@ -1,8 +1,32 @@
-<p>rooms</p>
-<br><br>
+
+<div id="con-cuenta" class="hidden">
+    <p>rooms</p>
+</div>
+
+<div id="caja-start" class="centrar">
+    <div id="sin-cuenta" class="hidden"><!--si no tienes iniciada sesion sale este div-->
+        <h2>Stop right there!</h2>
+        <p>Papers, please! First you will need an <b>account</b></p>
+        <p>It's super easy to create one, you just need a <b>name</b> and a <b>password</b></p>
+        <br>
+        <a class="enlace-boton" href="/signin">Click here to CREATE a new Anarcat account</a>
+        <br><br><br>
+        <a class="enlace-boton" href="/login">Click here to LOGIN with an Anarcat account</a>
+        <br> <br> <br>
+        <img src="https://imgur.com/TuDYCfP.png" alt="img">
+        <br>
+    </div>
+</div>
 
 <script>
     document.getElementById("btn-rooms").classList.add("barra-item-activado");
     document.getElementById("logo-arriba").remove();
     document.querySelector("title").innerHTML = "Anarchat - Rooms";
+    if(localStorage.getItem("user") == undefined || localStorage.getItem("user") == "no"){
+        document.getElementById("sin-cuenta").classList.remove("hidden");
+    } else {
+        document.getElementById("con-cuenta").classList.remove("hidden");
+        //con cuenta
+        
+    }
 </script>

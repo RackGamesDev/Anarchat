@@ -1,0 +1,67 @@
+<br>
+<div id="con-cuenta" class="centrar hidden">
+    <div class="caja-error hidden borde" id="caja-error">
+        <p>You typed your password wrong or the boxes don't match</p>
+    </div>
+    <h1 class="texto-gigante txt-rojo">WARNING!!!</h1>
+    <h2>You are going to delete your Anarchat account, this user may die!!!</h2>
+    <p>To delete it you have to type your password twice and click delete</p>
+    <p>Have into account that not only your user will be deleted, but also your messages and rooms</p>
+    <input type="password" placeholder="Your password" value="" id="dcontrasegna1">
+    <br><br>
+    <input type="password" placeholder="Your password" value="" id="dcontrasegna2">
+    <br>
+    <p><input type="checkbox" id="check-contrasegna">Visible</p>
+    <br>
+    <img src="https://imgur.com/y2qQvnn.png" alt="img">
+    <br>
+    <input type="button" id="boton-borrar" value="DELETE NOW ):">
+</div>
+
+<script>
+    if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != "no"){
+        document.getElementById("con-cuenta").classList.remove("hidden");
+
+        const $checkVisible = document.getElementById("check-contrasegna");
+        const $contrasegna1 = document.getElementById("dcontrasegna1");
+        const $contrasegna2 = document.getElementById("dcontrasegna2");
+        $checkVisible.addEventListener("change", () => {//contrasegnas visibles
+            if($checkVisible.checked){
+                $contrasegna1.type="text";
+                $contrasegna2.type="text";
+            } else {
+                $contrasegna1.type="password";
+                $contrasegna2.type="password";
+            }
+        });
+        document.getElementById("boton-borrar").addEventListener("click", async () => {//boton
+            if($contrasegna1.value == $contrasegna2.value){
+                const res = await fetch("/b/userp/" + localStorage.getItem("user"));
+                const req = await res.json();
+                if($contrasegna1.value == req.contrasegna){//borrar finalmente
+                    await fetch("/b/userdel/" + localStorage.getItem("user"), {
+                        method: "POST",
+                        headers: {
+                            "Content-type": "application/json; charset=utf-8"
+                        },
+                        body: JSON.stringify({contrasegna: $contrasegna1.value})
+                        })
+                        .then(() => {
+                            localStorage.setItem("user", "no");
+                            window.location.href = "/";
+                        })
+                        .catch(() => console.log("errorrr"));
+                } else {
+                    document.getElementById("caja-error").classList.remove("hidden");
+                }
+            } else {
+                document.getElementById("caja-error").classList.remove("hidden");
+            }
+        });
+    } else {
+        window.location.href = "/err404";
+    }
+    document.querySelector("title").innerHTML = "Anarchat - Delete account";
+    document.getElementById("logo-arriba").remove();
+    document.getElementById("btn-account").classList.add("barra-item-activado");
+</script>

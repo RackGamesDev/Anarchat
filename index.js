@@ -61,14 +61,8 @@ const formarPagina = (pagina) => {//devuelve una pagina entera, juntando la cabe
 app.get("/", (req, res) => {//inicio
     res.send(formarPagina('inicio.html'));
 });
-app.get("/rooms", (req, res) => {
-    res.send(formarPagina('rooms.html'));
-});
 app.get("/account", (req, res) => {
     res.send(formarPagina('account.html'));
-});
-app.get("/about", (req, res) => {
-    res.send(formarPagina('about.html'));
 });
 app.get("/login", (req, res) => {
     res.send(formarPagina('login.html'));
@@ -76,11 +70,20 @@ app.get("/login", (req, res) => {
 app.get("/signin", (req, res) => {
     res.send(formarPagina('signin.html'));
 });
+app.get("/editPassword", (req, res) => {
+    res.send(formarPagina('editPassword.html'));
+});
+app.get("/deleteAccount", (req, res) => {
+    res.send(formarPagina('deleteAccount.html'));
+});
 app.get("/logout", (req, res) => {
     res.send(formarPagina('logout.html'));
 });
-app.get("/editPassword", (req, res) => {
-    res.send(formarPagina('editPassword.html'));
+app.get("/rooms", (req, res) => {
+    res.send(formarPagina('rooms.html'));
+});
+app.get("/about", (req, res) => {
+    res.send(formarPagina('about.html'));
 });
 
 
@@ -116,7 +119,7 @@ app.post("/b/user", async (req, res) => {//crear un usuario
         if(user != null && user.nombre.length > 7 && user.contrasegna.length > 7 && user.nombre != user.contrasegna){
             user.save()
             .then((data) => {
-                res.redirect("/");
+                res.redirect("/account");
             })
             .catch((err) => {
                 console.log(err);
@@ -131,20 +134,40 @@ app.post("/b/user", async (req, res) => {//crear un usuario
     }
     //INICIAR SESION
 });
-app.delete("/b/user/:id", async (req, res) => {//eliminar un usuario, hace falta la contrasegna
+app.post("/b/userdel/:id", async (req, res) => {//eliminar un usuario, hace falta la contrasegna
     const { id } = req.params;
-    if(id != null){
-        Usuario.deleteOne({_id: id})
+    const { contrasegna } = req.body;
+    if(id != null && contrasegna != null){
+        Usuario.findById(id)
         .then((data) => {
-            res.send("ok");
+            if(data.contrasegna == contrasegna){
+                Usuario.deleteOne({_id: id})
+                .then(() => {
+                    //res.redirect("/");
+                    //BORRAR TAMBIEN SUS SALAS Y MENSAJES
+
+
+
+
+                })
+                .catch((err) => {
+                    console.log(err + "  no se pudo borrar");
+                    res.redirect("/err404");
+                });
+                res.status(200);
+            } else {
+                console.log("contrasegna incorrecta")
+                res.redirect("/err404");
+            }
         })
         .catch((err) => {
-            console.log(err);
+            console.log(err + "  usuario no existe")
             res.redirect("/err404");
-        });
+        })
     } else {
         res.redirect("/err404");
     }
+    res.send("ok");
 });
 app.put("/b/user/:id", async (req, res) => {//actualizar cualquier dato que no sea ni el id ni la contrasegna del usuario
     const { id } = req.params;
@@ -176,8 +199,50 @@ app.post("/b/userlogin", async (req, res) => {//hacer login, comprueba si el usu
         res.redirect("/err404");
     }
 });
-app.put("/b/userp", async (req, res) => {//actualizar contrasegna del usuario, necesita haber iniciado sesion
+app.get("/b/userp/:id", async (req, res) => {//recibe la contrasegna de un usuario, cuidado
+    const { id } = req.params;
+    if(id != null){
+        Usuario.findById(id)
+        .then((data) => {
+            const dataFinal = {contrasegna: data.contrasegna}
+            res.json(dataFinal);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.redirect("/err404");
+        });
+    } else {
+        res.redirect("/err404");
+    }
+});
+app.put("/b/userp/:id", async (req, res) => {//actualizar contrasegna del usuario, necesita haber iniciado sesion
+    const { id } = req.params;
+    const { nuevaContrasegna, viejaContrasegna } = req.body;
+    if(id != null && nuevaContrasegna != null && viejaContrasegna != null){
+        Usuario.findById(id)
+        .then((data) => {
+            if(data.contrasegna == viejaContrasegna){
+                Usuario.updateOne({_id: id}, {$set: {contrasegna: nuevaContrasegna}})
+                .then(() => {
+                    res.send("ok");
+                })
+                .catch((err) => {
+                    console.log(err);
+                    res.redirect("/err404");
+                });
+            } else {
+                res.redirect("/err404");
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            res.redirect("/err404");
+        });
 
+        
+    } else {
+        res.redirect("/err404");
+    }
 });
 
 app.get("/b/room", async (req, res) => {//conseguir todos los datos de una sala incluyendo mensajes

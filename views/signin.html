@@ -16,7 +16,7 @@
         <p>The password and the name must be both at least 8 characters long, the name cannot be the password and both password boxes must containt the same text</p>
     </div>
     <br>
-    <img src="https://imgur.com/u8lWL5P.png" alt="img">
+    <img src="https://imgur.com/fsGTSYY.png" alt="img">
     <p>You already have an account? <a href="/signin">login here</a></p>
 </div>
 <br><br><br>
@@ -97,10 +97,10 @@
         if(status2.status == "ok"){
             localStorage.setItem("user", status2.elId);//iniciar sesion
             localStorage.setItem("dark", status.oscuro);
-            window.location.href = "/";
+            window.location.href = "/account";
         }
         //const status = await res.json();
-        window.location.href = "/";
+        window.location.href = "/account";
     }
 
     $boton.addEventListener("click", () => {//VERIFICAR DATOS

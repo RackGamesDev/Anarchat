@@ -18,6 +18,7 @@
 
     --colorBoton: #3e4142;/*color de fondo de los botones*/
     --colorError: red;/*color para cosas malas*/
+    --colorErrorLigero: #5c0000;/*botones peligrosos*/
 }
 html, body {
     margin: 0;
@@ -55,6 +56,9 @@ main img{
     visibility: hidden;
     width: 0px;
     height: 0px;
+}
+.txt-rojo{
+    color: var(--colorError);
 }
 
 @keyframes transicion-barra-item {/*transicion de los items de la barra*/
@@ -158,7 +162,7 @@ form input[type="text"], form input[type="password"]{/*todos los text input*/
     font-size: 1.2rem;
     border: 2px solid var(--colorBorde);
 }
-input[type="button"]{/*todos los button input*/
+input[type="button"]:not(.boton-normal){/*todos los button input*/
     font-size: 1.2rem;
     border: 2px solid var(--colorBorde);
     padding: 10px;
@@ -168,7 +172,7 @@ input[type="button"]{/*todos los button input*/
     transition-duration: 0.3s;
     transition-timing-function: ease-in-out;
 }
-input[type="button"]:hover{/*input boton cuando pasas el raton*/
+input[type="button"]:hover:not(.boton-normal){/*input boton cuando pasas el raton*/
     background-color: var(--colorBarraSi);
     color: var(--colorLetraBarraSi);
     cursor: pointer;
@@ -248,11 +252,25 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     text-align: start;
     background-color: var(--colorFondo);
     border: 2px solid var(--colorBorde);
+    overflow: scroll;
 }
-.elperfil>#display-foto-perfil{/*la imagen puesta en el perfil*/
+#display-foto-perfil{/*la imagen puesta en el perfil*/
     size: 128px;
+    width: 128px;
+    height: 128px;
 }
-
+#btn-logout, #btn-delete-account, #boton-borrar{/*botones extra de account*/
+    margin: 10px;
+    padding: 5px;
+    text-decoration: none;
+    color: var(--colorLetra3);
+    background-color: var(--colorErrorLigero);
+    border: 1px solid var(--colorBorde);
+    overflow: hidden;
+}
+#dcontrasegna1, #dcontrasegna2{/*sitios para la contrasegna al borrar*/
+    width: 40%;
+}
 
 
 
@@ -290,5 +308,15 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     #sitio-id, #url-imagen-ir{
         font-size: 0.8rem;
         width: 90%;
+    }
+    .texto-gigante{
+        font-size: 3rem;
+        margin: 1px;
+    }
+    a.enlace-boton{
+        font-size: 1rem !important;
+    }
+    #dcontrasegna1, #dcontrasegna2{
+        width: 80%;
     }
 }

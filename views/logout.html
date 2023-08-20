@@ -1,2 +1,6 @@
-<p>logout</p>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<script>
+    document.getElementById("logo-arriba").remove();
+    document.querySelector("title").innerHTML = "Anarchat - Logout";
+    localStorage.setItem("user", "no");
+    window.location.href = "/";
+</script>
