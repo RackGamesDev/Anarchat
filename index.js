@@ -106,7 +106,7 @@ app.use("/", rutaRecursos);
 app.get("/b/user/:id", async (req, res) => {//conseguir los datos de un usuario, sin contrasegna
     //const cual = req.query.id;
     const { id } = req.params;
-    if(id != null){
+    if(id != undefined){
         Usuario.findById(id)
         .then((data) => {
             const dataFinal = {nombre: data.nombre, urlFoto: data.urlFoto, descripcion: data.descripcion, salas: data.salas}
@@ -124,7 +124,7 @@ app.post("/b/user", async (req, res) => {//crear un usuario
     req.body.tienePublica = "false";
     const user = Usuario(req.body);
     try{
-        if(user != null && user.nombre.length > 7 && user.contrasegna.length > 7 && user.nombre != user.contrasegna && user.nombre.length < 33 && user.contrasegna.length < 33){
+        if(user != undefined && user.nombre.length > 7 && user.contrasegna.length > 7 && user.nombre != user.contrasegna && user.nombre.length < 33 && user.contrasegna.length < 33){
             user.save()
             .then((data) => {
                 res.redirect("/account");
@@ -145,7 +145,7 @@ app.post("/b/user", async (req, res) => {//crear un usuario
 app.post("/b/userdel/:id", async (req, res) => {//eliminar un usuario, hace falta la contrasegna
     const { id } = req.params;
     const { contrasegna } = req.body;
-    if(id != null && contrasegna != null){
+    if(id != undefined && contrasegna != undefined){
         Usuario.findById(id)
         .then((data) => {
             if(data.contrasegna == contrasegna){
@@ -180,7 +180,7 @@ app.post("/b/userdel/:id", async (req, res) => {//eliminar un usuario, hace falt
 app.put("/b/user/:id", async (req, res) => {//actualizar cualquier dato que no sea ni el id ni la contrasegna del usuario
     const { id } = req.params;
     const { nombre, descripcion, urlFoto, modoOscuro } = req.body;
-    if(id != null && nombre != null && descripcion != null && urlFoto != null && modoOscuro != null){
+    if(id != undefined && nombre != undefined && descripcion != undefined && urlFoto != undefined && modoOscuro != undefined){
         Usuario.updateOne({_id: id}, {$set: {nombre, descripcion, urlFoto, modoOscuro}})
         .then((data) => {
             res.send("ok");
@@ -195,7 +195,7 @@ app.put("/b/user/:id", async (req, res) => {//actualizar cualquier dato que no s
 });
 app.post("/b/userlogin", async (req, res) => {//hacer login, comprueba si el usuario existe y en tal caso lo devuelve
     const { nombre, contrasegna } = req.body;
-    if(nombre != null && contrasegna != null){
+    if(nombre != undefined && contrasegna != undefined){
         Usuario.findOne({nombre: nombre, contrasegna: contrasegna})
         .then((data) => {
             res.json({status: "ok", elId: data._id, oscuro: data.modoOscuro});
@@ -209,7 +209,7 @@ app.post("/b/userlogin", async (req, res) => {//hacer login, comprueba si el usu
 });
 app.get("/b/userp/:id", async (req, res) => {//recibe la contrasegna de un usuario, cuidado
     const { id } = req.params;
-    if(id != null){
+    if(id != undefined){
         Usuario.findById(id)
         .then((data) => {
             const dataFinal = {contrasegna: data.contrasegna}
@@ -226,7 +226,7 @@ app.get("/b/userp/:id", async (req, res) => {//recibe la contrasegna de un usuar
 app.put("/b/userp/:id", async (req, res) => {//actualizar contrasegna del usuario, necesita haber iniciado sesion
     const { id } = req.params;
     const { nuevaContrasegna, viejaContrasegna } = req.body;
-    if(id != null && nuevaContrasegna != null && viejaContrasegna != null && nuevaContrasegna.length < 33){
+    if(id != undefined && nuevaContrasegna != undefined && viejaContrasegna != undefined && nuevaContrasegna.length < 33){
         Usuario.findById(id)
         .then((data) => {
             if(data.contrasegna == viejaContrasegna){
@@ -255,7 +255,7 @@ app.put("/b/userp/:id", async (req, res) => {//actualizar contrasegna del usuari
 app.put("/b/userpb/:id", async (req, res) => {//cambiar si el usuario ya a creado su sala publica o no
     const { id } = req.params;
     const { deja } = req.body;
-    if(id != null && deja != null){
+    if(id != undefined && deja != undefined){
         Usuario.updateOne({_id: id}, {$set: {tienePublica: deja}})
         .then((data) => {
             res.send("ok");
@@ -266,6 +266,21 @@ app.put("/b/userpb/:id", async (req, res) => {//cambiar si el usuario ya a cread
         });
 
 
+    } else {
+        res.redirect("/err404");
+    }
+});
+app.get("/b/userpb/:id", async (req, res) => {//saber si el usuario hizo ya su sala o no
+    const { id } = req.params;
+    if(id != undefined){
+        Usuario.findById(id)
+        .then((data)=>{
+            res.json({tienePublica: data.tienePublica});
+        })
+        .catch((err)=>{
+            console.log(err);
+            res.redirect("/err404");
+        });
     } else {
         res.redirect("/err404");
     }
@@ -281,7 +296,7 @@ app.get("/b/rooms/:id", async (req, res) => {//conseguir la informacion basica d
 app.post("/b/room/:id", async (req, res) => {//crear una sala
     const { id } = req.params;
     const { nombre, idFundador, publica, urlImagen } = req.body;
-    if(nombre != null && idFundador != null && publica != null && urlImagen != null && id != null){
+    if(nombre != undefined && idFundador != undefined && publica != undefined && urlImagen != undefined && id != undefined){
         //crear sala
         const sala = Sala(req.body);
         sala.save()
@@ -300,7 +315,6 @@ app.post("/b/room/:id", async (req, res) => {//crear una sala
                             //unir a la sala con el usuario
                             Sala.updateOne({_id: data3._id}, {$set: {idMiembros: [id]}})
                             .then((data5)=>{
-                                console.log("LLEGO");
                                 res.status(200);
                             })
                             .catch((err) => {

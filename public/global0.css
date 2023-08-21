@@ -19,6 +19,7 @@
     --colorBoton: #3e4142;/*color de fondo de los botones*/
     --colorError: red;/*color para cosas malas*/
     --colorErrorLigero: #5c0000;/*botones peligrosos*/
+    --colorCargando: rgba(0, 0, 0, 0.2);
 }
 html, body {
     margin: 0;
@@ -41,8 +42,12 @@ html *{
     
     color: var(--colorLetra1);
 }
-main img{
+main img:not(.noimagen){
     border: 2px solid black;
+}
+.noimagen{
+    border: none;
+    background-color: transparent;
 }
 #logo-principal{/*imagen del logo de la pagina principal*/
     height: 100%;
@@ -141,6 +146,18 @@ main img{
 }
 .centrar{/*simplemente centrar el texto*/
     text-align: center;
+}
+#cargando{/*cuadro de cargar*/
+    background-color: var(--colorCargando);
+    z-index: 20;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
 }
 
 

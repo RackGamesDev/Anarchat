@@ -1,3 +1,7 @@
+<div id="cargando" class="noimagen hidden">
+    <br><br><br><br>
+    <img src="https://imgur.com/Z9lyXBY.gif" alt="loading...">
+</div>
 <div class="centrar">
     <h1>Building site</h1>
     <p>Put the details of the new room and we'll do the rest</p>
@@ -17,7 +21,11 @@
         <p id="descripcion-contador">X/128</p>
         <input type="button" id="borrar-descripcion" value="Delete description" class="boton-normal">
         <br>
-        <p><input type="checkbox" id="i-sala-publica">Public room</p>
+        <p class="" id="mas-publica"><input type="checkbox" id="i-sala-publica">Public room</p>
+        <div class="hidden borde" id="aviso-nopublic">
+            <p>It looks that you already created a public room, you cannot create more. Sorry</p>
+            <p>If you want to create a public room, you have to delete the one you have</p>
+        </div>
         <div class="hidden borde" id="aviso-public">
             <p>You can only create one public room per account. And it will be accessible to every Anarchat user</p>
         </div>
@@ -41,7 +49,7 @@
         window.location.href = "/err404"
     } else {
         //con cuenta
-        document.addEventListener("DOMContentLoaded", ()=>{
+        document.addEventListener("DOMContentLoaded", async ()=>{
             const $nombre = document.getElementById("i-sala-nombre");
             const $publica = document.getElementById("i-sala-publica");
             const $descripcion = document.getElementById("i-sala-descripcion");
@@ -51,6 +59,13 @@
             const $sitioImagen = document.getElementById("sitio-imagen");
             $nombre.focus();
             $descripcion.innerHTML = "";
+
+            const req = await fetch("/b/userpb/" + localStorage.getItem("user"));//comprobar si ya hizo la sala publica
+            const res = await req.json();
+            if(res.tienePublica == "true"){
+                document.getElementById("aviso-nopublic").classList.remove("hidden");
+                document.getElementById("mas-publica").classList.add("hidden");
+            }
 
             $publica.addEventListener("change", (e) => {//change public
                 if($publica.checked){
@@ -116,7 +131,7 @@
             });
 
             const enviar = async () => {//enviar finalmente
-                console.log("asdf");
+                document.getElementById("cargando").classList.remove("hidden");
                 let publica = "false";
                 if($publica.checked){
                     publica = "true";
@@ -143,7 +158,7 @@
                 }).then(()=>{
                     window.location.href = "/rooms"
                 });
-
+                document.getElementById("cargando").classList.add("hidden");
             }
 
             document.getElementById("i-sala-crear").addEventListener("click", (e) => {//verificar

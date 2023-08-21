@@ -1,4 +1,7 @@
-
+<div id="cargando" class="noimagen">
+    <br><br><br><br>
+    <img src="https://imgur.com/Z9lyXBY.gif" alt="loading...">
+</div>
 <div id="con-cuenta" class="hidden sitio-salas">
     <div id="mas-salas">
         <div id="salas-privadas">
@@ -7,15 +10,7 @@
                 <h2>Nothing here</h2>
                 <p>You aren't in any private room, create one or join it</p>
             </div>
-            <div class="sala-publica" data-posicion="0">
-                <h2 id="nombre-sala">X</h2>
-                <img src="X" alt="X" class="display-foto-perfil">
-                <h3 id="fundador-sala">Founder: X</h3>
-                <div id="descripcion-sala" class="descripcion-sala">descripcionnnnnnnnnnnnnnnna sadf sd f aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
-                <br>
-                <a href="#" id="entrar-sala">Enter...</a>
-                <br><br>
-            </div>
+            
 
         </div>
         <div id="salas-publicas">
@@ -30,10 +25,26 @@
     <br><br><br>
     <img src="https://imgur.com/e99SO1h.png" alt="img">
     <template id="sala-publica-template">
-        
+        <div class="sala-publica" data-posicion="0">
+            <h2 id="nombre-sala">X</h2>
+            <img src="X" alt="X" class="display-foto-perfil">
+            <h3 id="fundador-sala">Founder: X</h3>
+            <div id="descripcion-sala" class="descripcion-sala">descripcionnnnnnnnnnnnnnnna sadf sd f aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+            <br>
+            <a href="#" id="entrar-sala">Enter...</a>
+            <br><br>
+        </div>
     </template>
     <template id="sala-privada-template">
-
+        <div class="sala-privada" data-posicion="0">
+            <h2 id="nombre-sala">X</h2>
+            <img src="X" alt="X" class="display-foto-perfil">
+            <h3 id="fundador-sala">Founder: X</h3>
+            <div id="descripcion-sala" class="descripcion-sala">descripcionnnnnnnnnnnnnnnna sadf sd f aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+            <br>
+            <a href="#" id="entrar-sala">Enter...</a>
+            <br><br>
+        </div>
     </template>
 </div>
 
@@ -58,6 +69,7 @@
     document.querySelector("title").innerHTML = "Anarchat - Rooms";
     if(localStorage.getItem("user") == undefined || localStorage.getItem("user") == "no"){
         document.getElementById("sin-cuenta").classList.remove("hidden");
+        document.getElementById("cargando").classList.add("hidden");
     } else {
         document.getElementById("con-cuenta").classList.remove("hidden");
         //con cuenta
@@ -65,7 +77,7 @@
 
 
 
-
+            document.getElementById("cargando").classList.add("hidden");
         });
     }
 </script>

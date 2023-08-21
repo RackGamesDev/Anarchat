@@ -1,3 +1,7 @@
+<div id="cargando" class="noimagen hidden">
+    <br><br><br><br>
+    <img src="https://imgur.com/Z9lyXBY.gif" alt="loading...">
+</div>
 <br>
 <div id="con-cuenta" class="centrar hidden">
     <div class="caja-error hidden borde" id="caja-error">
@@ -35,6 +39,7 @@
             }
         });
         document.getElementById("boton-borrar").addEventListener("click", async () => {//boton
+            document.getElementById("cargando").classList.remove("hidden");
             if($contrasegna1.value == $contrasegna2.value){
                 const res = await fetch("/b/userp/" + localStorage.getItem("user"));
                 const req = await res.json();
@@ -57,6 +62,7 @@
             } else {
                 document.getElementById("caja-error").classList.remove("hidden");
             }
+            document.getElementById("cargando").classList.add("hidden");
         });
     } else {
         window.location.href = "/err404";

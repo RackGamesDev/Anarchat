@@ -1,3 +1,7 @@
+<div id="cargando" class="noimagen hidden">
+    <br><br><br><br>
+    <img src="https://imgur.com/Z9lyXBY.gif" alt="loading...">
+</div>
 <div class="centrar">
     <h1>Who are you?</h1>
     <h2>Login using only your name and your password</h2>
@@ -40,6 +44,7 @@
     });
 
     const enviar = async (usuario, contrasegna) => {//ENVIAR DATOS
+        document.getElementById("cargando").classList.remove("hidden");
         const datos = {nombre: usuario, contrasegna: contrasegna}
         res = await fetch("/b/userLogin", {
             method: "POST",
@@ -59,6 +64,7 @@
             $contrasegna.value = "";
             $cajaError.classList.remove("hidden");
         }
+        document.getElementById("cargando").classList.add("hidden");
     }
 
     $boton.addEventListener("click", () => {//VERIFICAR DATOS

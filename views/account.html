@@ -1,3 +1,7 @@
+<div id="cargando" class="noimagen">
+    <br><br><br><br>
+    <img src="https://imgur.com/Z9lyXBY.gif" alt="loading...">
+</div>
 <br>
 <div id="con-cuenta" class="centrar elperfil hidden"><!--si tienes iniciada sesion sale este div-->
     <div id="error-perfil" class="caja-error centrar hidden">
@@ -90,6 +94,7 @@ if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != 
         } else {
             document.getElementById("con-cuenta").remove();
         }
+        document.getElementById("cargando").classList.add("hidden");
     });
     const hacerImagenRandom = () => {//si no hay imagen especificada usar una random
         const randPhoto = Math.floor(Math.random() * 8);
@@ -149,6 +154,7 @@ if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != 
         }
     });
     document.getElementById("boton-cambios-perfil").addEventListener("click", async (e)=>{//intentar verificar
+        document.getElementById("cargando").classList.remove("hidden");
         if($sitioNombre.value.length < 8 || $sitioDescripcion.innerHTML.length > 128 || $sitioNombre.value.length > 32){
             document.getElementById("error-perfil").classList.remove("hidden");
         } else {
@@ -174,11 +180,13 @@ if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != 
             then(() => window.location.href = "/account")
             .catch(() => window.location.href = "/err404");
         }
+        document.getElementById("cargando").classList.add("hidden");
     });
 } else {
     document.getElementById("sin-cuenta").classList.remove("hidden");
     document.getElementById("logo-arriba").remove();
     document.getElementById("btn-account").classList.add("barra-item-activado");
+    document.getElementById("cargando").classList.add("hidden");
 }
     
     
