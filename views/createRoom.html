@@ -1,0 +1,161 @@
+<div class="centrar">
+    <h1>Building site</h1>
+    <p>Put the details of the new room and we'll do the rest</p>
+    <form>
+        <h2>Name:</h2>
+        <input type="text" id="i-sala-nombre" value="" placeholder="">
+        <h2>Image URL:</h2>
+        <input id="sitio-imagen" type="text" id="i-sala-imagen" value="" placeholder="Imgur 128x128 recomended">
+        <br><br>
+        <a id="link-imagen" href="https://imgur.com/Wega2Bu.png" target="_blank"><img id="display-foto-perfil" src="https://imgur.com/Wega2Bu.png" alt="X"></a>
+        <br>
+        <input type="button" id="actualiza-imagen" value="Update image" class="boton-normal">
+        <h2>Description:</h2>
+        <div id="i-sala-descripcion" contenteditable>
+
+        </div>
+        <p id="descripcion-contador">X/128</p>
+        <input type="button" id="borrar-descripcion" value="Delete description" class="boton-normal">
+        <br>
+        <p><input type="checkbox" id="i-sala-publica">Public room</p>
+        <div class="hidden borde" id="aviso-public">
+            <p>You can only create one public room per account. And it will be accessible to every Anarchat user</p>
+        </div>
+        <br>
+        <input type="button" value="Create room" id="i-sala-crear">
+    </form>
+    
+    <div class="caja-error hidden borde" id="caja-error">
+        <p>The name must be between 8 and 32 characters length and the description has a 128 character limit, or maybe you already created one public room</p>
+    </div>
+    <br>
+    <img src="https://imgur.com/JRjWcbY.png" alt="img">
+</div>
+
+<script>
+    document.execCommand('insertHTML', false, '<br><br>');
+    document.getElementById("btn-rooms").classList.add("barra-item-activado");
+    document.getElementById("logo-arriba").remove();
+    document.querySelector("title").innerHTML = "Anarchat - Create room";
+    if(localStorage.getItem("user") == undefined || localStorage.getItem("user") == "no"){
+        window.location.href = "/err404"
+    } else {
+        //con cuenta
+        document.addEventListener("DOMContentLoaded", ()=>{
+            const $nombre = document.getElementById("i-sala-nombre");
+            const $publica = document.getElementById("i-sala-publica");
+            const $descripcion = document.getElementById("i-sala-descripcion");
+            const $descripcionContador = document.getElementById("descripcion-contador");
+            const $linkImagen = document.getElementById("link-imagen");
+            const $imagen = document.getElementById("display-foto-perfil");
+            const $sitioImagen = document.getElementById("sitio-imagen");
+            $nombre.focus();
+            $descripcion.innerHTML = "";
+
+            $publica.addEventListener("change", (e) => {//change public
+                if($publica.checked){
+                    document.getElementById("aviso-public").classList.remove("hidden");
+                } else {
+                    document.getElementById("aviso-public").classList.add("hidden");
+                }
+            });
+
+            const hacerPlaceRandom = () => {//placeholder aleatorio del nombre
+                const randNombre = Math.floor(Math.random() * 8);
+                let randPlace = "";
+                switch(randNombre){
+                    case 0:
+                        randPlace = "LandOfPaos";
+                    break;
+                    case 1:
+                        randPlace = "LiterallyMyHouse";
+                    break;
+                    case 2:
+                        randPlace = "TheRoomOfPapus";
+                    break;
+                    case 3:
+                        randPlace = "TheBackRoom";
+                    break;
+                    case 4:
+                        randPlace = "TheHappyCorner";
+                    break;
+                    case 5:
+                        randPlace = "room11111";
+                    break;
+                    case 6:
+                        randPlace = "ARoomWithRandoms";
+                    break;
+                    case 7:
+                        randPlace = "TheArea15";
+                    break;
+                    
+                    default:
+                        randPlace = "LandOfPaos";
+                    break;
+                }
+                return randPlace;
+            }
+            $nombre.placeholder = hacerPlaceRandom();
+
+            function actualizarContador(){
+                $descripcionContador.innerHTML = $descripcion.innerHTML.length + "/128";
+                if($descripcion.innerHTML.length > 128){
+                    $descripcionContador.classList.add("txt-rojo");
+                } else {
+                    $descripcionContador.classList.remove("txt-rojo");
+                }
+            }
+            let tiempoDescripcion = setInterval(actualizarContador, 50);
+            document.getElementById("borrar-descripcion").addEventListener("click", () => {//borrar descripcion
+                $descripcion.innerHTML = "";
+            });
+
+            document.getElementById("actualiza-imagen").addEventListener("click", ()=>{//actualizar imagen
+                $linkImagen.href = $sitioImagen.value;
+                $imagen.src= $sitioImagen.value;
+            });
+
+            const enviar = async () => {//enviar finalmente
+                console.log("asdf");
+                let publica = "false";
+                if($publica.checked){
+                    publica = "true";
+                }
+                const body = {
+                    nombre: $nombre.value,
+                    idFundador: localStorage.getItem("user"),
+                    publica: publica,
+                    urlImagen: $sitioImagen.value
+                }
+                await fetch("/b/room/" + localStorage.getItem("user"), {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json; charset=utf-8"
+                    },
+                    body: JSON.stringify(body)
+                });
+                await fetch("/b/userpb/" + localStorage.getItem("user"), {
+                    method: "PUT",
+                    headers: {
+                        "Content-type": "application/json; charset=utf-8"
+                    },
+                    body: JSON.stringify({deja: "true"})
+                }).then(()=>{
+                    window.location.href = "/rooms"
+                });
+
+            }
+
+            document.getElementById("i-sala-crear").addEventListener("click", (e) => {//verificar
+                if($nombre.value.length < 9 || $descripcion.innerHTML.length > 128 || $nombre.value.length > 32){
+                    document.getElementById("caja-error").classList.remove("hidden");
+                } else {
+                    if($sitioImagen.value = "" || !$sitioImagen.value){
+                        $sitioImagen.value = "https://imgur.com/Wega2Bu.png";
+                    }
+                    enviar();
+                }
+            });
+        });
+    }
+</script>

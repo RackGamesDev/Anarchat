@@ -1,0 +1,14 @@
+<p>join room</p>
+<br><br><br>
+
+<script>
+    document.getElementById("btn-rooms").classList.add("barra-item-activado");
+    document.getElementById("logo-arriba").remove();
+    document.querySelector("title").innerHTML = "Anarchat - Join room";
+    if(localStorage.getItem("user") == undefined || localStorage.getItem("user") == "no"){
+        window.location.href = "/err404"
+    } else {
+        //con cuenta
+        
+    }
+</script>

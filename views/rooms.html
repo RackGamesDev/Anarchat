@@ -1,20 +1,40 @@
 
-<div id="con-cuenta" class="hidden">
+<div id="con-cuenta" class="hidden sitio-salas">
     <div id="mas-salas">
         <div id="salas-privadas">
             <h1>Private rooms</h1>
+            <div class="sala-privada" id="sin-sala-privada">
+                <h2>Nothing here</h2>
+                <p>You aren't in any private room, create one or join it</p>
+            </div>
+            <div class="sala-publica" data-posicion="0">
+                <h2 id="nombre-sala">X</h2>
+                <img src="X" alt="X" class="display-foto-perfil">
+                <h3 id="fundador-sala">Founder: X</h3>
+                <div id="descripcion-sala" class="descripcion-sala">descripcionnnnnnnnnnnnnnnna sadf sd f aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+                <br>
+                <a href="#" id="entrar-sala">Enter...</a>
+                <br><br>
+            </div>
 
-            
         </div>
         <div id="salas-publicas">
             <h1>Public rooms</h1>
-
+            
 
         </div>
     </div>
-    <input type="button" id="crear-sala" value="Create a new room">
-    <br>
-    <input type="button" id="crear-sala" value="Join a room">
+    <a id="crear-sala" href="/createRoom">Create a new room</a>
+    <br><br>
+    <a id="entrar-sala" href="/joinRoom">Join a room</a>
+    <br><br><br>
+    <img src="https://imgur.com/e99SO1h.png" alt="img">
+    <template id="sala-publica-template">
+        
+    </template>
+    <template id="sala-privada-template">
+
+    </template>
 </div>
 
 <div id="caja-start" class="centrar">
@@ -41,6 +61,11 @@
     } else {
         document.getElementById("con-cuenta").classList.remove("hidden");
         //con cuenta
-        
+        document.addEventListener("DOMContentLoaded", () => {
+
+
+
+
+        });
     }
 </script>

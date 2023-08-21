@@ -13,9 +13,8 @@
     </form>
     <br><br>
     <div class="caja-error hidden borde" id="caja-error">
-        <p>The password and the name must be both at least 8 characters long, the name cannot be the password and both password boxes must containt the same text</p>
+        <p>The password and the name must be between 8 and 32 characters long, the name cannot be the password and both password boxes must containt the same text</p>
     </div>
-    <br>
     <img src="https://imgur.com/fsGTSYY.png" alt="img">
     <p>You already have an account? <a href="/signin">login here</a></p>
 </div>
@@ -33,6 +32,7 @@
     const $check = document.getElementById("checkContrasegna");
     const $cajaError = document.getElementById("caja-error");
 
+    $nombre.focus();
     $check.checked = false;
     $check.addEventListener("change", (e) => {
         if($check.checked){
@@ -107,7 +107,7 @@
         const nombre = $nombre.value;
         const contrasegna = $contrasegna.value;
         const contrasegna2 = $contrasegna2.value;
-        if(nombre.length < 7 || contrasegna.length < 7 || contrasegna2.length < 7 || contrasegna != contrasegna2 || nombre == contrasegna || nombre == contrasegna2){
+        if(nombre.length < 7 || nombre.length > 32 || contrasegna.length < 7 || contrasegna.length > 32 || contrasegna2.length < 7 || contrasegna != contrasegna2 || nombre == contrasegna || nombre == contrasegna2){
             $cajaError.classList.remove("hidden");
         } else {
             enviar(nombre, contrasegna);

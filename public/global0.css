@@ -56,6 +56,7 @@ main img{
     visibility: hidden;
     width: 0px;
     height: 0px;
+    position: absolute;
 }
 .txt-rojo{
     color: var(--colorError);
@@ -138,7 +139,7 @@ main img{
     font-size: 5rem;
     margin: 2px;
 }
-.centrar:not(input[type="textarea"]){/*simplemente centrar el texto*/
+.centrar{/*simplemente centrar el texto*/
     text-align: center;
 }
 
@@ -254,7 +255,7 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     border: 2px solid var(--colorBorde);
     overflow: scroll;
 }
-#display-foto-perfil{/*la imagen puesta en el perfil*/
+#display-foto-perfil, .display-foto-perfil{/*la imagen puesta en el perfil*/
     size: 128px;
     width: 128px;
     height: 128px;
@@ -276,12 +277,51 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     display: flex;
     flex-direction: row;
     justify-content: center;
+    height: 100%;
 }
 #salas-privadas, #salas-publicas{/*ambas secciones de salas*/
-    margin: 10px 10%;
+    margin: 10px;
     text-align: center;
-    border: 1px solid var(--colorBorde);
+    border: 2px solid var(--colorBorde);
     background-color: var(--colorFondo2);
+    width: 40%;
+    height: 80vh;
+    overflow-y: scroll;
+}
+.sala-privada, .sala-publica{/*cada cuadro de sala*/
+    border: 1px solid var(--colorBorde);
+    background-color: var(--colorFondo);
+    margin: 10px 20px;
+    overflow: hidden;
+}
+.descripcion-sala{/*cuadro con la descripcion de una sala*/
+    width: 90%;
+    max-height: 200px;
+    overflow: scroll;
+    padding: 10px;
+    text-align: start;
+}
+#nombre-sala{/*titulo de sala*/
+    padding: 0;
+    margin: 3px;
+}
+#entrar-sala, #crear-sala{/*boton para entrar o crear una sala*/
+    background-color: var(--colorBoton);
+    color: var(--colorLetra3);
+    text-decoration: none;
+    padding: 5px 10px;
+    margin: 40px;
+}
+.sitio-salas{/*lo mas fuera de lo de las salas*/
+    text-align: center;
+}
+#i-sala-descripcion{/*el input de descripcion de la sala*/
+    width: 60%;
+    height: 150px;
+    overflow: hidden;
+    text-align: start;
+    border: 1px solid var(--colorBorde);
+    transform:translateX(32%);
 }
 
 
@@ -328,5 +368,11 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     }
     #dcontrasegna1, #dcontrasegna2{
         width: 80%;
+    }
+    #salas-privadas>h1, #salas-publicas>h1, #nombre-sala{
+        font-size: 1rem;
+    }
+    #fundador-sala{
+        font-size: 0.9rem;
     }
 }

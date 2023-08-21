@@ -82,6 +82,12 @@ app.get("/logout", (req, res) => {
 app.get("/rooms", (req, res) => {
     res.send(formarPagina('rooms.html'));
 });
+app.get("/createRoom", (req, res) => {
+    res.send(formarPagina('createRoom.html'));
+});
+app.get("/joinRoom", (req, res) => {
+    res.send(formarPagina('joinRoom.html'));
+});
 app.get("/about", (req, res) => {
     res.send(formarPagina('about.html'));
 });
@@ -90,6 +96,7 @@ app.get("/about", (req, res) => {
 import ruta from './routes/rutas.js'
 app.use("/", ruta);
 import rutaRecursos from './routes/recursos.js';
+import { debug } from 'console';
 app.use("/", rutaRecursos);
 
 
@@ -114,9 +121,10 @@ app.get("/b/user/:id", async (req, res) => {//conseguir los datos de un usuario,
     }
 });
 app.post("/b/user", async (req, res) => {//crear un usuario
+    req.body.tienePublica = "false";
     const user = Usuario(req.body);
     try{
-        if(user != null && user.nombre.length > 7 && user.contrasegna.length > 7 && user.nombre != user.contrasegna){
+        if(user != null && user.nombre.length > 7 && user.contrasegna.length > 7 && user.nombre != user.contrasegna && user.nombre.length < 33 && user.contrasegna.length < 33){
             user.save()
             .then((data) => {
                 res.redirect("/account");
@@ -218,7 +226,7 @@ app.get("/b/userp/:id", async (req, res) => {//recibe la contrasegna de un usuar
 app.put("/b/userp/:id", async (req, res) => {//actualizar contrasegna del usuario, necesita haber iniciado sesion
     const { id } = req.params;
     const { nuevaContrasegna, viejaContrasegna } = req.body;
-    if(id != null && nuevaContrasegna != null && viejaContrasegna != null){
+    if(id != null && nuevaContrasegna != null && viejaContrasegna != null && nuevaContrasegna.length < 33){
         Usuario.findById(id)
         .then((data) => {
             if(data.contrasegna == viejaContrasegna){
@@ -244,12 +252,85 @@ app.put("/b/userp/:id", async (req, res) => {//actualizar contrasegna del usuari
         res.redirect("/err404");
     }
 });
+app.put("/b/userpb/:id", async (req, res) => {//cambiar si el usuario ya a creado su sala publica o no
+    const { id } = req.params;
+    const { deja } = req.body;
+    if(id != null && deja != null){
+        Usuario.updateOne({_id: id}, {$set: {tienePublica: deja}})
+        .then((data) => {
+            res.send("ok");
+        })
+        .catch((err) => {
+            console.log(err);
+            res.redirect("/err404");
+        });
 
-app.get("/b/room", async (req, res) => {//conseguir todos los datos de una sala incluyendo mensajes
+
+    } else {
+        res.redirect("/err404");
+    }
+});
+
+
+app.get("/b/room/:id", async (req, res) => {//conseguir todos los datos de una sala incluyendo mensajes
 
 });
-app.post("/b/room", async (req, res) => {//crear una sala
-    
+app.get("/b/rooms/:id", async (req, res) => {//conseguir la informacion basica de todas las salas de un usuario
+
+});
+app.post("/b/room/:id", async (req, res) => {//crear una sala
+    const { id } = req.params;
+    const { nombre, idFundador, publica, urlImagen } = req.body;
+    if(nombre != null && idFundador != null && publica != null && urlImagen != null && id != null){
+        //crear sala
+        const sala = Sala(req.body);
+        sala.save()
+            .then((data1) => {
+                //recibir usuario
+                Usuario.findById(id)
+                .then((data2) => {
+                    let susSalas = data2.salas;
+                    //recibir id de la nueva sala
+                    Sala.findById(data1._id)
+                    .then((data3) => {
+                        susSalas.push(data3._id);
+                        //unir al usuario con la sala
+                        Usuario.updateOne({_id: id}, {$set: {salas: susSalas}})
+                        .then((data4) => {
+                            //unir a la sala con el usuario
+                            Sala.updateOne({_id: data3._id}, {$set: {idMiembros: [id]}})
+                            .then((data5)=>{
+                                console.log("LLEGO");
+                                res.status(200);
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                                res.redirect("/err404");
+                            });
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            res.redirect("/err404");
+                        });
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        res.redirect("/err404");
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    res.redirect("/err404");
+                });    
+            })
+            .catch((err) => {
+                console.log(err);
+                res.redirect("/err404");
+            });
+    } else {
+        res.redirect("/err404");
+    }
+    res.redirect("/rooms");
 });
 app.post("/b/join", async (req, res) => {//unirse a una sala, hace falta el id de sala y el de usuario
     
@@ -257,20 +338,20 @@ app.post("/b/join", async (req, res) => {//unirse a una sala, hace falta el id d
 app.post("/b/exit", async (req, res) => {//salir de una sala, por haber sido expulsado o salir manualmente, no se puede salir siendo el fundador
     
 });
-app.delete("/b/room", async (req, res) => {//borrar una sala, se necesita el id de usuario y de sala y que el usuario sea el fundador
-    
-});
-app.get("/b/invite", async (req, res) => {//devuelve datos para invitacion, hace falta el id de sala
+app.post("/b/roomdel", async (req, res) => {//borrar una sala, se necesita el id de usuario y de sala y que el usuario sea el fundador
     
 });
 
-app.post("/b/say", async (req, res) => {//decir algo en una sala, muchos datos necesitados
-    
-});
-app.delete("/b/say", async (req, res) => {//borrar un mensaje de una sala
-    
-});
 
+app.post("/b/say/:id", async (req, res) => {//decir algo en una sala, muchos datos necesitados
+    
+});
+app.post("/b/saydel/:id", async (req, res) => {//borrar un mensaje de una sala
+    
+});
+app.put("/b/say/:id", async (req, res) => {//editar un mensaje de una sala
+    
+});
 
 
 
@@ -291,3 +372,4 @@ app.get("/*", (req, res) => {
 });
 app.listen(PORT, () => console.log("levantado en " + PORT));
 console.log("todo operativo :)");
+

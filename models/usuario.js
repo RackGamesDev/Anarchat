@@ -8,7 +8,8 @@ const usuarioSchema = new Schema({
     urlFoto: String,//la url de la foto del usuario, preferiblemente imgur
     descripcion: String,//la descripcion publica del usuario
     modoOscuro: String,//si tiene el modo oscuro o no ("true", "false")
-    salas: [String]//las salas en las que esta, no discrimina si es el admin o no
+    salas: [String],//las salas en las que esta, no discrimina si es el admin o no
+    tienePublica: String//si ya ha creado su sala publica unica ("true", "false")
 });
 
 const Usuario = mongoose.model('usuario', usuarioSchema);
