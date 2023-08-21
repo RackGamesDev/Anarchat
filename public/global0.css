@@ -253,8 +253,9 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     font-weight: lighter;
 }
 #sitio-id, #url-imagen-ir{/*texto con tu id y la url de la imagen*/
-    overflow: scroll;
-    width: 350px;
+    /*overflow: scroll;*/
+    overflow: visible;
+    width: 400px;
     background-color: transparent;
     /* font-size: 1rem;
     align-self: center; */
@@ -365,6 +366,10 @@ form input[type="checkbox"]{/*todos los checkbox input*/
         font-size: 0.9rem;
         padding: 2px;
         margin: 1px;
+    }
+    .elperfil{
+        width: 100%;
+        transform:translateX(0);
     }
     #zona-perfil{
         font-size: 0.8rem;

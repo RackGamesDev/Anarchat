@@ -149,15 +149,17 @@
                     },
                     body: JSON.stringify(body)
                 });
-                await fetch("/b/userpb/" + localStorage.getItem("user"), {
-                    method: "PUT",
-                    headers: {
-                        "Content-type": "application/json; charset=utf-8"
-                    },
-                    body: JSON.stringify({deja: "true"})
-                }).then(()=>{
-                    window.location.href = "/rooms"
-                });
+                if(publica){
+                    await fetch("/b/userpb/" + localStorage.getItem("user"), {
+                        method: "PUT",
+                        headers: {
+                            "Content-type": "application/json; charset=utf-8"
+                        },
+                        body: JSON.stringify({deja: "true"})
+                    }).then(()=>{
+                        window.location.href = "/rooms"
+                    });
+                }
                 document.getElementById("cargando").classList.add("hidden");
             }
 
