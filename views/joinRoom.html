@@ -2,9 +2,20 @@
     <br><br><br><br>
     <img src="https://imgur.com/Z9lyXBY.gif" alt="loading...">
 </div>
-
-<p>join room</p>
-<br><br><br>
+<div class="centrar">
+    <h1>Join a room</h1>
+    <p>This is where you can join private rooms, the founder should have sent you a code, paste it here</p>
+    <br>
+    <h2>Room code:</h2>
+    <input type="text" value="" placeholder="Paste room code" id="sitio-codigo">
+    <br><br>
+    <input type="button" value="Join now!" id="boton-unirse">
+    <br><br><br>
+    <div class="caja-error hidden borde" id="caja-error">
+        <p>It looks that the room doesn't exists or you are already joined. Or maybe the room is public (then there is no need to join)</p>
+    </div>
+    <img src="https://imgur.com/e9S4mbs.png" alt="img">
+</div>
 
 <script>
     document.getElementById("btn-rooms").classList.add("barra-item-activado");
@@ -14,6 +25,28 @@
         window.location.href = "/err404"
     } else {
         //con cuenta
-        
+        const $codigo = document.getElementById("sitio-codigo");
+        document.getElementById("boton-unirse").addEventListener("click", async () => {
+            document.getElementById("cargando").classList.remove("hidden");
+            $codigo.focus();
+            if($codigo.value != ""){//comprobar
+                let req = await fetch("/b/join/" + localStorage.getItem("user"), {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json; charset=utf-8"
+                    },
+                    body: JSON.stringify({sala: $codigo.value})
+                });
+                let res = await req.json();
+                if(res.stat == 400){
+                    document.getElementById("caja-error").classList.remove("hidden");
+                    $codigo.value = "";
+                } else if(res.stat == 200){
+                    window.location.href = "/rooms";
+                }
+                
+            }
+            document.getElementById("cargando").classList.add("hidden");
+        });
     }
 </script>

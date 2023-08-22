@@ -88,6 +88,7 @@ app.get("/createRoom", (req, res) => {
 app.get("/joinRoom", (req, res) => {
     res.send(formarPagina('joinRoom.html'));
 });
+
 app.get("/about", (req, res) => {
     res.send(formarPagina('about.html'));
 });
@@ -104,6 +105,7 @@ app.use("/", rutaRecursos);
 //EN ESTA PARTE VAN LOS ENDPOINTS:
 
 app.get("/b/user/:id", async (req, res) => {//conseguir los datos de un usuario, sin contrasegna
+    console.log("GET USUARIO DATOS");
     //const cual = req.query.id;
     const { id } = req.params;
     if(id != undefined){
@@ -121,6 +123,7 @@ app.get("/b/user/:id", async (req, res) => {//conseguir los datos de un usuario,
     }
 });
 app.post("/b/user", async (req, res) => {//crear un usuario
+    console.log("CREAR USUARIO");
     req.body.tienePublica = "false";
     const user = Usuario(req.body);
     try{
@@ -143,6 +146,7 @@ app.post("/b/user", async (req, res) => {//crear un usuario
     //INICIAR SESION
 });
 app.post("/b/userdel/:id", async (req, res) => {//eliminar un usuario, hace falta la contrasegna
+    console.log("ELIMINAR USUARIO");
     const { id } = req.params;
     const { contrasegna } = req.body;
     if(id != undefined && contrasegna != undefined){
@@ -153,6 +157,10 @@ app.post("/b/userdel/:id", async (req, res) => {//eliminar un usuario, hace falt
                 .then(() => {
                     //res.redirect("/");
                     //BORRAR TAMBIEN SUS SALAS Y MENSAJES
+
+
+
+
 
 
 
@@ -178,6 +186,7 @@ app.post("/b/userdel/:id", async (req, res) => {//eliminar un usuario, hace falt
     res.send("ok");
 });
 app.put("/b/user/:id", async (req, res) => {//actualizar cualquier dato que no sea ni el id ni la contrasegna del usuario
+    console.log("ACTUALIZAR USUARIO");
     const { id } = req.params;
     const { nombre, descripcion, urlFoto, modoOscuro } = req.body;
     if(id != undefined && nombre != undefined && descripcion != undefined && urlFoto != undefined && modoOscuro != undefined){
@@ -194,6 +203,7 @@ app.put("/b/user/:id", async (req, res) => {//actualizar cualquier dato que no s
     }
 });
 app.post("/b/userlogin", async (req, res) => {//hacer login, comprueba si el usuario existe y en tal caso lo devuelve
+    console.log("LOGIN");
     const { nombre, contrasegna } = req.body;
     if(nombre != undefined && contrasegna != undefined){
         Usuario.findOne({nombre: nombre, contrasegna: contrasegna})
@@ -208,6 +218,7 @@ app.post("/b/userlogin", async (req, res) => {//hacer login, comprueba si el usu
     }
 });
 app.get("/b/userp/:id", async (req, res) => {//recibe la contrasegna de un usuario, cuidado
+    console.log("DAR CONTRASEGNA USUARIO");
     const { id } = req.params;
     if(id != undefined){
         Usuario.findById(id)
@@ -224,6 +235,7 @@ app.get("/b/userp/:id", async (req, res) => {//recibe la contrasegna de un usuar
     }
 });
 app.put("/b/userp/:id", async (req, res) => {//actualizar contrasegna del usuario, necesita haber iniciado sesion
+    console.log("ACTUALIZAR CONTRASEGNA USUARIO");
     const { id } = req.params;
     const { nuevaContrasegna, viejaContrasegna } = req.body;
     if(id != undefined && nuevaContrasegna != undefined && viejaContrasegna != undefined && nuevaContrasegna.length < 33){
@@ -253,6 +265,7 @@ app.put("/b/userp/:id", async (req, res) => {//actualizar contrasegna del usuari
     }
 });
 app.put("/b/userpb/:id", async (req, res) => {//cambiar si el usuario ya a creado su sala publica o no
+    console.log("CAMBIAR POSIBILIDAD PUBLICA");
     const { id } = req.params;
     const { deja } = req.body;
     if(id != undefined && deja != undefined){
@@ -271,6 +284,7 @@ app.put("/b/userpb/:id", async (req, res) => {//cambiar si el usuario ya a cread
     }
 });
 app.get("/b/userpb/:id", async (req, res) => {//saber si el usuario hizo ya su sala o no
+    console.log("RECIBIR USUARIO PUBLICA");
     const { id } = req.params;
     if(id != undefined){
         Usuario.findById(id)
@@ -287,16 +301,81 @@ app.get("/b/userpb/:id", async (req, res) => {//saber si el usuario hizo ya su s
 });
 
 
-app.get("/b/room/:id", async (req, res) => {//conseguir todos los datos de una sala incluyendo mensajes
-
+app.get("/b/room/:sala", async (req, res) => {//conseguir todos los datos de una sala incluyendo mensajes
+    
+});
+app.get("/b/roomData/:sala", async (req, res)=>{//conseguir informacion de perfilado de una sala
+    console.log("CONSEGUIR PERFILADO SALA");
+    const { sala } = req.params;
+    if(sala != undefined){
+        Sala.findById(sala)
+        .then((data) => {
+            let dataFinal = {_id: data._id, nombre: data.nombre, descripcion: data.descripcion, urlFoto: data.urlFoto, nombreFundador: "", publica: data.publica}
+            Usuario.findById(data.idFundador)
+            .then((data2) => {
+                dataFinal.nombreFundador = data2.nombre;
+                res.json(dataFinal);
+            })
+            .catch((err)=>{
+                console.log(err);
+                res.redirect("/err404");
+            });
+        })
+        .catch((err)=>{
+            console.log(err);
+            res.redirect("/err404");
+        });
+    } else {
+        res.redirect("/err404");
+    }
 });
 app.get("/b/rooms/:id", async (req, res) => {//conseguir la informacion basica de todas las salas de un usuario
-
+    console.log("CONSEGUIR ID SALAS USUARIO");
+    const { id } = req.params;
+    if(id != undefined){
+        //conseguir array de salas del usuario
+        Usuario.findById(id)
+        .then((data) => {
+            res.json({salas: data.salas});
+        })
+        .catch((err)=>{
+            console.log(err);
+            res.redirect("/err404");
+        });
+    } else {
+        res.redirect("/err404");
+    }
+});
+app.get("/b/founder/:sala", async (req, res) => {//conseguir el fundador de una sala
+    console.log("CONSEGUIR FUNDADOR SALA");
+    const { sala } = req.params;
+    if(sala != undefined){
+        Sala.findById(sala)
+        .then((data) => {
+            Usuario.findById(data.idFundador)
+            .then((data2) => {
+                const dataFinal = {_id: data2._id, nombre: data2.nombre, descripcion: data2.descripcion, urlFoto: data2.urlFoto}
+                console.log("va");
+                res.json(dataFinal);
+            })
+            .catch((err)=>{
+                console.log(err);
+                res.redirect("/err404");
+            });
+        })
+        .catch((err)=>{
+            console.log(err);
+            res.redirect("/err404");
+        });
+    } else {
+        res.redirect("/err404");
+    }
 });
 app.post("/b/room/:id", async (req, res) => {//crear una sala
+    console.log("CREAR SALA");
     const { id } = req.params;
-    const { nombre, idFundador, publica, urlImagen } = req.body;
-    if(nombre != undefined && idFundador != undefined && publica != undefined && urlImagen != undefined && id != undefined){
+    const { nombre, idFundador, publica, urlFoto, descripcion } = req.body;
+    if(nombre != undefined && idFundador != undefined && publica != undefined && urlFoto != undefined && descripcion != undefined && id != undefined){
         //crear sala
         const sala = Sala(req.body);
         sala.save()
@@ -346,8 +425,80 @@ app.post("/b/room/:id", async (req, res) => {//crear una sala
     }
     res.redirect("/rooms");
 });
-app.post("/b/join", async (req, res) => {//unirse a una sala, hace falta el id de sala y el de usuario
-    
+app.post("/b/join/:id", async (req, res) => {//unirse a una sala, hace falta el id de sala y el de usuario
+    console.log("UNIRSE A SALA");
+    const { id } = req.params;
+    const { sala } = req.body;
+    if(id != undefined && sala != undefined){
+        //ver si la sala existe
+        Sala.findById(sala)
+        .then((data) => {
+            if(data.idMiembros.includes(id) || data.publica == "true"){
+                res.json({stat: 400});//el usuario ya esta dentro o es publica
+            } else {
+                let miembros = data.idMiembros;
+                miembros.push(id);
+                //unir a la sala
+                Sala.updateOne({_id: sala}, {$set: {idMiembros: miembros}})
+                .then((data2) => {
+                    //recibir salas del usuario
+                    Usuario.findById(id)
+                    .then((data3) => {
+                        let salasn = data3.salas;
+                        salasn.push(sala);
+                        //unir sala
+                        Usuario.updateOne({_id: id}, {$set: {salas: salasn}})
+                        .then((data4) => {
+                            console.log("va");
+                            res.json({stat: 200});//funciona
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            res.redirect("/err404");
+                        });
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        res.redirect("/err404");
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    res.redirect("/err404");
+                });
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            res.json({stat: 400});//la sala no existe
+        });
+    } else {
+        res.redirect("/err404");
+    }
+});
+app.get("/roomsPublic/:limit", (req, res) => {//consigue todas las salas publicas de la base de datos
+    console.log("CONSEGUIR SALAS PUBLICAS TODAS");
+    const { limit } = req.params;
+    if(limit != NaN){
+        Sala.find({publica: {$in: "true"}})
+        .limit()
+        .then((data) => {
+            res.json(data);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.json({stat: 400});//la sala no existe
+        });
+    }
+});
+app.get("/room/:sala", (req, res) => {
+    res.send(formarPagina('room.html'));
+
+
+
+
+
+
 });
 app.post("/b/exit", async (req, res) => {//salir de una sala, por haber sido expulsado o salir manualmente, no se puede salir siendo el fundador
     

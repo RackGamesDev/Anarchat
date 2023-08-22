@@ -128,6 +128,7 @@
             document.getElementById("actualiza-imagen").addEventListener("click", ()=>{//actualizar imagen
                 $linkImagen.href = $sitioImagen.value;
                 $imagen.src= $sitioImagen.value;
+                console.log($sitioImagen.value);
             });
 
             const enviar = async () => {//enviar finalmente
@@ -140,7 +141,8 @@
                     nombre: $nombre.value,
                     idFundador: localStorage.getItem("user"),
                     publica: publica,
-                    urlImagen: $sitioImagen.value
+                    urlFoto: $sitioImagen.value || "",
+                    descripcion: $descripcion.innerHTML || ""
                 }
                 await fetch("/b/room/" + localStorage.getItem("user"), {
                     method: "POST",
@@ -149,27 +151,27 @@
                     },
                     body: JSON.stringify(body)
                 });
-                if(publica){
+                if($publica.checked){
                     await fetch("/b/userpb/" + localStorage.getItem("user"), {
                         method: "PUT",
                         headers: {
                             "Content-type": "application/json; charset=utf-8"
                         },
                         body: JSON.stringify({deja: "true"})
-                    }).then(()=>{
-                        window.location.href = "/rooms"
                     });
                 }
                 document.getElementById("cargando").classList.add("hidden");
+                window.location.href = "/rooms"
             }
 
             document.getElementById("i-sala-crear").addEventListener("click", (e) => {//verificar
                 if($nombre.value.length < 9 || $descripcion.innerHTML.length > 128 || $nombre.value.length > 32){
                     document.getElementById("caja-error").classList.remove("hidden");
                 } else {
-                    if($sitioImagen.value = "" || !$sitioImagen.value){
+                    if($sitioImagen.value == ""){
                         $sitioImagen.value = "https://imgur.com/Wega2Bu.png";
                     }
+                    console.log($sitioImagen.value);
                     enviar();
                 }
             });

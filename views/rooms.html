@@ -23,24 +23,24 @@
     <br><br>
     <a id="entrar-sala" href="/joinRoom">Join a room</a>
     <br><br><br>
-    <img src="https://imgur.com/e99SO1h.png" alt="img">
+    <img src="https://imgur.com/yT51eEd.png" alt="img">
     <template id="sala-publica-template">
-        <div class="sala-publica" data-posicion="0">
+        <div class="sala-publica">
             <h2 id="nombre-sala">X</h2>
-            <img src="X" alt="X" class="display-foto-perfil">
+            <img id="foto-sala" src="X" alt="X" class="display-foto-perfil">
             <h3 id="fundador-sala">Founder: X</h3>
-            <div id="descripcion-sala" class="descripcion-sala">descripcionnnnnnnnnnnnnnnna sadf sd f aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+            <div id="descripcion-sala" class="descripcion-sala borde">X</div>
             <br>
             <a href="#" id="entrar-sala">Enter...</a>
             <br><br>
         </div>
     </template>
     <template id="sala-privada-template">
-        <div class="sala-privada" data-posicion="0">
+        <div class="sala-privada">
             <h2 id="nombre-sala">X</h2>
-            <img src="X" alt="X" class="display-foto-perfil">
-            <h3 id="fundador-sala">Founder: X</h3>
-            <div id="descripcion-sala" class="descripcion-sala">descripcionnnnnnnnnnnnnnnna sadf sd f aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+            <img id="foto-sala" src="X" alt="X" class="display-foto-perfil">
+            <p id="fundador-sala">Founder: X</p>
+            <div id="descripcion-sala" class="descripcion-sala">X</div>
             <br>
             <a href="#" id="entrar-sala">Enter...</a>
             <br><br>
@@ -73,11 +73,68 @@
     } else {
         document.getElementById("con-cuenta").classList.remove("hidden");
         //con cuenta
-        document.addEventListener("DOMContentLoaded", () => {
 
+        const dibujar = async () => {
 
+        }
 
+        document.addEventListener("DOMContentLoaded", async () => {
+            let req = await fetch("/b/rooms/" + localStorage.getItem("user"));
+            let res = await req.json();//array con los id de las salas
+
+            if(res.salas.length != 0){
+                document.getElementById("sin-sala-privada").remove();
+                const $lugar = document.getElementById("salas-privadas");
+                //let elementos = "";
+                
+                res.salas.forEach(async (e)=>{//por cada id encontrado
+                    let reqs = await fetch("/b/roomData/" + e);//recibir perfilado de sala
+                    let ress = await reqs.json();
+
+                    if(ress.publica != "true"){
+                        const $cuadro = document.createElement("div");
+                        $cuadro.innerHTML = document.getElementById("sala-privada-template").innerHTML;
+                        //y renderizarlo
+                        $cuadro.querySelector("#nombre-sala").innerHTML = ress.nombre;
+                        $cuadro.querySelector("#foto-sala").src = ress.urlFoto;
+                        $cuadro.querySelector("#descripcion-sala").innerHTML = ress.descripcion;
+                        $cuadro.querySelector("#entrar-sala").href = "room/" + ress._id;
+                        $cuadro.querySelector("#fundador-sala").innerHTML = "Founder: <b>" + ress.nombreFundador + "</b>";
+                        if(ress.descripcion == ""){
+                            $cuadro.querySelector("#descripcion-sala").remove();
+                        }
+
+                        $lugar.innerHTML += $cuadro.innerHTML;//esto se deberia hacer con un fragmento pero no va
+                        $lugar.innerHTML += "<br>";
+                    }
+                });
+            }
             document.getElementById("cargando").classList.add("hidden");
+
+            //ver salas publicas
+            let reqp = await fetch("/roomsPublic/16");
+            let resp = await reqp.json();
+            //pintar salas publicas
+            const $sitioPublicas = document.getElementById("salas-publicas");
+            await resp.forEach(async (e) => {
+                const $cuadro = document.createElement("div");
+                $cuadro.innerHTML = document.getElementById("sala-publica-template").innerHTML;
+                $cuadro.querySelector("#nombre-sala").innerHTML = e.nombre;
+                $cuadro.querySelector("#foto-sala").src = e.urlFoto;
+                $cuadro.querySelector("#descripcion-sala").innerHTML = e.descripcion;
+                $cuadro.querySelector("#entrar-sala").href = "room/" + e._id;
+
+                let reqpf = await fetch("/b/founder/" + e._id);
+                let respf = await reqpf.json();
+                $cuadro.querySelector("#fundador-sala").innerHTML = "Founder: <b>" + respf.nombre + "</b>";
+
+                if(e.descripcion == ""){
+                    $cuadro.querySelector("#descripcion-sala").remove();
+                }
+
+                $sitioPublicas.innerHTML += $cuadro.innerHTML;//esto se deberia hacer con un fragmento pero no va
+                $sitioPublicas.innerHTML += "<br>";
+            });
         });
     }
 </script>
