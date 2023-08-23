@@ -28,10 +28,10 @@
         <div class="sala-publica">
             <h2 id="nombre-sala">X</h2>
             <img id="foto-sala" src="X" alt="X" class="display-foto-perfil">
-            <h3 id="fundador-sala">Founder: X</h3>
+            <p id="fundador-sala">Founder: X</p>
             <div id="descripcion-sala" class="descripcion-sala borde">X</div>
             <br>
-            <a href="#" id="entrar-sala">Enter...</a>
+            <a href="" id="entrar-sala">Enter...</a>
             <br><br>
         </div>
     </template>
@@ -42,7 +42,7 @@
             <p id="fundador-sala">Founder: X</p>
             <div id="descripcion-sala" class="descripcion-sala">X</div>
             <br>
-            <a href="#" id="entrar-sala">Enter...</a>
+            <a href="" id="entrar-sala">Enter...</a>
             <br><br>
         </div>
     </template>
@@ -98,7 +98,7 @@
                         $cuadro.querySelector("#nombre-sala").innerHTML = ress.nombre;
                         $cuadro.querySelector("#foto-sala").src = ress.urlFoto;
                         $cuadro.querySelector("#descripcion-sala").innerHTML = ress.descripcion;
-                        $cuadro.querySelector("#entrar-sala").href = "room/" + ress._id;
+                        $cuadro.querySelector("#entrar-sala").href = "/goRoom?room=" + ress._id;
                         $cuadro.querySelector("#fundador-sala").innerHTML = "Founder: <b>" + ress.nombreFundador + "</b>";
                         if(ress.descripcion == ""){
                             $cuadro.querySelector("#descripcion-sala").remove();
@@ -122,7 +122,7 @@
                 $cuadro.querySelector("#nombre-sala").innerHTML = e.nombre;
                 $cuadro.querySelector("#foto-sala").src = e.urlFoto;
                 $cuadro.querySelector("#descripcion-sala").innerHTML = e.descripcion;
-                $cuadro.querySelector("#entrar-sala").href = "room/" + e._id;
+                $cuadro.querySelector("#entrar-sala").href = "/goRoom?room=" + e._id;
 
                 let reqpf = await fetch("/b/founder/" + e._id);
                 let respf = await reqpf.json();
@@ -136,5 +136,6 @@
                 $sitioPublicas.innerHTML += "<br>";
             });
         });
+        
     }
 </script>

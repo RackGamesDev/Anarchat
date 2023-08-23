@@ -88,7 +88,12 @@ app.get("/createRoom", (req, res) => {
 app.get("/joinRoom", (req, res) => {
     res.send(formarPagina('joinRoom.html'));
 });
-
+app.get("/room", (req, res) => {
+    res.send(formarPagina('room.html'));
+});
+app.get("/goRoom*", (req, res) => {
+    res.send(formarPagina('goRoom.html'));
+});
 app.get("/about", (req, res) => {
     res.send(formarPagina('about.html'));
 });
@@ -355,7 +360,6 @@ app.get("/b/founder/:sala", async (req, res) => {//conseguir el fundador de una 
             Usuario.findById(data.idFundador)
             .then((data2) => {
                 const dataFinal = {_id: data2._id, nombre: data2.nombre, descripcion: data2.descripcion, urlFoto: data2.urlFoto}
-                console.log("va");
                 res.json(dataFinal);
             })
             .catch((err)=>{
@@ -491,13 +495,7 @@ app.get("/roomsPublic/:limit", (req, res) => {//consigue todas las salas publica
         });
     }
 });
-app.get("/room/:sala", (req, res) => {
-    res.send(formarPagina('room.html'));
-
-
-
-
-
+app.put("/b/roomEdit", async (req, res) => {//editar una sala
 
 });
 app.post("/b/exit", async (req, res) => {//salir de una sala, por haber sido expulsado o salir manualmente, no se puede salir siendo el fundador

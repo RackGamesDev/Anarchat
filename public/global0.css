@@ -20,6 +20,7 @@
     --colorError: red;/*color para cosas malas*/
     --colorErrorLigero: #5c0000;/*botones peligrosos*/
     --colorCargando: rgba(0, 0, 0, 0.2);
+    --colorLink: #00a3ee;
 }
 html, body {
     margin: 0;
@@ -333,6 +334,10 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     padding: 5px 10px;
     margin: 40px;
 }
+#aviso-public, #aviso-nopublic{/*avisos con salas publicas*/
+    width: 80%;
+    transform: translateX(10%);
+}
 .sitio-salas{/*lo mas fuera de lo de las salas*/
     text-align: center;
 }
@@ -351,6 +356,100 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 #sitio-codigo{/*input para el codigo para unirse a una sala*/
     width: 70%;
 }
+
+
+#info-sala{/*caja con la informacion de la sala*/
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+    border: 1px solid var(--colorBorde);
+    background-color: var(--colorFondo2);
+    overflow: hidden;
+    justify-content: stretch;
+    position: fixed;
+    width: 100%;
+}
+#s-nombre-sala{/*sitio con el nombre de la sala*/
+    margin: 0;
+    padding: 0;
+    overflow: scroll;
+    max-width: 90%;
+    white-space: nowrap;
+}
+#s-foto-sala{/*foto de la sala*/
+    margin: 5px;
+    size: 128px;
+    width: 128px;
+    height: 128px;
+}
+#s-descripcion-sala{
+    border: 1px solid var(--colorBorde);
+    background-color: var(--colorFondo);
+    overflow: scroll;
+    width: 100%;
+    display: block;
+    max-height: 120%;
+}
+#cosas-sala{/*el cuadro principal del chat*/
+    border: 2px solid var(--colorBorde);
+    display: flex;
+    margin: 10px;
+    flex-direction: row;
+    height: 70%;
+}
+#chat{/*caja del chat*/
+    border: 1px solid var(--colorBorde);
+    background-color: var(--colorFondo);
+    width: 70%;
+    height: 100%;
+}
+#miembros{/*caja de miembros*/
+    border: 1px solid var(--colorBorde);
+    background-color: var(--colorFondo2);
+    width: 30%;
+    height: 100%;
+    text-align: center;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+#inputs-sala{/*caja con los inputs*/
+    margin: 10px;
+}
+#inputs-sala>input[type="button"]{/*botones de mandar*/
+    padding: 2px;
+}
+.mensaje{/*cuadro con todo el mensaje*/
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    margin: 5px;
+}
+.mensaje-persona{/*zona con la info de la persona*/
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.imagen-mensaje{/*foto de perfil*/
+    border: 1px solid var(--colorBorde);
+    size: 32px;
+    width: 32px;
+    height: 32px;
+    margin: 5px;
+}
+#texto-mensaje{/*el texto en si del mensaje*/
+    width: 95%;
+    word-wrap: break-word;
+    margin: 5px;
+}
+#usuario-mensaje{/*nombre del usuario*/
+    text-decoration: none;
+    font-weight: bold;
+}
+#link-descarga{/*el link de descarga del archivo*/
+    color: var(--colorLink);
+}
+
+
 
 
 @media (max-width: 782px){/*para dispositivos verticales*/

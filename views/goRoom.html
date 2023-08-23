@@ -1,0 +1,12 @@
+<div id="cargando" class="noimagen">
+    <br><br><br><br>
+    <img src="https://imgur.com/Z9lyXBY.gif" alt="loading...">
+</div>
+<p>go to room</p>
+<script>
+    document.getElementById("logo-arriba").remove();
+    document.addEventListener("DOMContentLoaded", async () => {
+        localStorage.setItem("room", new URL(location.href).searchParams.get('room'));
+        location.href = "/room";
+    });
+</script>

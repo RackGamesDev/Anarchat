@@ -1,1 +1,76 @@
-<p>room</p>
+<div id="info-sala">
+    <a id="s-enlace-imagen" target="_blank" href="https://imgur.com/Wega2Bu.png"><img id="s-foto-sala" src="https://imgur.com/Wega2Bu.png" alt="X"></a>
+    <div>
+        <h1 id="s-nombre-sala">X</h1>
+        <p id="s-fundador-sala">By X</p>
+        <p>publica / 888 miembros</p>
+    </div>
+    <br>
+    <div id="s-descripcion-sala">
+        X
+    </div>
+</div>
+<br><br><br><br><br><br><br><br><br><br>
+<div id="cosas-sala">
+    <div id="chat">
+
+        
+
+    </div>
+    <div id="miembros">
+        <h2>Members</h2><hr>
+
+        
+
+    </div>
+</div>
+<div id="inputs-sala">
+    <input type="text" id="escribir-mensaje" placeholder="Send something">
+    <input type="button" id="mandar-mensaje" value="Send">
+    <input type="button" id="mandar-archivo" value="File">
+</div>
+
+<template id="template-mensaje">
+    <div class="mensaje">
+        <div class="mensaje-persona" id="mensaje-persona">
+            <img class="imagen-mensaje" id="imagen-mensaje" src="https://imgur.com/Wega2Bu.png" alt="X">
+            <a href="#" id="usuario-mensaje">X</a>
+        </div>
+        <div class="mensaje-texto" id="mensaje-texto">
+            <p id="texto-mensaje">X</p>
+        </div>
+        <div id="descarga-archivo" class="descarga-archivo">
+            <a id="link-descarga" href="#">X</a>
+        </div>
+        <br>
+    </div>
+</template>
+<template id="template-miembro">
+    <div class="un-miembro">
+        <div class="mensaje-persona" id="mensaje-persona">
+            <img class="imagen-mensaje" id="imagen-mensaje" src="https://imgur.com/Wega2Bu.png" alt="X">
+            <a href="#" id="usuario-mensaje">X</a>
+        </div>
+        
+    </div>
+</template>
+
+<script>
+    document.getElementById("btn-rooms").classList.add("barra-item-activado");
+    document.getElementById("logo-arriba").remove();
+
+    if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != "no" && localStorage.getItem("room") != undefined && localStorage.getItem("room") != "no"){
+        document.addEventListener("DOMContentLoaded", async () => {
+            console.log(localStorage.getItem("room"));
+
+
+
+
+
+            document.querySelector("title").innerHTML = "Anarchat - Rooms";
+        });
+    } else {
+        window.location.href == "/err404"
+    }
+    
+</script>
