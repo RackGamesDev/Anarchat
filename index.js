@@ -91,6 +91,15 @@ app.get("/joinRoom", (req, res) => {
 app.get("/room", (req, res) => {
     res.send(formarPagina('room.html'));
 });
+app.get("/roomEdit", (req, res) => {
+    res.send(formarPagina('roomEdit.html'));
+});
+app.get("/roomDel", (req, res) => {
+    res.send(formarPagina('roomDel.html'));
+});
+app.get("/roomExit", (req, res) => {
+    res.send(formarPagina('roomExit.html'));
+});
 app.get("/goRoom*", (req, res) => {
     res.send(formarPagina('goRoom.html'));
 });
@@ -306,8 +315,25 @@ app.get("/b/userpb/:id", async (req, res) => {//saber si el usuario hizo ya su s
 });
 
 
-app.get("/b/room/:sala", async (req, res) => {//conseguir todos los datos de una sala incluyendo mensajes
+app.get("/b/roomMsg/:sala/:limit", async (req, res) => {//conseguir x numero de mensajes de una sala
     
+});
+app.get("/b/roomMembers/:sala", async (req, res) => {
+    console.log("CONSEGUIR MIEMBROS SALA");
+    const { sala } = req.params;
+    if(sala != undefined){
+        Sala.findById(sala)
+        .then((data) => {
+            let dataFinal = {_id: data._id, idMiembros: data.idMiembros}
+            res.json(dataFinal);
+        })
+        .catch((err)=>{
+            console.log(err);
+            res.redirect("/err404");
+        });
+    } else {
+        res.redirect("/err404");
+    }
 });
 app.get("/b/roomData/:sala", async (req, res)=>{//conseguir informacion de perfilado de una sala
     console.log("CONSEGUIR PERFILADO SALA");
@@ -493,13 +519,54 @@ app.get("/roomsPublic/:limit", (req, res) => {//consigue todas las salas publica
             console.log(err);
             res.json({stat: 400});//la sala no existe
         });
+    } else {
+        res.redirect("/err404");
     }
 });
 app.put("/b/roomEdit", async (req, res) => {//editar una sala
 
 });
-app.post("/b/exit", async (req, res) => {//salir de una sala, por haber sido expulsado o salir manualmente, no se puede salir siendo el fundador
-    
+app.put("/b/exit", async (req, res) => {//salir de una sala, por haber sido expulsado o salir manualmente, no se puede salir siendo el fundador
+    //NO FUNCIONAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    console.log("SALIR DE SALA");
+    const { usuario, sala } = req.body;
+    if(usuario != undefined && sala != undefined){
+        Usuario.findById(usuario)
+        .then((data) => {
+            let nuevoSalas = data.salas;
+            nuevoSalas.splice(sala);
+            Usuario.updateOne({_id: usuario}, {$set: {salas: nuevoSalas}})
+            .then((data2) => {
+                Sala.findById(sala)
+                .then((data3) => {
+                    let nuevoMiembros = data3.idMiembros;
+                    nuevoMiembros.splice(sala);
+                    Sala.updateOne({_id: sala}, {$set: {idMiembros: nuevoMiembros}})
+                    .then((data4) => {
+                        res.status(200);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        res.json({stat: 400});//la sala no existe
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    res.json({stat: 400});//la sala no existe
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+                res.json({stat: 400});//la sala no existe
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.json({stat: 400});//la sala no existe
+        })
+    } else {
+        res.redirect("/err404");
+    }
 });
 app.post("/b/roomdel", async (req, res) => {//borrar una sala, se necesita el id de usuario y de sala y que el usuario sea el fundador
     

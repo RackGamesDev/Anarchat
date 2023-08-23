@@ -1,16 +1,31 @@
+<div id="cargando" class="noimagen">
+    <br><br><br><br>
+    <img src="https://imgur.com/Z9lyXBY.gif" alt="loading...">
+</div>
 <div id="info-sala">
     <a id="s-enlace-imagen" target="_blank" href="https://imgur.com/Wega2Bu.png"><img id="s-foto-sala" src="https://imgur.com/Wega2Bu.png" alt="X"></a>
     <div>
-        <h1 id="s-nombre-sala">X</h1>
-        <p id="s-fundador-sala">By X</p>
-        <p>publica / 888 miembros</p>
+        <h2 id="s-nombre-sala">X</h2>
+        <a href="" id="s-fundador-sala">By X</a>
+        <p id="s-sala-miembros">publica / 888 miembros</p>
     </div>
     <br>
     <div id="s-descripcion-sala">
         X
     </div>
+    
 </div>
-<br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br>
+<div id="caja-id-sala">
+    <p id="id-sala" class="hidden">id: sadfasdfasdfasdf</p>
+    <input id="check-ver-id" type="checkbox"><p>Visible ID</p>
+</div>
+<div id="opciones-sala">
+    <br>
+    <input type="button" id="salir-sala" value="Exit room">
+    <input type="button" id="editar-sala" value="Edit room details">
+</div>
+
 <div id="cosas-sala">
     <div id="chat">
 
@@ -61,13 +76,80 @@
 
     if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != "no" && localStorage.getItem("room") != undefined && localStorage.getItem("room") != "no"){
         document.addEventListener("DOMContentLoaded", async () => {
-            console.log(localStorage.getItem("room"));
+            const salaActual = localStorage.getItem("room");
+
+            let req = await fetch("/b/roomData/" + salaActual);
+            let res = await req.json();
+
+            const $nombreSala = document.getElementById("s-nombre-sala");
+            $nombreSala.innerHTML = res.nombre;
+            document.querySelector("title").innerHTML = res.nombre + " - Anarchat";
+            const $descripiconSala = document.getElementById("s-descripcion-sala");
+            $descripiconSala.innerHTML = res.descripcion;
+            if(res.descripcion == ""){
+                $descripiconSala.remove();
+            }
+            const $fundadorSala = document.getElementById("s-fundador-sala");
+            $fundadorSala.innerHTML = "By: <b>" + res.nombreFundador + "</b>";
+            const $enlaceImagenSala = document.getElementById("s-enlace-imagen");
+            $enlaceImagenSala.href = res.urlFoto;
+            const $imagenSala = document.getElementById("s-foto-sala");
+            $imagenSala.src = res.urlFoto;
+            const $idSala = document.getElementById("id-sala");
+            $idSala.innerHTML = "ID: <b>" + res._id + "</b>";
+            const $checkId = document.getElementById("check-ver-id");
+            const $contadorMiembrosSala = document.getElementById("s-sala-miembros");
+            const $botonSalir = document.getElementById("salir-sala");
+            $botonSalir.addEventListener("click", (e) => {//salir de la sala
+                location.href = "/roomExit"
+            });
+            const $zonaMiembros = document.getElementById("miembros");
+            let reqMiembros = await fetch("/b/roomMembers/" + salaActual);
+            let resMiembros = await reqMiembros.json();
+            if(res.publica == "true"){
+                $contadorMiembrosSala.innerHTML = "Public room";
+                document.getElementById("caja-id-sala").remove();
+                $botonSalir.remove();
+                $zonaMiembros.remove();
+            } else {
+                $contadorMiembrosSala.innerHTML = "Members: " + resMiembros.idMiembros.length;
+            }
+            let reqFounder = await fetch("/b/founder/" + salaActual);
+            let resFounder = await reqFounder.json();
+            const $botonEditar = document.getElementById("editar-sala");
+            $botonEditar.addEventListener("click", (e) => {//ir a editar la sala
+                location.href = "/roomEdit";
+            });
+            if(resFounder._id != localStorage.getItem("user")){
+                $botonEditar.remove();
+            } else {
+                $botonSalir.remove();
+            }
+            
+
+            //poner miembros:
 
 
 
 
+            //poner mensajes:
 
-            document.querySelector("title").innerHTML = "Anarchat - Rooms";
+
+
+            document.getElementById("cargando").classList.add("hidden");
+            $checkId.addEventListener("change", (e) => {//ver id
+                if($checkId.checked){
+                    $idSala.classList.remove("hidden");
+                } else {
+                    $idSala.classList.add("hidden");
+                }
+            });
+            $fundadorSala.addEventListener("click", (e) => {//mostrar perfil del fundador
+                e.preventDefault();
+
+
+
+            });
         });
     } else {
         window.location.href == "/err404"

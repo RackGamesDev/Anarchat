@@ -1,0 +1,33 @@
+<div class="centrar">
+    <br>
+    <h1 class="texto-gigante txt-rojo">Wait!!!</h1>
+    <p>Are you sure you want to leave this private room?, You won't be able to chat again unless someone invites you</p>
+    <input type="button" id="boton-salir" value="This place is not for me..."><br><br><br>
+    <img src="https://imgur.com/130eoRg.png" alt="img">
+</div>
+
+<script>
+    document.getElementById("btn-rooms").classList.add("barra-item-activado");
+    document.getElementById("logo-arriba").remove();
+    document.querySelector("title").innerHTML = "Anarchat - Exit room";
+
+    if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != "no" && localStorage.getItem("room") != undefined && localStorage.getItem("room") != "no"){
+        document.getElementById("boton-salir").addEventListener("click", async () => {
+            console.log("salir");
+            await fetch("/b/exit", {
+                method: "PUT",
+                headers: {
+                    "Content-type": "application/json; charset=utf-8"
+                },
+                body: JSON.stringify({
+                    usuario: localStorage.getItem("user"),
+                    sala: localStorage.getItem("room")
+                })
+            });
+            location.href = "/rooms";
+        });
+    } else {
+        location.href = "/err404"
+    }
+    
+</script>

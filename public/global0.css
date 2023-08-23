@@ -358,6 +358,21 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 }
 
 
+#opciones-sala{/*caja con opciones para la sala*/
+    margin: 10px;
+}
+#opciones-sala>input{/*botones de opciones para la sala*/
+    padding: 3px;
+}
+#caja-id-sala{/*todo lo del id de la sala*/
+    display: flex;
+    flex-direction: row;
+    margin-left: 10px;
+    
+}
+#caja-id-sala>input{/*check de visible id*/
+    margin-left: 15px;
+}
 #info-sala{/*caja con la informacion de la sala*/
     display: flex;
     flex-direction: row;
@@ -373,8 +388,9 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     margin: 0;
     padding: 0;
     overflow: scroll;
-    max-width: 90%;
+    max-width: 500px;
     white-space: nowrap;
+    margin-right: 10px;
 }
 #s-foto-sala{/*foto de la sala*/
     margin: 5px;
@@ -386,8 +402,7 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     border: 1px solid var(--colorBorde);
     background-color: var(--colorFondo);
     overflow: scroll;
-    width: 100%;
-    display: block;
+    width: 70%;
     max-height: 120%;
 }
 #cosas-sala{/*el cuadro principal del chat*/
@@ -448,6 +463,14 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 #link-descarga{/*el link de descarga del archivo*/
     color: var(--colorLink);
 }
+#escribir-mensaje{/*sitio escribir mensaje*/
+    width: 70%;
+    border: 1px solid var(--colorBorde);
+}
+#chat{/*caja de los mensajes*/
+    width: 100%;
+}
+
 
 
 

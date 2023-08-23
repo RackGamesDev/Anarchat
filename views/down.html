@@ -10,7 +10,7 @@
     } else{
         console.log("MODO OSCURO");
     }
-    if(window.location.pathname != "/room" && !window.location.pathname.startsWith("/goRoom") && window.location.pathname != "/roomEdit"){
+    if(window.location.pathname != "/room" && !window.location.pathname.startsWith("/goRoom") && window.location.pathname != "/roomEdit" && window.location.pathname != "/roomDel" && window.location.pathname != "/roomExit"){
         localStorage.setItem("room", "no");
     }
 </script>
