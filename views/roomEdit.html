@@ -1,6 +1,40 @@
-<p>room edit</p>
+<div id="cargando" class="noimagen">
+    <br><br><br><br>
+    <img src="https://imgur.com/Z9lyXBY.gif" alt="loading...">
+</div>
+<div class="centrar" id="caja-room-edit">
+    <h1>Edit the room</h1>
+    <div class="caja-error hidden borde" id="caja-error">
+        <p>The name must be between 8 and 32 characters length and the description has a 128 character limit</p>
+    </div>
+    <h2>Name:</h2>
+    <input type="text" value="" id="e-nombre-sala">
+    <h2>Image link:</h2>
+    <input type="text" value="" id="e-url-imagen-sala" placeholder="https://imgur.com/Wega2Bu.png">
+    <br><br>
+    <a href="" id="enlace-imagen" target="_blank"><img src="" alt="x" id="mostrar-imagen"></a>
+    <h2>Description:</h2>
+        <div id="i-sala-descripcion" contenteditable>
+
+        </div>
+    <p id="descripcion-contador">X/128</p>
+    <div class="hidden borde" id="aviso-nopublic">
+        <p>It looks that you already created a public room, you cannot create more. Sorry</p>
+        <p>If you want to create a public room, you have to delete the one you have</p>
+    </div>
+    <div id="check-publica">
+        <input type="checkbox" id="e-publica">Public Room
+    </div>
+    <br>
+    <input type="button" value="Edit" id="boton-editar-sala">
+    <br><br>
+    <img src="https://imgur.com/YHVFLnL.png" alt="img">
+    <br><br>
+    <a href="/roomDel" id="borrar-sala" class="txt-rojo">Delete room</a>
+</div>
 
 <script>
+    document.execCommand('insertHTML', false, '<br><br>');
     document.getElementById("btn-rooms").classList.add("barra-item-activado");
     document.getElementById("logo-arriba").remove();
     document.querySelector("title").innerHTML = "Anarchat - Edit room";
@@ -14,7 +48,7 @@
             
         });
     } else {
-        location.href = "/err404"
+        location.href = "/err404";
     }
     
 </script>

@@ -367,6 +367,13 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 #borrar-sala{/*confirmar borrar sala*/
     color: var(--colorError);
 }
+#caja-room-edit{/*caja de edicion de la sala*/
+    width: 80%;
+    transform: translateX(10%);
+}
+#caja-room-edit input[type="text"]{/*textbox de edicion de la sala*/
+    width: 60%;
+}
 #opciones-sala>input{/*botones de opciones para la sala*/
     padding: 3px;
 }

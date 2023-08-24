@@ -1,10 +1,10 @@
 <div class="centrar">
     <h1 class="texto-gigante txt-rojo">Wait!!!</h1>
     <p>Are you sure you want to delete your room?, all the members will be kicked out and the messages will disappear forever!!!</p>
-    <p>Type here "I want to destroy this place" before deleting the room:</p>
+    <p>Type here "<b>I want to destroy this place</b>" before deleting the room:</p>
     <input type="text" value="" placeholder="I don't want to destroy this place." id="confirmacion-borrar-sala">
     <div class="caja-error hidden borde" id="caja-error">
-        <p>You didn't typed "I want to destroy this place"</p>
+        <p>You didn't typed "<b>I want to destroy this place</b>"</p>
     </div>
     <br><br>
     <input type="button" id="borrar-sala" value="Delete forever" class="txt-rojo">
@@ -25,12 +25,20 @@
             const $botonBorrar = document.getElementById("borrar-sala");
             $botonBorrar.addEventListener("click", async () => {
                 if($confirmacion.value == "I want to destroy this place"){//borrar sala
-                    let usuario = localStorage.getItem("usuario");
-                    let sala = localStorage.getItem("sala");
+                    const usuariob = localStorage.getItem("user");
+                    const salab = localStorage.getItem("room");
 
-
-                    console.log("asdfasdfsd");
-
+                    const bodyp = {usuario: usuariob, sala: salab}
+                    await fetch("/b/roomdel", {
+                        method: "POST",
+                        headers: {
+                            "Content-type": "application/json; charset=utf-8"
+                        },
+                        body: JSON.stringify(bodyp)
+                    })
+                    .then(() => {
+                        location.href = "/salas"
+                    });
 
                 } else {
                     document.getElementById("caja-error").classList.remove("hidden");

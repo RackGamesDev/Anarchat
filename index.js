@@ -524,7 +524,10 @@ app.get("/roomsPublic/:limit", (req, res) => {//consigue todas las salas publica
     }
 });
 app.put("/b/roomEdit", async (req, res) => {//editar una sala
+    console.log("EDITAR SALA");
 
+
+    
 });
 app.put("/b/exit", async (req, res) => {//salir de una sala, por haber sido expulsado o salir manualmente, no se puede salir siendo el fundador
     //NO FUNCIONAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -565,15 +568,51 @@ app.put("/b/exit", async (req, res) => {//salir de una sala, por haber sido expu
         .catch((err) => {
             console.log(err);
             res.json({stat: 400});//la sala no existe
-        })
+        });
     } else {
         res.redirect("/err404");
     }
 });
 app.post("/b/roomdel", async (req, res) => {//borrar una sala, se necesita el id de usuario y de sala y que el usuario sea el fundador
+    console.log("BORRAR SALA");
     const { sala, usuario } = req.body;
     if(sala != undefined && usuario != undefined){
-
+        Sala.findById(sala)//conseguir detalles de la sala
+        .then((data1) => {
+            if(data1.idFundador == usuario){
+                data1.idMiembros.forEach((e) => {//salir a cada usuario de la sala
+                    Usuario.findById(e)
+                    .then((usr) => {
+                        let nuevoSalas = usr.salas;
+                        let index = usr.salas.indexOf(sala);
+                        nuevoSalas.splice(index, 1);
+                        Usuario.updateOne({_id: usr._id}, {$set: {salas: nuevoSalas}})
+                        .catch((err) => {
+                            console.log(err);
+                            res.redirect("/err404");
+                        });
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        res.redirect("/err404");
+                    });
+                });
+                Sala.deleteOne({_id: sala})//borrar ya la sala
+                .then((data2) => {
+                    res.redirect("/rooms");
+                })
+                .catch((err) => {
+                    console.log(err);
+                    res.redirect("/err404");
+                });
+            } else {
+                res.redirect("/err404");//el usuari no es fundador
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            res.redirect("/err404");//la sala no existe o el usuario no es fundador
+        });
     } else {
         res.redirect("/err404");
     }
