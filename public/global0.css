@@ -361,6 +361,12 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 #opciones-sala{/*caja con opciones para la sala*/
     margin: 10px;
 }
+#confirmacion-borrar-sala{/*i want to destroy this place*/
+    width: 290px;
+}
+#borrar-sala{/*confirmar borrar sala*/
+    color: var(--colorError);
+}
 #opciones-sala>input{/*botones de opciones para la sala*/
     padding: 3px;
 }

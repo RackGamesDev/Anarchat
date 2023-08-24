@@ -424,7 +424,7 @@ app.post("/b/room/:id", async (req, res) => {//crear una sala
                             //unir a la sala con el usuario
                             Sala.updateOne({_id: data3._id}, {$set: {idMiembros: [id]}})
                             .then((data5)=>{
-                                res.status(200);
+                                res.redirect(200);
                             })
                             .catch((err) => {
                                 console.log(err);
@@ -531,19 +531,21 @@ app.put("/b/exit", async (req, res) => {//salir de una sala, por haber sido expu
     console.log("SALIR DE SALA");
     const { usuario, sala } = req.body;
     if(usuario != undefined && sala != undefined){
-        Usuario.findById(usuario)
+        Usuario.findById(usuario)//encontrar al usuario que se va a salir
         .then((data) => {
             let nuevoSalas = data.salas;
-            nuevoSalas.splice(sala);
-            Usuario.updateOne({_id: usuario}, {$set: {salas: nuevoSalas}})
+            let index1 = data.salas.indexOf(sala);
+            nuevoSalas.splice(index1, 1);
+            Usuario.updateOne({_id: usuario}, {$set: {salas: nuevoSalas}})//quitar la sala del usuario
             .then((data2) => {
-                Sala.findById(sala)
+                Sala.findById(sala)//encontrar la sala de la que se va a salir
                 .then((data3) => {
                     let nuevoMiembros = data3.idMiembros;
-                    nuevoMiembros.splice(sala);
-                    Sala.updateOne({_id: sala}, {$set: {idMiembros: nuevoMiembros}})
+                    let index2 = data3.idMiembros.indexOf(usuario);
+                    nuevoMiembros.splice(index2, 1);
+                    Sala.updateOne({_id: sala}, {$set: {idMiembros: nuevoMiembros}})//quitar el usuario de la sala
                     .then((data4) => {
-                        res.status(200);
+                        res.redirect("/rooms");
                     })
                     .catch((err) => {
                         console.log(err);
@@ -569,7 +571,12 @@ app.put("/b/exit", async (req, res) => {//salir de una sala, por haber sido expu
     }
 });
 app.post("/b/roomdel", async (req, res) => {//borrar una sala, se necesita el id de usuario y de sala y que el usuario sea el fundador
-    
+    const { sala, usuario } = req.body;
+    if(sala != undefined && usuario != undefined){
+
+    } else {
+        res.redirect("/err404");
+    }
 });
 
 

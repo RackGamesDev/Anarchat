@@ -23,8 +23,11 @@
                     usuario: localStorage.getItem("user"),
                     sala: localStorage.getItem("room")
                 })
+            })
+            .then(() => {
+                location.href = "/rooms";
             });
-            location.href = "/rooms";
+            
         });
     } else {
         location.href = "/err404"

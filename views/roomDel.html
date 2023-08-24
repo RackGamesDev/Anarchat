@@ -1,4 +1,17 @@
-<p>room delete</p>
+<div class="centrar">
+    <h1 class="texto-gigante txt-rojo">Wait!!!</h1>
+    <p>Are you sure you want to delete your room?, all the members will be kicked out and the messages will disappear forever!!!</p>
+    <p>Type here "I want to destroy this place" before deleting the room:</p>
+    <input type="text" value="" placeholder="I don't want to destroy this place." id="confirmacion-borrar-sala">
+    <div class="caja-error hidden borde" id="caja-error">
+        <p>You didn't typed "I want to destroy this place"</p>
+    </div>
+    <br><br>
+    <input type="button" id="borrar-sala" value="Delete forever" class="txt-rojo">
+    <br><br><br>
+    <img src="https://imgur.com/SjtspKq.png" alt="img">
+</div>
+
 
 <script>
     document.getElementById("btn-rooms").classList.add("barra-item-activado");
@@ -6,12 +19,23 @@
     document.querySelector("title").innerHTML = "Anarchat - Delete room";
 
     if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != "no" && localStorage.getItem("room") != undefined && localStorage.getItem("room") != "no"){
-        document.addEventListener("DOMContentLoaded", async () => {
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const $confirmacion = document.getElementById("confirmacion-borrar-sala");
+            const $botonBorrar = document.getElementById("borrar-sala");
+            $botonBorrar.addEventListener("click", async () => {
+                if($confirmacion.value == "I want to destroy this place"){//borrar sala
+                    let usuario = localStorage.getItem("usuario");
+                    let sala = localStorage.getItem("sala");
 
 
+                    console.log("asdfasdfsd");
 
 
-            
+                } else {
+                    document.getElementById("caja-error").classList.remove("hidden");
+                }
+            });
         });
     } else {
         location.href = "/err404"
