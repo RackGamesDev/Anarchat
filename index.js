@@ -533,12 +533,34 @@ app.put("/b/roomEdit/:room/:user", async (req, res) => {//editar una sala
     console.log("EDITAR SALA");
     const { nombre, descripcion, urlFoto, verID, publica } = req.body;
     const { room, user } = req.params;
-    if(nombre != undefined && descripcion != undefined && urlFoto != undefined && verId != undefined && publica != undefined && room != undefined && user != undefined){
-
-
-
-
-        
+    if(nombre != undefined && descripcion != undefined && urlFoto != undefined && verID != undefined && publica != undefined && room != undefined && user != undefined){
+        Usuario.findById(user)
+        .then((data1) => {//buscar usuario
+            Sala.findById(room)
+            .then((data2) => {//buscar la sala
+                if(data2.idFundador == user){
+                    Sala.updateOne({_id: room}, {$set: {nombre, descripcion, urlFoto, verID, publica}})//actualizar sala
+                    .then((data3) => {
+                        //res.status(200);
+                        res.redirect("/room");
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        res.redirect("/err404");
+                    });
+                } else {
+                    res.redirect("/err404");//el usuario no es el fundador
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                res.redirect("/err404");//sala no existe
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.redirect("/err404");//usuario no existe
+        });
     } else {
         res.redirect("/err404");
     }

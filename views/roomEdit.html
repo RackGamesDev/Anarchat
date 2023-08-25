@@ -100,6 +100,7 @@
             let resUsr = await reqUsr.json();
             if(res.publica == "true"){
                 $divVerId.classList.add("hidden");
+                document.getElementById("check-publica").innerHTML = "<p>Once you converted a private room into public you cannot turn it back into private again, sorry.</p>";
             }
             if(resUsr.tienePublica == "true"){
                 $avisoPublica.classList.remove("hidden");
@@ -137,7 +138,28 @@
 
             document.getElementById("boton-editar-sala").addEventListener("click", async (e) => {//confirmar
                 document.getElementById("cargando").classList.remove("hidden");
-
+                if($descripcion.innerHTML.length > 128 || $nombre.value.length < 9 || $nombre.value.length > 32){
+                    document.getElementById("caja-error").classList.remove("hidden");
+                } else {
+                    if($urlFoto.value == "" || $urlFoto.value == undefined){
+                        $urlFoto.value = "https://imgur.com/Wega2Bu.png";
+                    }
+                    const bodyp = {
+                        nombre: $nombre.value,
+                        descripcion: $descripcion.innerHTML || "",
+                        urlFoto: $urlFoto.value,
+                        verID: $checkVerId.checked,
+                        publica: $checkPublica.checked
+                    }
+                    await fetch("/b/roomEdit/" + localStorage.getItem("room") + "/" + localStorage.getItem("user"), {
+                        method: "PUT",
+                        headers:{
+                            "Content-type": "application/json; charset=utf-8"
+                        },
+                        body: JSON.stringify(bodyp)
+                    });
+                    location.href = "/room";
+                }
 
 
                 document.getElementById("cargando").classList.add("hidden");
