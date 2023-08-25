@@ -21,7 +21,13 @@
         <p id="descripcion-contador">X/128</p>
         <input type="button" id="borrar-descripcion" value="Delete description" class="boton-normal">
         <br>
+        <h2>Public settings:</h2>
         <p class="" id="mas-publica"><input type="checkbox" id="i-sala-publica">Public room</p>
+        <br>
+        <div id="ver-id" class="borde">
+            <p><input type="checkbox" id="check-ver-id">Members can see the ID</p>
+            <p id="aviso-ver-id" class="hidden">If you make the room ID public, any member can see it and use it to invite more people, this option is only avaliable with private rooms</p>
+        </div>
         <br>
         <div class="hidden borde" id="aviso-nopublic">
             <p>It looks that you already created a public room, you cannot create more. Sorry</p>
@@ -58,6 +64,9 @@
             const $linkImagen = document.getElementById("link-imagen");
             const $imagen = document.getElementById("display-foto-perfil");
             const $sitioImagen = document.getElementById("sitio-imagen");
+            const $divVerId = document.getElementById("ver-id");
+            const $checkVerId = document.getElementById("check-ver-id");
+            const $avisoVerId = document.getElementById("aviso-ver-id");
             $nombre.focus();
             $descripcion.innerHTML = "";
 
@@ -66,13 +75,25 @@
             if(res.tienePublica == "true"){
                 document.getElementById("aviso-nopublic").classList.remove("hidden");
                 document.getElementById("mas-publica").classList.add("hidden");
+                $divVerId.classList.remove("hidden");
             }
 
             $publica.addEventListener("change", (e) => {//change public
                 if($publica.checked){
                     document.getElementById("aviso-public").classList.remove("hidden");
+                    $divVerId.classList.add("hidden");
                 } else {
                     document.getElementById("aviso-public").classList.add("hidden");
+                    $divVerId.classList.remove("hidden");
+                }
+                $checkVerId.checked = false;
+                $avisoVerId.classList.add("hidden");
+            });
+            $checkVerId.addEventListener("change", (e) => {//cambiar si se puede ver el id
+                if($checkVerId.checked){
+                    $avisoVerId.classList.remove("hidden");
+                } else {
+                    $avisoVerId.classList.add("hidden");
                 }
             });
 
@@ -138,12 +159,17 @@
                 if($publica.checked){
                     publica = "true";
                 }
+                let verIDSala = "false";
+                if($checkVerId.checked){
+                    verIDSala = "true";
+                }
                 const body = {
                     nombre: $nombre.value,
                     idFundador: localStorage.getItem("user"),
                     publica: publica,
                     urlFoto: $sitioImagen.value || "",
-                    descripcion: $descripcion.innerHTML || ""
+                    descripcion: $descripcion.innerHTML || "",
+                    verID: verIDSala
                 }
                 await fetch("/b/room/" + localStorage.getItem("user"), {
                     method: "POST",

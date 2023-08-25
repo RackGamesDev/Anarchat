@@ -8,7 +8,11 @@
     </div>
     <br><br>
     <input type="button" id="borrar-sala" value="Delete forever" class="txt-rojo">
-    <br><br><br>
+    <br><br>
+    <div id="aviso-tiempo-borrar" class="centrar borde hidden">
+        <p>Sometimes deleting a room takes a while, you can go to anywhere else while we work on everything</p>
+    </div>
+    <br>
     <img src="https://imgur.com/SjtspKq.png" alt="img">
 </div>
 
@@ -21,6 +25,9 @@
     if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != "no" && localStorage.getItem("room") != undefined && localStorage.getItem("room") != "no"){
         document.addEventListener("DOMContentLoaded", () => {
 
+            function avisarTiempo(){
+                document.getElementById("aviso-tiempo-borrar").classList.remove("hidden");
+            }
             const $confirmacion = document.getElementById("confirmacion-borrar-sala");
             const $botonBorrar = document.getElementById("borrar-sala");
             $botonBorrar.addEventListener("click", async () => {
@@ -29,6 +36,9 @@
                     const salab = localStorage.getItem("room");
 
                     const bodyp = {usuario: usuariob, sala: salab}
+
+                    let tiempo = setTimeout(avisarTiempo, 3000);
+
                     await fetch("/b/roomdel", {
                         method: "POST",
                         headers: {
@@ -37,9 +47,11 @@
                         body: JSON.stringify(bodyp)
                     })
                     .then(() => {
-                        location.href = "/salas"
+                        console.log("asdffdsa");
+                        location.href = "/salas";
                     });
-
+                    location.href = "/salas";
+                    
                 } else {
                     document.getElementById("caja-error").classList.remove("hidden");
                 }

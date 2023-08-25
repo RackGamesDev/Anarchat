@@ -112,6 +112,7 @@ import ruta from './routes/rutas.js'
 app.use("/", ruta);
 import rutaRecursos from './routes/recursos.js';
 import { debug } from 'console';
+import { verify } from 'crypto';
 app.use("/", rutaRecursos);
 
 
@@ -170,7 +171,7 @@ app.post("/b/userdel/:id", async (req, res) => {//eliminar un usuario, hace falt
                 Usuario.deleteOne({_id: id})
                 .then(() => {
                     //res.redirect("/");
-                    //BORRAR TAMBIEN SUS SALAS Y MENSAJES
+                    //ELIMINAR SUS SALAS, LA MEMBRESIA DE USUARIOS EN SUS SALAS Y SUS MEMBRESIAS EN OTRAS SALAS
 
 
 
@@ -316,9 +317,12 @@ app.get("/b/userpb/:id", async (req, res) => {//saber si el usuario hizo ya su s
 
 
 app.get("/b/roomMsg/:sala/:limit", async (req, res) => {//conseguir x numero de mensajes de una sala
-    
+    console.log("CONSEGUIR MENSAJES");
+
+
+
 });
-app.get("/b/roomMembers/:sala", async (req, res) => {
+app.get("/b/roomMembers/:sala", async (req, res) => {//devuelve los miembros de la sala
     console.log("CONSEGUIR MIEMBROS SALA");
     const { sala } = req.params;
     if(sala != undefined){
@@ -341,10 +345,11 @@ app.get("/b/roomData/:sala", async (req, res)=>{//conseguir informacion de perfi
     if(sala != undefined){
         Sala.findById(sala)
         .then((data) => {
-            let dataFinal = {_id: data._id, nombre: data.nombre, descripcion: data.descripcion, urlFoto: data.urlFoto, nombreFundador: "", publica: data.publica}
+            let dataFinal = {_id: data._id, nombre: data.nombre, descripcion: data.descripcion, urlFoto: data.urlFoto, nombreFundador: "", idFundador: "", publica: data.publica, verID: data.verID}
             Usuario.findById(data.idFundador)
             .then((data2) => {
                 dataFinal.nombreFundador = data2.nombre;
+                dataFinal.idFundador = data2._id
                 res.json(dataFinal);
             })
             .catch((err)=>{
@@ -404,9 +409,10 @@ app.get("/b/founder/:sala", async (req, res) => {//conseguir el fundador de una 
 app.post("/b/room/:id", async (req, res) => {//crear una sala
     console.log("CREAR SALA");
     const { id } = req.params;
-    const { nombre, idFundador, publica, urlFoto, descripcion } = req.body;
-    if(nombre != undefined && idFundador != undefined && publica != undefined && urlFoto != undefined && descripcion != undefined && id != undefined){
+    const { nombre, idFundador, publica, urlFoto, descripcion, verID } = req.body;
+    if(nombre != undefined && idFundador != undefined && publica != undefined && urlFoto != undefined && descripcion != undefined && id != undefined && verID != undefined){
         //crear sala
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaa  " + verID);
         const sala = Sala(req.body);
         sala.save()
             .then((data1) => {
@@ -424,7 +430,7 @@ app.post("/b/room/:id", async (req, res) => {//crear una sala
                             //unir a la sala con el usuario
                             Sala.updateOne({_id: data3._id}, {$set: {idMiembros: [id]}})
                             .then((data5)=>{
-                                res.redirect(200);
+                                res.status(200);
                             })
                             .catch((err) => {
                                 console.log(err);
@@ -523,14 +529,21 @@ app.get("/roomsPublic/:limit", (req, res) => {//consigue todas las salas publica
         res.redirect("/err404");
     }
 });
-app.put("/b/roomEdit", async (req, res) => {//editar una sala
+app.put("/b/roomEdit/:room/:user", async (req, res) => {//editar una sala
     console.log("EDITAR SALA");
+    const { nombre, descripcion, urlFoto, verID, publica } = req.body;
+    const { room, user } = req.params;
+    if(nombre != undefined && descripcion != undefined && urlFoto != undefined && verId != undefined && publica != undefined && room != undefined && user != undefined){
 
 
-    
+
+
+        
+    } else {
+        res.redirect("/err404");
+    }
 });
 app.put("/b/exit", async (req, res) => {//salir de una sala, por haber sido expulsado o salir manualmente, no se puede salir siendo el fundador
-    //NO FUNCIONAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
     console.log("SALIR DE SALA");
     const { usuario, sala } = req.body;
     if(usuario != undefined && sala != undefined){
@@ -583,6 +596,13 @@ app.post("/b/roomdel", async (req, res) => {//borrar una sala, se necesita el id
                 data1.idMiembros.forEach((e) => {//salir a cada usuario de la sala
                     Usuario.findById(e)
                     .then((usr) => {
+                        if(data1.publica){//dejar al usuario hacer mas salas publicas
+                            Usuario.updateOne({_id: usr._id}, {$set: {tienePublica: "false"}})
+                            .catch((err) => {
+                                console.log(err);
+                                res.redirect("/err404");
+                            });
+                        }
                         let nuevoSalas = usr.salas;
                         let index = usr.salas.indexOf(sala);
                         nuevoSalas.splice(index, 1);
@@ -599,7 +619,7 @@ app.post("/b/roomdel", async (req, res) => {//borrar una sala, se necesita el id
                 });
                 Sala.deleteOne({_id: sala})//borrar ya la sala
                 .then((data2) => {
-                    res.redirect("/rooms");
+                    res.status(200);
                 })
                 .catch((err) => {
                     console.log(err);

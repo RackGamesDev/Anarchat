@@ -334,7 +334,7 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     padding: 5px 10px;
     margin: 40px;
 }
-#aviso-public, #aviso-nopublic{/*avisos con salas publicas*/
+#aviso-public, #aviso-nopublic, #ver-id{/*avisos con salas publicas*/
     width: 80%;
     transform: translateX(10%);
 }
@@ -369,7 +369,13 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 }
 #caja-room-edit{/*caja de edicion de la sala*/
     width: 80%;
+    transform: translateX(12.5%);
+}
+#e-sala-descripcion{/*caja con la descripcion*/
+    border: 1px solid var(--colorBorde);
+    width: 80%;
     transform: translateX(10%);
+    text-align: start;
 }
 #caja-room-edit input[type="text"]{/*textbox de edicion de la sala*/
     width: 60%;

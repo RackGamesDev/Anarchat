@@ -83,6 +83,7 @@
 
             const $nombreSala = document.getElementById("s-nombre-sala");
             $nombreSala.innerHTML = res.nombre;
+            //$nombreSala.href = "/seeUser/" + res.idFundador;
             document.querySelector("title").innerHTML = res.nombre + " - Anarchat";
             const $descripiconSala = document.getElementById("s-descripcion-sala");
             $descripiconSala.innerHTML = res.descripcion;
@@ -113,6 +114,9 @@
                 $zonaMiembros.remove();
             } else {
                 $contadorMiembrosSala.innerHTML = "Members: " + resMiembros.idMiembros.length;
+                if(res.verID == "false" && localStorage.getItem("user") != res.idFundador){
+                    document.getElementById("caja-id-sala").remove();
+                }
             }
             let reqFounder = await fetch("/b/founder/" + salaActual);
             let resFounder = await reqFounder.json();

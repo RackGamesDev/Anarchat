@@ -13,17 +13,31 @@
     <input type="text" value="" id="e-url-imagen-sala" placeholder="https://imgur.com/Wega2Bu.png">
     <br><br>
     <a href="" id="enlace-imagen" target="_blank"><img src="" alt="x" id="mostrar-imagen"></a>
+    <br>
+    <input type="button" class="boton-normal" id="update-imagen" value="Update image">
     <h2>Description:</h2>
-        <div id="i-sala-descripcion" contenteditable>
+        <div id="e-sala-descripcion" contenteditable>
 
         </div>
     <p id="descripcion-contador">X/128</p>
+    <input type="button" class="boton-normal" id="delete-description" value="Delete description">
+    <br>
+    <br>
+    <h2>Public settings:</h2>
     <div class="hidden borde" id="aviso-nopublic">
         <p>It looks that you already created a public room, you cannot create more. Sorry</p>
         <p>If you want to create a public room, you have to delete the one you have</p>
     </div>
     <div id="check-publica">
         <input type="checkbox" id="e-publica">Public Room
+    </div>
+    <div class="hidden borde" id="aviso-public">
+        <p>If you make this room public, everyone will be able to access. Also, you can only create one public room per account</p>
+    </div>
+    <br>
+    <div id="ver-id" class="borde">
+        <p><input type="checkbox" id="check-ver-id">Members can see the ID</p>
+        <p id="aviso-ver-id" class="hidden">If you make the room ID public, any member can see it and use it to invite more people, this option is only avaliable with private rooms</p>
     </div>
     <br>
     <input type="button" value="Edit" id="boton-editar-sala">
@@ -42,9 +56,94 @@
     if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != "no" && localStorage.getItem("room") != undefined && localStorage.getItem("room") != "no"){
         document.addEventListener("DOMContentLoaded", async () => {
 
+            let req = await fetch("/b/roomData/" + localStorage.getItem("room"));
+            let res = await req.json();
+
+            const $nombre = document.getElementById("e-nombre-sala");
+            $nombre.focus();
+            $nombre.value = res.nombre;
+            const $urlFoto = document.getElementById("e-url-imagen-sala");
+            $urlFoto.value = res.urlFoto;
+            const $enlaceImagen = document.getElementById("enlace-imagen");
+            $enlaceImagen.href = res.urlFoto;
+            const $displayImagen = document.getElementById("mostrar-imagen");
+            $displayImagen.src = res.urlFoto;
+            document.getElementById("update-imagen").addEventListener("click", (e) => {//update image
+                $enlaceImagen.href = $urlFoto.value;
+                $displayImagen.src = $urlFoto.value;
+            });
+            const $descripcion = document.getElementById("e-sala-descripcion");
+            $descripcion.innerHTML = res.descripcion;
+            const $contadorDescripcion = document.getElementById("descripcion-contador");
+            document.getElementById("delete-description").addEventListener("click", (e) => {//borrar descripcion
+                $descripcion.innerHTML = "";
+                $contadorDescripcion.innerHTML = "0/128";
+            });
+            function actualizarContador(){
+                $contadorDescripcion.innerHTML = $descripcion.innerHTML.length + "/128";//actualizar contador
+                if($descripcion.innerHTML.length > 128){
+                    $contadorDescripcion.classList.add("txt-rojo");
+                } else {
+                    $contadorDescripcion.classList.remove("txt-rojo");
+                }
+            }
+            let contador = setInterval(actualizarContador, 50);
+
+            const $checkPublica = document.getElementById("e-publica");
+            const $avisoPublica = document.getElementById("aviso-nopublic");
+            const $avisoHacerPublica = document.getElementById("aviso-public");
+            const $divVerId = document.getElementById("ver-id");
+            const $checkVerId = document.getElementById("check-ver-id");
+            $checkVerId.checked = (res.verID == "true");
+            const $avisoVerId = document.getElementById("aviso-ver-id");
+            let reqUsr = await fetch("/b/userpb/" + localStorage.getItem("user"));
+            let resUsr = await reqUsr.json();
+            if(res.publica == "true"){
+                $divVerId.classList.add("hidden");
+            }
+            if(resUsr.tienePublica == "true"){
+                $avisoPublica.classList.remove("hidden");
+                $checkPublica.checked == false;
+                document.getElementById("check-publica").classList.add("hidden");
+            } else {
+                if(res.publica == "true"){
+                    $checkPublica.checked == true;
+                    $divVerId.classList.add("hidden");
+                    $avisoVerId.classList.add("hidden");
+                    $checkVerId.checked = false;
+                } else {
+                    $checkPublica.checked == false;
+                }
+            }
+            $checkPublica.addEventListener("change", (e) => {//cambiar check publica
+                if($checkPublica.checked){
+                    $avisoHacerPublica.classList.remove("hidden");
+                    $divVerId.classList.add("hidden");
+                } else {
+                    $divVerId.classList.remove("hidden");
+                    $avisoHacerPublica.classList.add("hidden");
+                }
+                $checkVerId.checked = false;
+                $avisoVerId.classList.add("hidden");
+            });
+            $checkVerId.addEventListener("change", (e) => {//cambiar check visible
+                if($checkVerId.checked){
+                    $avisoVerId.classList.remove("hidden");
+                } else {
+                    $avisoVerId.classList.add("hidden");
+                }
+            });
+
+
+            document.getElementById("boton-editar-sala").addEventListener("click", async (e) => {//confirmar
+                document.getElementById("cargando").classList.remove("hidden");
 
 
 
+                document.getElementById("cargando").classList.add("hidden");
+            });
+
+            document.getElementById("cargando").classList.add("hidden");
             
         });
     } else {

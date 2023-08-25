@@ -9,7 +9,8 @@ const salaSchema = new Schema({
     publica: String,//si es publica, en ese caso aparecera en el inicio y el idsala no sera necesario ("true", "false")
     mensajes: [String],//todos los id de mensajes que tiene
     urlFoto: String,//la url de la foto de perfil
-    descripcion: String//la descripcion html de la sala
+    descripcion: String,//la descripcion html de la sala
+    verID: String//si los miembros pueden ver el id, en caso de que sea privada
 });
 
 const Sala = mongoose.model('sala', salaSchema);
