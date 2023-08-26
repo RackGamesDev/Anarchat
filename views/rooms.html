@@ -2,6 +2,18 @@
     <br><br><br><br>
     <img src="https://imgur.com/Z9lyXBY.gif" alt="loading...">
 </div>
+<div id="ver-perfil" class="hidden">
+    <div>
+        <br>
+        <a href="" id="miniperfil-foto-enlace"><img src="https://imgur.com/Wega2Bu.png" alt="x" id="miniperfil-foto"></a>
+        <h2 id="miniperfil-nombre">nombre</h2>
+        <div id="miniperfil-descripcion">
+            asfdasdfaswdf
+        </div>
+        <br>
+        <input type="button" value="Close" id="miniperfil-cerrar" class="boton-normal">
+    </div>
+</div>
 <div id="con-cuenta" class="hidden sitio-salas">
     <div id="mas-salas">
         <div id="salas-privadas">
@@ -29,7 +41,9 @@
         <div class="sala-publica">
             <h2 id="nombre-sala">X</h2>
             <img id="foto-sala" src="X" alt="X" class="display-foto-perfil">
-            <p id="fundador-sala">Founder: X</p>
+            <br>
+            <a href="#" data-usrid="" id="fundador-sala">Founder: X</a>
+            <br><br>
             <div id="descripcion-sala" class="descripcion-sala borde">X</div>
             <br>
             <a href="" id="entrar-sala">Enter...</a>
@@ -40,10 +54,12 @@
         <div class="sala-privada">
             <h2 id="nombre-sala">X</h2>
             <img id="foto-sala" src="X" alt="X" class="display-foto-perfil">
-            <p id="fundador-sala">Founder: X</p>
+            <br>
+            <a href="#" data-usrid="" id="fundador-sala">Founder: X</a>
+            <br><br>
             <div id="descripcion-sala" class="descripcion-sala">X</div>
             <br>
-            <a href="" id="entrar-sala">Enter...</a>
+            <a id="entrar-sala">Enter...</a>
             <br><br>
         </div>
     </template>
@@ -75,9 +91,18 @@
         document.getElementById("con-cuenta").classList.remove("hidden");
         //con cuenta
 
-        const dibujar = async () => {
-
+        const miniperfil = async (e, id) => {//abrir miniperfil
+            console.log(id);
+            document.getElementById("ver-perfil").classList.remove("hidden");
+            let req = await fetch("/b/userProfile/" + id);
+            let res = await req.json();
+            document.getElementById("miniperfil-foto").src = res.urlFoto;
+            document.getElementById("miniperfil-foto-enlace").href = res.urlFoto;
+            document.getElementById("miniperfil-nombre").innerHTML = res.nombre;
+            document.getElementById("miniperfil-descripcion").innerHTML = res.descripcion;
         }
+        document.getElementById("miniperfil-cerrar").addEventListener("click", () => {document.getElementById("ver-perfil").classList.add("hidden");});
+
 
         document.addEventListener("DOMContentLoaded", async () => {
             let req = await fetch("/b/rooms/" + localStorage.getItem("user"));
@@ -100,10 +125,12 @@
                         $cuadro.querySelector("#foto-sala").src = ress.urlFoto;
                         $cuadro.querySelector("#descripcion-sala").innerHTML = ress.descripcion;
                         $cuadro.querySelector("#entrar-sala").href = "/goRoom?room=" + ress._id;
+                        const $fundadorc = $cuadro.querySelector("#fundador-sala");
                         $cuadro.querySelector("#fundador-sala").innerHTML = "Founder: <b>" + ress.nombreFundador + "</b>";
                         if(ress.descripcion == ""){
                             $cuadro.querySelector("#descripcion-sala").remove();
                         }
+                        $fundadorc.setAttribute("data-usrid", ress.idFundador);
 
                         $lugar.innerHTML += $cuadro.innerHTML;//esto se deberia hacer con un fragmento pero no va
                         $lugar.innerHTML += "<br>";
@@ -117,7 +144,7 @@
             let resp = await reqp.json();
             //pintar salas publicas
             const $sitioPublicas = document.getElementById("salas-publicas");
-            await resp.forEach(async (e) => {
+            resp.forEach(async (e) => {
                 const $cuadro = document.createElement("div");
                 $cuadro.innerHTML = document.getElementById("sala-publica-template").innerHTML;
                 $cuadro.querySelector("#nombre-sala").innerHTML = e.nombre;
@@ -127,15 +154,27 @@
 
                 let reqpf = await fetch("/b/founder/" + e._id);
                 let respf = await reqpf.json();
-                $cuadro.querySelector("#fundador-sala").innerHTML = "Founder: <b>" + respf.nombre + "</b>";
+                const $fundadorc = $cuadro.querySelector("#fundador-sala");
+                $fundadorc.innerHTML = "Founder: <b>" + respf.nombre + "</b>";
 
                 if(e.descripcion == ""){
                     $cuadro.querySelector("#descripcion-sala").remove();
                 }
 
+                $fundadorc.setAttribute("data-usrid", respf._id);
+
                 $sitioPublicas.innerHTML += $cuadro.innerHTML;//esto se deberia hacer con un fragmento pero no va
                 $sitioPublicas.innerHTML += "<br>";
             });
+            let cont = setTimeout(() => {
+                document.querySelectorAll('[data-usrid]').forEach((el) => {
+                    el.addEventListener("click", function(e) {
+                        e.preventDefault();
+                        const elId = this.getAttribute("data-usrid");
+                        miniperfil(e, elId);
+                    })
+                });
+            }, 100);
         });
         
     }

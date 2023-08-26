@@ -2,18 +2,29 @@
     <br><br><br><br>
     <img src="https://imgur.com/Z9lyXBY.gif" alt="loading...">
 </div>
+<div id="ver-perfil" class="hidden">
+    <div>
+        <br>
+        <a href="" id="miniperfil-foto-enlace"><img src="https://imgur.com/Wega2Bu.png" alt="x" id="miniperfil-foto"></a>
+        <h2 id="miniperfil-nombre">nombre</h2>
+        <div id="miniperfil-descripcion">
+            asfdasdfaswdf
+        </div>
+        <br>
+        <input type="button" value="Close" id="miniperfil-cerrar" class="boton-normal">
+    </div>
+</div>
 <div id="info-sala">
     <a id="s-enlace-imagen" target="_blank" href="https://imgur.com/Wega2Bu.png"><img id="s-foto-sala" src="https://imgur.com/Wega2Bu.png" alt="X"></a>
     <div>
         <h2 id="s-nombre-sala">X</h2>
-        <a href="" id="s-fundador-sala">By X</a>
+        <a href="" id="s-fundador-sala" data-usrid="">By X</a>
         <p id="s-sala-miembros">publica / 888 miembros</p>
     </div>
     <br>
     <div id="s-descripcion-sala">
         X
     </div>
-    
 </div>
 <br><br><br><br><br><br><br><br>
 <div id="caja-id-sala">
@@ -49,7 +60,7 @@
     <div class="mensaje">
         <div class="mensaje-persona" id="mensaje-persona">
             <img class="imagen-mensaje" id="imagen-mensaje" src="https://imgur.com/Wega2Bu.png" alt="X">
-            <a href="#" id="usuario-mensaje">X</a>
+            <a href="#" id="usuario-mensaje" data-usrid="">X</a>
         </div>
         <div class="mensaje-texto" id="mensaje-texto">
             <p id="texto-mensaje">X</p>
@@ -64,7 +75,7 @@
     <div class="un-miembro">
         <div class="mensaje-persona" id="mensaje-persona">
             <img class="imagen-mensaje" id="imagen-mensaje" src="https://imgur.com/Wega2Bu.png" alt="X">
-            <a href="#" id="usuario-mensaje">X</a>
+            <a href="#" id="usuario-mensaje" data-usrid="">X</a>
         </div>
         
     </div>
@@ -76,6 +87,20 @@
 
     if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != "no" && localStorage.getItem("room") != undefined && localStorage.getItem("room") != "no"){
         document.addEventListener("DOMContentLoaded", async () => {
+            const miniperfil = async (e, id) => {//abrir miniperfil
+                console.log(id);
+                document.getElementById("ver-perfil").classList.remove("hidden");
+                let req = await fetch("/b/userProfile/" + id);
+                let res = await req.json();
+                document.getElementById("miniperfil-foto").src = res.urlFoto;
+                document.getElementById("miniperfil-foto-enlace").href = res.urlFoto;
+                document.getElementById("miniperfil-nombre").innerHTML = res.nombre;
+                document.getElementById("miniperfil-descripcion").innerHTML = res.descripcion;
+            }
+            document.getElementById("miniperfil-cerrar").addEventListener("click", () => {document.getElementById("ver-perfil").classList.add("hidden");});
+
+
+
             const salaActual = localStorage.getItem("room");
 
             let req = await fetch("/b/roomData/" + salaActual);
@@ -92,6 +117,7 @@
             }
             const $fundadorSala = document.getElementById("s-fundador-sala");
             $fundadorSala.innerHTML = "By: <b>" + res.nombreFundador + "</b>";
+            $fundadorSala.setAttribute("data-usrid", res.idFundador);
             const $enlaceImagenSala = document.getElementById("s-enlace-imagen");
             $enlaceImagenSala.href = res.urlFoto;
             const $imagenSala = document.getElementById("s-foto-sala");
@@ -154,6 +180,16 @@
 
 
             });
+
+            let cont = setTimeout(() => {
+                document.querySelectorAll('[data-usrid]').forEach((el) => {
+                    el.addEventListener("click", function(e) {
+                        e.preventDefault();
+                        const elId = this.getAttribute("data-usrid");
+                        miniperfil(e, elId);
+                    })
+                });
+            }, 100);
         });
     } else {
         window.location.href == "/err404"

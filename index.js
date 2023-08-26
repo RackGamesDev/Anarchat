@@ -137,6 +137,23 @@ app.get("/b/user/:id", async (req, res) => {//conseguir los datos de un usuario,
         res.redirect("/err404");
     }
 });
+app.get("/b/userProfile/:id", async (req, res) => {//conseguir los datos de un usuario para el miniperfil
+    console.log("GET USUARIO DATOS PERFIL");
+    const { id } = req.params;
+    if(id != undefined){
+        Usuario.findById(id)
+        .then((data) => {
+            const dataFinal = {nombre: data.nombre, descripcion: data.descripcion, urlFoto: data.urlFoto}
+            res.json(dataFinal);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.redirect("/err404");
+        });
+    } else {
+        res.redirect("/err404");
+    }
+});
 app.post("/b/user", async (req, res) => {//crear un usuario
     console.log("CREAR USUARIO");
     req.body.tienePublica = "false";
