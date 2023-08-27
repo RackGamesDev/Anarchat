@@ -59,7 +59,7 @@
 <template id="template-mensaje">
     <div class="mensaje">
         <div class="mensaje-persona" id="mensaje-persona">
-            <img class="imagen-mensaje" id="imagen-mensaje" src="https://imgur.com/Wega2Bu.png" alt="X">
+            <img class="imagen-mensaje" id="imagen-mensaje" src="" alt="X">
             <a href="#" id="usuario-mensaje" data-usrid="">X</a>
         </div>
         <div class="mensaje-texto" id="mensaje-texto">
@@ -73,9 +73,9 @@
 </template>
 <template id="template-miembro">
     <div class="un-miembro">
-        <div class="mensaje-persona" id="mensaje-persona">
-            <img class="imagen-mensaje" id="imagen-mensaje" src="https://imgur.com/Wega2Bu.png" alt="X">
-            <a href="#" id="usuario-mensaje" data-usrid="">X</a>
+        <div class="miembro-persona" id="miembro-persona">
+            <img class="imagen-miembro" id="imagen-miembro" src="" alt="X">
+            <a href="#" id="usuario-miembro" data-usrid="">X</a>
         </div>
         
     </div>
@@ -88,7 +88,6 @@
     if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != "no" && localStorage.getItem("room") != undefined && localStorage.getItem("room") != "no"){
         document.addEventListener("DOMContentLoaded", async () => {
             const miniperfil = async (e, id) => {//abrir miniperfil
-                console.log(id);
                 document.getElementById("ver-perfil").classList.remove("hidden");
                 let req = await fetch("/b/userProfile/" + id);
                 let res = await req.json();
@@ -157,12 +156,28 @@
             }
             
 
-            //poner miembros:
-
-
-
-
+            //poner miembros (se deberia hacer con fragmento):
+            if(res.publica != "true"){
+                //let fragmentoMiembros = document.createDocumentFragment();
+                resMiembros.idMiembros.forEach(async (re) => {
+                    const $cuadros = document.createElement("div");
+                    $cuadros.innerHTML = document.getElementById("template-miembro").innerHTML;
+                    let reqPerf = await fetch("/b/userProfile/" + re);
+                    let resPerf = await reqPerf.json();
+                    if(re == resFounder._id){
+                        $cuadros.querySelector("#usuario-miembro").innerHTML = '<b id="nombre-miembro-fundador">' + resPerf.nombre + '</b>';
+                    } else {
+                        $cuadros.querySelector("#usuario-miembro").innerHTML = resPerf.nombre;
+                    }
+                    $cuadros.querySelector("#usuario-miembro").setAttribute("data-usrid", re);
+                    $cuadros.querySelector("#imagen-miembro").src = resPerf.urlFoto;
+                    document.getElementById("miembros").innerHTML += $cuadros.innerHTML;
+                });
+            //document.getElementById("miembros").innerHTML += fragmentoMiembros.innerHTML;
+            }
             //poner mensajes:
+
+
 
 
 
@@ -176,9 +191,6 @@
             });
             $fundadorSala.addEventListener("click", (e) => {//mostrar perfil del fundador
                 e.preventDefault();
-
-
-
             });
 
             let cont = setTimeout(() => {

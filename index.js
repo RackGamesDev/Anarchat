@@ -309,8 +309,6 @@ app.put("/b/userpb/:id", async (req, res) => {//cambiar si el usuario ya a cread
             console.log(err);
             res.redirect("/err404");
         });
-
-
     } else {
         res.redirect("/err404");
     }

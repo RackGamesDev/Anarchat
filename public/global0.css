@@ -358,17 +358,18 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 }
 
 
-@keyframes abrir-miniperfil{/*animacion para el cuadro del perfil*/
+@keyframes abrir-miniperfil{/*animacion para el cuadro del perfil (no va)*/
     from{
-
+        opacity: 0%;
     }
     to{
-
+        opacity: 100%;
     }
 }
 #ver-perfil{/*fondo de la caja de perfil*/
-    position: fixed;
+
     background-color: var(--colorCargando);
+    position: fixed;
     width: 100%;
     height: 100%;
     z-index: 20;
@@ -411,7 +412,7 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 #e-sala-descripcion{/*caja con la descripcion*/
     border: 1px solid var(--colorBorde);
     width: 100%;
-    transform: translateX(10%);
+    max-height: 500px;
     text-align: start;
 }
 #caja-room-edit input[type="text"]{/*textbox de edicion de la sala*/
@@ -485,9 +486,25 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     background-color: var(--colorFondo2);
     width: 30%;
     height: 100%;
-    text-align: center;
+    text-align: start;
+    padding: 10px;
     overflow-x: hidden;
     overflow-y: scroll;
+}
+#miembros>div{/*cada cuadro de miembro*/
+    margin-bottom: 20px;
+}
+#nombre-miembro-fundador{/*texto para el miembro fundador en el nombre*/
+    color: var(--colorLink);
+}
+#imagen-miembro{/*la foto de perfil de un miembro*/
+    height: 32px;
+    width: 32px;
+    size: 32px;
+    position: absolute;
+}
+#usuario-miembro{/*el nombre de un miembro*/
+    margin-left: 40px;
 }
 #inputs-sala{/*caja con los inputs*/
     margin: 10px;

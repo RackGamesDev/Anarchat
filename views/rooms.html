@@ -92,7 +92,6 @@
         //con cuenta
 
         const miniperfil = async (e, id) => {//abrir miniperfil
-            console.log(id);
             document.getElementById("ver-perfil").classList.remove("hidden");
             let req = await fetch("/b/userProfile/" + id);
             let res = await req.json();
