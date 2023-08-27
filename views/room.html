@@ -5,7 +5,7 @@
 <div id="ver-perfil" class="hidden">
     <div>
         <br>
-        <a href="" id="miniperfil-foto-enlace"><img src="https://imgur.com/Wega2Bu.png" alt="x" id="miniperfil-foto"></a>
+        <a href="" id="miniperfil-foto-enlace" target="_blank"><img src="https://imgur.com/Wega2Bu.png" alt="x" id="miniperfil-foto"></a>
         <h2 id="miniperfil-nombre">nombre</h2>
         <div id="miniperfil-descripcion">
             asfdasdfaswdf
@@ -89,6 +89,8 @@
         document.addEventListener("DOMContentLoaded", async () => {
             const miniperfil = async (e, id) => {//abrir miniperfil
                 document.getElementById("ver-perfil").classList.remove("hidden");
+                document.getElementById("ver-perfil").classList.add("animacion-abrir-miniperfil");
+                document.getElementById("ver-perfil").classList.remove("animacion-cerrar-miniperfil");
                 let req = await fetch("/b/userProfile/" + id);
                 let res = await req.json();
                 document.getElementById("miniperfil-foto").src = res.urlFoto;
@@ -96,7 +98,13 @@
                 document.getElementById("miniperfil-nombre").innerHTML = res.nombre;
                 document.getElementById("miniperfil-descripcion").innerHTML = res.descripcion;
             }
-            document.getElementById("miniperfil-cerrar").addEventListener("click", () => {document.getElementById("ver-perfil").classList.add("hidden");});
+            document.getElementById("miniperfil-cerrar").addEventListener("click", () => {
+                let timerCerrar = setTimeout(() => {
+                    document.getElementById("ver-perfil").classList.add("hidden");
+                }, 500);
+                document.getElementById("ver-perfil").classList.remove("animacion-abrir-miniperfil");
+                document.getElementById("ver-perfil").classList.add("animacion-cerrar-miniperfil");
+            });
 
 
 

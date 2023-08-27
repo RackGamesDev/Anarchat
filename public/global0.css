@@ -358,16 +358,37 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 }
 
 
-@keyframes abrir-miniperfil{/*animacion para el cuadro del perfil (no va)*/
-    from{
+@keyframes abrir-miniperfil{/*animacion para el cuadro del perfil abrir*/
+    0%{
         opacity: 0%;
     }
-    to{
+    100%{
         opacity: 100%;
     }
 }
+.animacion-abrir-miniperfil{/*clase para abrir la animacion del miniperfil*/
+    animation-name: abrir-miniperfil;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 1;
+    /* animation-direction: alternate; */
+}
+@keyframes cerrar-miniperfil{/*animacion para el cuadro del perfil cerrar*/
+    0%{
+        opacity: 100%;
+    }
+    100%{
+        opacity: 0%;
+    }
+}
+.animacion-cerrar-miniperfil{/*clase para cerrar la animacion del miniperfil*/
+    animation-name: cerrar-miniperfil;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 1;
+    /* animation-direction: alternate; */
+}
 #ver-perfil{/*fondo de la caja de perfil*/
-
     background-color: var(--colorCargando);
     position: fixed;
     width: 100%;
