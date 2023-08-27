@@ -530,9 +530,27 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 #inputs-sala{/*caja con los inputs*/
     margin: 10px;
 }
-#inputs-sala>input[type="button"]{/*botones de mandar*/
+#mandar-mensaje,#mandar-archivo{/*botones del chat*/
+    height: 32px;
+    width: 32px;
+    background-color: var(--colorBarraNo);
+    border: 1px solid var(--colorBorde);
+}
+#mandar-mensaje>img,#mandar-archivo>img{/*iconos del chat*/
+    border: none;
+    width: 90%;
+    height: 90%;
     padding: 2px;
 }
+#mandar-mensaje>img:hover,#mandar-archivo>img:hover{/*iconos del chat cuando pasas el raton*/
+    cursor: pointer;
+}
+#escribir-mensaje{/*textbox del mensaje*/
+    transform: translateY(-10px);
+    overflow: scroll;
+    max-height: 300px;
+}
+
 .mensaje{/*cuadro con todo el mensaje*/
     display: flex;
     width: 100%;

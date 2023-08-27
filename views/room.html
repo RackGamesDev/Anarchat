@@ -52,8 +52,8 @@
 </div>
 <div id="inputs-sala">
     <input type="text" id="escribir-mensaje" placeholder="Send something">
-    <input type="button" id="mandar-mensaje" value="Send">
-    <input type="button" id="mandar-archivo" value="File">
+    <button id="mandar-mensaje"><img src="https://imgur.com/0o9W5Xu.png" alt="Send"></button>
+    <button id="mandar-archivo"><img src="https://imgur.com/b8vGsmf.png" alt="Send"></button>
 </div>
 
 <template id="template-mensaje">
@@ -186,6 +186,31 @@
             //poner mensajes:
 
 
+
+
+
+            const $cajaTexto = document.getElementById("escribir-mensaje");
+            const mandarTexto = async (elTexto) => {//enviar un mensaje
+                console.log(elTexto);
+            }
+            const mandarArchivo = async () => {//enviar un archivo
+                
+            }
+            document.getElementById("mandar-mensaje").addEventListener("click", (e) => {
+                if($cajaTexto.value != ""){
+                    mandarTexto($cajaTexto.value);
+                    $cajaTexto.value = "";
+                }
+            });
+            document.addEventListener("keydown", (e) => {
+                if(e.code == "Enter" && $cajaTexto.value != ""){
+                    mandarTexto($cajaTexto.value);
+                    $cajaTexto.value = "";
+                }
+            });
+            document.getElementById("mandar-archivo").addEventListener("click", (e) => {
+                mandarArchivo();
+            });
 
 
 

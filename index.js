@@ -189,14 +189,49 @@ app.post("/b/userdel/:id", async (req, res) => {//eliminar un usuario, hace falt
                 .then(() => {
                     //res.redirect("/");
                     //ELIMINAR SUS SALAS, LA MEMBRESIA DE USUARIOS EN SUS SALAS Y SUS MEMBRESIAS EN OTRAS SALAS
+                    data.salas.forEach((laSala) => {//borrar todas las salas
+                        Sala.findById(laSala)
+                        .then((data2) => {
+                            if(data2.idFundador == id){//en la sala publica
+                                data2.idMiembros.forEach((elMiembro) => {//sacar a los miembros
+                                    Usuario.findById(elMiembro)
+                                    .then((data3) => {
+                                        const nuevoSalas = data3.salas;
+                                        let index = data3.salas.indexOf(laSala);
+                                        nuevoSalas.splice(index, 1);
+                                        Usuario.updateOne({_id: elMiembro}, {$set: {salas: nuevoSalas}})
+                                        .catch((err) => {
+                                            console.log(err);
+                                            res.redirect("/err404");
+                                        });
+                                    })
+                                    .catch((err) => {
+                                        console.log(err);
+                                        res.redirect("/err404");
+                                    });
+                                });
+                                //borrar finalmente la sala
+                                //arreglar que puede que no valla
 
 
 
 
-
-
-
-
+                            } else {//en la sala privada
+                                const nuevoMiembros = data2.idMiembros;
+                                let index = data2.idMiembros.indexOf(laSala);
+                                nuevoMiembros.splice(index, 1);
+                                Sala.updateOne({_id: laSala}, {$set: {idMiembros: nuevoMiembros}})
+                                .catch((err) => {
+                                    console.log(err);
+                                    res.redirect("/err404");
+                                });
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            res.redirect("/err404");
+                        });
+                    });
                 })
                 .catch((err) => {
                     console.log(err + "  no se pudo borrar");
