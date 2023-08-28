@@ -52,8 +52,8 @@
 </div>
 <div id="inputs-sala">
     <input type="text" id="escribir-mensaje" placeholder="Send something">
-    <button id="mandar-mensaje"><img src="https://imgur.com/0o9W5Xu.png" alt="Send"></button>
-    <button id="mandar-archivo"><img src="https://imgur.com/b8vGsmf.png" alt="Send"></button>
+    <button id="mandar-mensaje"><img src="https://imgur.com/b8vGsmf.png" alt="Send"></button>
+    <button id="mandar-archivo"><img src="https://imgur.com/0o9W5Xu.png" alt="Send"></button>
 </div>
 
 <template id="template-mensaje">
@@ -101,7 +101,7 @@
             document.getElementById("miniperfil-cerrar").addEventListener("click", () => {
                 let timerCerrar = setTimeout(() => {
                     document.getElementById("ver-perfil").classList.add("hidden");
-                }, 500);
+                }, 300);
                 document.getElementById("ver-perfil").classList.remove("animacion-abrir-miniperfil");
                 document.getElementById("ver-perfil").classList.add("animacion-cerrar-miniperfil");
             });
@@ -197,6 +197,8 @@
                 
             }
             document.getElementById("mandar-mensaje").addEventListener("click", (e) => {
+                e.stopPropagation();
+                console.log("el click");
                 if($cajaTexto.value != ""){
                     mandarTexto($cajaTexto.value);
                     $cajaTexto.value = "";
@@ -209,6 +211,7 @@
                 }
             });
             document.getElementById("mandar-archivo").addEventListener("click", (e) => {
+                e.stopPropagation();
                 mandarArchivo();
             });
 
@@ -237,7 +240,7 @@
             }, 100);
         });
     } else {
-        window.location.href == "/err404"
+        window.location.href == "/err404";
     }
     
 </script>

@@ -368,7 +368,7 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 }
 .animacion-abrir-miniperfil{/*clase para abrir la animacion del miniperfil*/
     animation-name: abrir-miniperfil;
-    animation-duration: 0.5s;
+    animation-duration: 0.3s;
     animation-timing-function: ease-in-out;
     animation-iteration-count: 1;
     /* animation-direction: alternate; */
@@ -383,7 +383,7 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 }
 .animacion-cerrar-miniperfil{/*clase para cerrar la animacion del miniperfil*/
     animation-name: cerrar-miniperfil;
-    animation-duration: 0.5s;
+    animation-duration: 0.3s;
     animation-timing-function: ease-in-out;
     animation-iteration-count: 1;
     /* animation-direction: alternate; */
