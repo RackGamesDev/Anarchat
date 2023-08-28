@@ -53,6 +53,7 @@
     <template id="sala-privada-template">
         <div class="sala-privada">
             <h2 id="nombre-sala">X</h2>
+            <i id="contador-miembros">Members: X</i><br>
             <img id="foto-sala" src="X" alt="X" class="display-foto-perfil">
             <br>
             <a href="#" data-usrid="" id="fundador-sala">Founder: X</a>
@@ -131,6 +132,7 @@
                         $cuadro.querySelector("#nombre-sala").innerHTML = ress.nombre;
                         $cuadro.querySelector("#foto-sala").src = ress.urlFoto;
                         $cuadro.querySelector("#descripcion-sala").innerHTML = ress.descripcion;
+                        $cuadro.querySelector("#contador-miembros").innerHTML = "Members: <b>" + ress.cantidadMiembros + "</b>";
                         $cuadro.querySelector("#entrar-sala").href = "/goRoom?room=" + ress._id;
                         const $fundadorc = $cuadro.querySelector("#fundador-sala");
                         $cuadro.querySelector("#fundador-sala").innerHTML = "Founder: <b>" + ress.nombreFundador + "</b>";

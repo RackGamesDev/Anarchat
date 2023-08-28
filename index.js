@@ -190,27 +190,31 @@ app.post("/b/userdel/:id", async (req, res) => {//eliminar un usuario, hace falt
                     .then((data2) => {
                         if(data2.idFundador == id && data2.publica != "true"){//en la sala publica
                             data2.idMiembros.forEach((elMiembro) => {//sacar a los miembros
-                                Usuario.findById(elMiembro)
-                                .then((data3) => {
-                                    console.log(data3);
-                                    const nuevoSalas = data3.salas;
-                                    let index = data3.salas.indexOf(laSala);
-                                    nuevoSalas.splice(index, 1);
-                                    Usuario.updateOne({_id: elMiembro}, {$set: {salas: nuevoSalas}})
+                                if(elMiembro != id){
+                                    Usuario.findById(elMiembro)
+                                    .then((data3) => {
+                                        const nuevoSalas = data3.salas;
+                                        let index = data3.salas.indexOf(laSala);
+                                        nuevoSalas.splice(index, 1);
+                                        Usuario.updateOne({_id: elMiembro}, {$set: {salas: nuevoSalas}})
+                                        .catch((err) => {
+                                            console.log(err);
+                                            res.redirect("/err404");
+                                        });
+                                    })
                                     .catch((err) => {
                                         console.log(err);
                                         res.redirect("/err404");
                                     });
-                                })
-                                .catch((err) => {
-                                    console.log(err);
-                                    res.redirect("/err404");
-                                });
+                                }
+                                
                             });
-                            //arreglar que puede que no valla
-                            //hacer que tambien se puedan expulsar miembros
-                            
-                        } else {//en la sala privada
+                            Sala.deleteOne({_id: laSala})//borrar su sala
+                            .catch((err) => {
+                                console.log(err);
+                                res.redirect("/err404");
+                            });
+                        } else if(data2.publica != "true"){//en la sala privada
                             const nuevoMiembros = data2.idMiembros;
                             let index = data2.idMiembros.indexOf(laSala);
                             nuevoMiembros.splice(index, 1);
@@ -220,16 +224,21 @@ app.post("/b/userdel/:id", async (req, res) => {//eliminar un usuario, hace falt
                                 res.redirect("/err404");
                             });
                         }
-                        Sala.deleteOne({_id: laSala})//borrar finalmente la sala
-                            .then(() => {
-                                res.status(200);
-                            }).catch((err) => {
+                        if(data2.publica == "true" && data2.idFundador == id){//borrar su sala publica
+                            Sala.deleteOne({_id: laSala})
+                            .catch((err) => {
                                 console.log(err);
                                 res.redirect("/err404");
                             });
+                        }
                     })
+                    .catch((err) => {
+                        console.log(err);
+                        res.redirect("/err404");
+                    });
+                    Usuario.deleteOne({_id: id})//y borrar el usuario
                     .then(() => {
-                        console.log("Y BORRAR EL USUARIO...");
+                        res.status(200);
                     })
                     .catch((err) => {
                         console.log(err);
@@ -393,7 +402,7 @@ app.get("/b/roomData/:sala", async (req, res)=>{//conseguir informacion de perfi
     if(sala != undefined){
         Sala.findById(sala)
         .then((data) => {
-            let dataFinal = {_id: data._id, nombre: data.nombre, descripcion: data.descripcion, urlFoto: data.urlFoto, nombreFundador: "", idFundador: "", publica: data.publica, verID: data.verID}
+            let dataFinal = {_id: data._id, nombre: data.nombre, descripcion: data.descripcion, urlFoto: data.urlFoto, nombreFundador: "", idFundador: "", publica: data.publica, verID: data.verID, cantidadMiembros: data.idMiembros.length}
             Usuario.findById(data.idFundador)
             .then((data2) => {
                 dataFinal.nombreFundador = data2.nombre;
@@ -710,6 +719,11 @@ app.post("/b/roomdel", async (req, res) => {//borrar una sala, se necesita el id
 
 
 app.post("/b/say/:id", async (req, res) => {//decir algo en una sala, muchos datos necesitados
+    
+
+
+
+
     
 });
 app.post("/b/saydel/:id", async (req, res) => {//borrar un mensaje de una sala

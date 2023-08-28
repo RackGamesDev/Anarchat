@@ -75,7 +75,7 @@
     <div class="un-miembro">
         <div class="miembro-persona" id="miembro-persona">
             <img class="imagen-miembro" id="imagen-miembro" src="" alt="X">
-            <a href="#" id="usuario-miembro" data-usrid="">X</a>
+            <a href="#" id="usuario-miembro" data-usrid="">X</a><button data-usrkick="">Kick</button>
         </div>
         
     </div>
@@ -109,6 +109,7 @@
 
 
             const salaActual = localStorage.getItem("room");
+            const usuarioActual = localStorage.getItem("user");
 
             let req = await fetch("/b/roomData/" + salaActual);
             let res = await req.json();
@@ -179,6 +180,11 @@
                     }
                     $cuadros.querySelector("#usuario-miembro").setAttribute("data-usrid", re);
                     $cuadros.querySelector("#imagen-miembro").src = resPerf.urlFoto;
+                    if(usuarioActual == resFounder._id){
+                        $cuadros.querySelector("button").setAttribute("data-usrkick", re);
+                    } else {
+                        $cuadros.querySelector("button").remove();
+                    }
                     document.getElementById("miembros").innerHTML += $cuadros.innerHTML;
                 });
             //document.getElementById("miembros").innerHTML += fragmentoMiembros.innerHTML;
@@ -192,8 +198,23 @@
             const $cajaTexto = document.getElementById("escribir-mensaje");
             const mandarTexto = async (elTexto) => {//enviar un mensaje
                 console.log(elTexto);
+
+
+
+
+
+
+
             }
             const mandarArchivo = async () => {//enviar un archivo
+                
+
+
+
+
+
+
+
                 
             }
             document.getElementById("mandar-mensaje").addEventListener("click", (e) => {
@@ -215,7 +236,36 @@
                 mandarArchivo();
             });
 
-
+            let botonesHechar = setTimeout(() => {
+                if(res.idFundador == usuarioActual && res.publica != "true"){
+                    document.querySelector('[data-usrkick="' + usuarioActual + '"]').remove();
+                    let botones = document.querySelectorAll("[data-usrkick]");
+                    botones.forEach((e) => {
+                        e.addEventListener("click", async (e2) => {
+                            const bodyy = {
+                                        usuario: e.getAttribute("data-usrkick"),
+                                        sala: salaActual
+                                    }
+                            console.log(bodyy);
+                            await fetch("/b/exit", {
+                                method: "PUT",
+                                headers: {
+                                    "Content-type": "application/json; charset=utf-8"
+                                },
+                                body: JSON.stringify(bodyy)
+                            });
+                            e.classList.remove();
+                            location.reload();
+                        });
+                    });
+                } else {
+                    let botones = document.querySelectorAll("[data-usrkick]");
+                    console.log(botones);
+                    botones.forEach((e) => {
+                        e.remove();
+                    });
+                }
+            }, 100);
 
             document.getElementById("cargando").classList.add("hidden");
             $checkId.addEventListener("change", (e) => {//ver id
