@@ -1,0 +1,25 @@
+<div class="centrar">
+    <h1>Settings</h1>
+    <p>Have into account that this settings will be saved on your browser data and not on your Anarchat account</p>
+    <hr>
+    <h3>Max public requests</h3>
+    <p>Define how much public rooms will appear on the Rooms site</p>
+    <br>
+    <h3>Chat reload time</h3>
+    <p>Define the time between the reloads of a chat for search new messages</p>
+    <br>
+    <h3>aa</h3>
+    <img src="https://imgur.com/esukGVq.png" alt="img">
+</div>
+
+<script>
+    document.getElementById("btn-account").classList.add("barra-item-activado");
+    document.getElementById("logo-arriba").remove();
+    document.querySelector("title").innerHTML = "Anarchat - Settings";
+
+    if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != "no"){
+
+    } else {
+        location.href = "/err404";
+    }
+</script>

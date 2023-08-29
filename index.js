@@ -106,6 +106,9 @@ app.get("/goRoom*", (req, res) => {
 app.get("/about", (req, res) => {
     res.send(formarPagina('about.html'));
 });
+app.get("/settings", (req, res) => {
+    res.send(formarPagina('settings.html'));
+});
 
 
 import ruta from './routes/rutas.js'
