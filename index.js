@@ -376,12 +376,7 @@ app.get("/b/userpb/:id", async (req, res) => {//saber si el usuario hizo ya su s
 });
 
 
-app.get("/b/roomMsg/:sala/:limit", async (req, res) => {//conseguir x numero de mensajes de una sala
-    console.log("CONSEGUIR MENSAJES");
 
-
-
-});
 app.get("/b/roomMembers/:sala", async (req, res) => {//devuelve los miembros de la sala
     console.log("CONSEGUIR MIEMBROS SALA");
     const { sala } = req.params;
@@ -472,7 +467,6 @@ app.post("/b/room/:id", async (req, res) => {//crear una sala
     const { nombre, idFundador, publica, urlFoto, descripcion, verID } = req.body;
     if(nombre != undefined && idFundador != undefined && publica != undefined && urlFoto != undefined && descripcion != undefined && id != undefined && verID != undefined){
         //crear sala
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaa  " + verID);
         const sala = Sala(req.body);
         sala.save()
             .then((data1) => {
@@ -721,13 +715,49 @@ app.post("/b/roomdel", async (req, res) => {//borrar una sala, se necesita el id
 });
 
 
-app.post("/b/say/:id", async (req, res) => {//decir algo en una sala, muchos datos necesitados
+app.get("/b/roomMsg/:sala/:limit", async (req, res) => {//conseguir x numero de mensajes de una sala
+    console.log("CONSEGUIR MENSAJES");
+
+
+
     
 
 
-
-
-    
+});
+app.post("/b/say/:sala", async (req, res) => {//decir algo en una sala, muchos datos necesitados
+    console.log("DECIR MENSAJE ");
+    const {sala} = req.params;
+    const {urlFoto, idUsuario, mensaje, nombre} = req.body;
+    if(sala != undefined && urlFoto != undefined && idUsuario != undefined && mensaje != undefined && nombre != undefined){
+        Sala.findById(sala)
+        .then((data) => {
+            const dataFinal = {
+                urlFoto: urlFoto,
+                idUsuario: idUsuario,
+                nombre: nombre,
+                mensaje: mensaje,
+                fecha: Date.now(),
+                orden: data.mensajes.length
+            }
+            let mensajesn = data.mensajes;
+            mensajesn.push(dataFinal);
+            Sala.updateOne({_id: sala}, {$set: {mensajes: mensajesn}})
+            .then((data2) => {
+                console.log(data2.mensajes);
+                res.status(200);
+            })
+            .catch((err) => {
+                console.log(err);
+                res.redirect("/err404");
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.redirect("/err404");//la sala no existe o el usuario no es fundador
+        });
+    } else {
+        res.redirect("/err404");
+    }
 });
 app.post("/b/saydel/:id", async (req, res) => {//borrar un mensaje de una sala
     

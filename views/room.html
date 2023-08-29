@@ -189,22 +189,42 @@
                 });
             //document.getElementById("miembros").innerHTML += fragmentoMiembros.innerHTML;
             }
+
+
+            
             //poner mensajes:
+            const chunkLimit = localStorage.getItem("chunk-limit");
+            const reloadTime = localStorage.getItem("reload-time");
+            const tenerMensajes = async () => {//ver mensajes
+                console.log("ver mensajes");
+                
 
 
 
+            }
+            tenerMensajes();
+            let recargarChat = setInterval(tenerMensajes, reloadTime);
 
 
+            let reqYo = await fetch("/b/userProfile/" + usuarioActual);
+            let resYo = await reqYo.json();
+            const miNombre = resYo.nombre;
+            const miFoto = resYo.urlFoto;
             const $cajaTexto = document.getElementById("escribir-mensaje");
             const mandarTexto = async (elTexto) => {//enviar un mensaje
-                console.log(elTexto);
-
-
-
-
-
-
-
+                const bodyy = {
+                    urlFoto: miFoto,
+                    idUsuario: usuarioActual,
+                    mensaje: elTexto,
+                    nombre: miNombre
+                }
+                await fetch("/b/say/" + localStorage.getItem("room"), {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json; charset=utf-8"
+                    },
+                    body: JSON.stringify(bodyy)
+                });
             }
             const mandarArchivo = async () => {//enviar un archivo
                 

@@ -7,11 +7,26 @@
     //tema oscuro o claro
     if(localStorage.getItem("dark") == "false" || localStorage.getItem("dark") == undefined){
         console.log("MODO CLARO");
+
+
+
     } else{
         console.log("MODO OSCURO");
+
+
+
     }
     if(window.location.pathname != "/room" && !window.location.pathname.startsWith("/goRoom") && window.location.pathname != "/roomEdit" && window.location.pathname != "/roomDel" && window.location.pathname != "/roomExit"){
         localStorage.setItem("room", "no");
+    }
+    if(localStorage.getItem("reload-time") === NaN || localStorage.getItem("reload-time") < 500 || localStorage.getItem("reload-time") > 1000){
+        localStorage.setItem("reload-time", 1000);
+    }
+    if(localStorage.getItem("max-public") === NaN || localStorage.getItem("max-public") < 1){
+        localStorage.setItem("max-public", 100);
+    }
+    if(localStorage.getItem("chunk-size") === NaN || localStorage.getItem("chunk-size") < 1 || localStorage.getItem("chunk-size") > 32){
+        localStorage.setItem("chunk-size", 16);
     }
 </script>
 </body>

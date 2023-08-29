@@ -169,7 +169,8 @@
                     publica: publica,
                     urlFoto: $sitioImagen.value || "",
                     descripcion: $descripcion.innerHTML || "",
-                    verID: verIDSala
+                    verID: verIDSala,
+                    salas: [{}]
                 }
                 await fetch("/b/room/" + localStorage.getItem("user"), {
                     method: "POST",

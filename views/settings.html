@@ -2,13 +2,23 @@
     <h1>Settings</h1>
     <p>Have into account that this settings will be saved on your browser data and not on your Anarchat account</p>
     <hr>
-    <h3>Max public requests</h3>
+    <div class="caja-error hidden borde" id="caja-error">
+        <p>The minimun of the max public room request is 1, and the possible range of the chat reload time is between 500 and 10000, and the possible range of the message chunk size is between 1 and 32</p>
+    </div>
+    <h3>Max public room requests </h3>
     <p>Define how much public rooms will appear on the Rooms site</p>
-    <br>
-    <h3>Chat reload time</h3>
+    <input type="number" id="max-public" value="100">
+    <br><br>
+    <h3>Chat reload time on miliseconds (500-10000)</h3>
     <p>Define the time between the reloads of a chat for search new messages</p>
-    <br>
-    <h3>aa</h3>
+    <input type="number" id="reload-time" value="1000">
+    <br><br>
+    <h3>Message chunk size</h3>
+    <p>Define how much messages will be loaded at once on the chat (1-32)</p>
+    <input type="number" id="chunk-size" value="16">
+    <br><br>
+    <input type="button" value="Apply" id="boton-settings">
+    <br><br>
     <img src="https://imgur.com/esukGVq.png" alt="img">
 </div>
 
@@ -18,7 +28,35 @@
     document.querySelector("title").innerHTML = "Anarchat - Settings";
 
     if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != "no"){
+        document.addEventListener("DOMContentLoaded", () => {
+            if(localStorage.getItem("reload-time") === NaN || localStorage.getItem("reload-time") < 500 || localStorage.getItem("reload-time") > 1000){
+                localStorage.setItem("reload-time", 1000);
+            }
+            if(localStorage.getItem("max-public") === NaN || localStorage.getItem("max-public") < 1){
+                localStorage.setItem("max-public", 100);
+            }
+            if(localStorage.getItem("chunk-size") === NaN || localStorage.getItem("chunk-size") < 1 || localStorage.getItem("chunk-size") > 32){
+                localStorage.setItem("chunk-size", 16);
+            }
 
+            const $reloadTime = document.getElementById("reload-time");
+            const $maxPublic = document.getElementById("max-public");
+            const $chunkSize = document.getElementById("chunk-size");
+            $reloadTime.value = localStorage.getItem("reload-time");
+            $maxPublic.value = localStorage.getItem("max-public");
+            $chunkSize.value = localStorage.getItem("chunk-size");
+
+            document.getElementById("boton-settings").addEventListener("click", (e) => {//validar
+                if($reloadTime.value === NaN || $reloadTime.value < 500 || $reloadTime.value > 10000 || $maxPublic.value === NaN || $maxPublic.value < 1 || $chunkSize.value === NaN || $chunkSize.value < 1 || $chunkSize.value > 32){
+                    document.getElementById("caja-error").classList.remove("hidden");
+                } else {//aplicar
+                    localStorage.setItem("reload-time", $reloadTime.value);
+                    localStorage.setItem("max-public", $maxPublic.value);
+                    localStorage.setItem("chunk-size", $chunkSize.value);
+                    location.href = "/account";
+                }
+            });
+        })
     } else {
         location.href = "/err404";
     }

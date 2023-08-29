@@ -153,27 +153,31 @@
             let resp = await reqp.json();
             //pintar salas publicas
             const $sitioPublicas = document.getElementById("salas-publicas");
+            let i = 0;
             resp.forEach(async (e) => {
-                const $cuadro = document.createElement("div");
-                $cuadro.innerHTML = document.getElementById("sala-publica-template").innerHTML;
-                $cuadro.querySelector("#nombre-sala").innerHTML = e.nombre;
-                $cuadro.querySelector("#foto-sala").src = e.urlFoto;
-                $cuadro.querySelector("#descripcion-sala").innerHTML = e.descripcion;
-                $cuadro.querySelector("#entrar-sala").href = "/goRoom?room=" + e._id;
+                i++;
+                if(i < localStorage.getItem("max-public")){
+                    const $cuadro = document.createElement("div");
+                    $cuadro.innerHTML = document.getElementById("sala-publica-template").innerHTML;
+                    $cuadro.querySelector("#nombre-sala").innerHTML = e.nombre;
+                    $cuadro.querySelector("#foto-sala").src = e.urlFoto;
+                    $cuadro.querySelector("#descripcion-sala").innerHTML = e.descripcion;
+                    $cuadro.querySelector("#entrar-sala").href = "/goRoom?room=" + e._id;
 
-                let reqpf = await fetch("/b/founder/" + e._id);
-                let respf = await reqpf.json();
-                const $fundadorc = $cuadro.querySelector("#fundador-sala");
-                $fundadorc.innerHTML = "Founder: <b>" + respf.nombre + "</b>";
+                    let reqpf = await fetch("/b/founder/" + e._id);
+                    let respf = await reqpf.json();
+                    const $fundadorc = $cuadro.querySelector("#fundador-sala");
+                    $fundadorc.innerHTML = "Founder: <b>" + respf.nombre + "</b>";
 
-                if(e.descripcion == ""){
-                    $cuadro.querySelector("#descripcion-sala").remove();
+                    if(e.descripcion == ""){
+                        $cuadro.querySelector("#descripcion-sala").remove();
+                    }
+
+                    $fundadorc.setAttribute("data-usrid", respf._id);
+
+                    $sitioPublicas.innerHTML += $cuadro.innerHTML;//esto se deberia hacer con un fragmento pero no va
+                    $sitioPublicas.innerHTML += "<br>";
                 }
-
-                $fundadorc.setAttribute("data-usrid", respf._id);
-
-                $sitioPublicas.innerHTML += $cuadro.innerHTML;//esto se deberia hacer con un fragmento pero no va
-                $sitioPublicas.innerHTML += "<br>";
             });
             let cont = setTimeout(() => {
                 document.querySelectorAll('[data-usrid]').forEach((el) => {
