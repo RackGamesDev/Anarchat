@@ -504,7 +504,6 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     cursor: pointer;
 }
 #chat{/*caja del chat*/
-    border: 1px solid var(--colorBorde);
     background-color: var(--colorFondo);
     width: 70%;
     height: 100%;

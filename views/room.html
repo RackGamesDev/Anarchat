@@ -55,22 +55,36 @@
     <button id="mandar-mensaje"><img src="https://imgur.com/b8vGsmf.png" alt="Send"></button>
     <button id="mandar-archivo"><img src="https://imgur.com/0o9W5Xu.png" alt="Send"></button>
 </div>
-<p>If you need to see more messages at once or change the reload time you can go to <a href="/settings">settings</a></p>
-<template id="template-mensaje">
-    <div class="mensaje">
+<div style="margin: 10px;">
+    <p>If you need to see more messages at once or change the reload time you can go to <a href="/settings">settings</a></p>
+    <p>Or if you need to see all the messages at once (non-realtime) you can go to <a href="/roomAll">All the messages</a></p>
+    <p id="error-length" class="txt-rojo hidden">Your message won't be sent if it lengths more than 1024 characters</p>
+</div>
+
+
+
+
+<div id="template-mensaje" class="hidden">
+    <div class="mensaje" id="template-mensaje-contenido">
         <div class="mensaje-persona" id="mensaje-persona">
-            <img class="imagen-mensaje" id="imagen-mensaje" src="" alt="X">
+            <img class="imagen-mensaje" id="imagen-mensaje" src="https://imgur.com/esukGVq.png" alt="X">
             <a href="#" id="usuario-mensaje" data-usrid="">X</a>
+            <input type="button" value="Edit" id="editar-mensaje" class="boton-normal">
+            <input type="button" value="Delete" id="borrar-mensaje" class="boton-normal">
+            <div class="hidden" id="caja-edicion-mensaje">
+                <input type="text" value="" placeholder="Press enter to edit" id="texto-editar">
+                <input type="button" value="Edit" id="editar-mensaje-final" class="boton-normal">
+            </div>
         </div>
         <div class="mensaje-texto" id="mensaje-texto">
             <p id="texto-mensaje">X</p>
         </div>
-        <div id="descarga-archivo" class="descarga-archivo">
+        <div id="descarga-archivo" class="descarga-archivo hidden">
             <a id="link-descarga" href="#">X</a>
         </div>
         <br>
     </div>
-</template>
+</div>
 <template id="template-miembro">
     <div class="un-miembro">
         <div class="miembro-persona" id="miembro-persona">
@@ -80,6 +94,9 @@
         
     </div>
 </template>
+
+
+
 
 <script>
     document.getElementById("btn-rooms").classList.add("barra-item-activado");
@@ -193,15 +210,55 @@
 
             
             //poner mensajes:
-            const chunkLimit = localStorage.getItem("chunk-limit");
+            let recibiendo = "true";
+            const chunkSize = localStorage.getItem("chunk-size");
             const reloadTime = localStorage.getItem("reload-time");
             const $zonaMensajes = document.getElementById("chat");
             const tenerMensajes = async () => {//ver mensajes
-                $zonaMensajes.innerHTML = "";
-                let reqMsg = await fetch("/b/roomMsg/" + salaActual + "/" + chunkLimit);
+                //$zonaMensajes.innerHTML = "";
+                let reqMsg = await fetch("/b/roomMsg/" + salaActual + "/" + chunkSize);
                 let resMsg = await reqMsg.json();
                 console.log(resMsg);
+                if(resMsg.length > 0 && recibiendo == "true"){
+                    const $fragment = document.createElement("div");
+                    const $contenidoBase = document.getElementById("template-mensaje-contenido");
+                    let i = 0;
+                    resMsg.forEach((el) => {
+                        const $cuadro = document.createElement("div");
+                        $cuadro.classList.add("mensaje");
+                        $cuadro.innerHTML = $contenidoBase.innerHTML;
 
+                        $cuadro.querySelector("#imagen-mensaje").src = resMsg[i].urlFoto;
+                        $cuadro.querySelector("#usuario-mensaje").innerHTML = resMsg[i].nombre;
+                        $cuadro.querySelector("#usuario-mensaje").setAttribute("data-usrid", resMsg[i].idUsuario);
+                        $cuadro.querySelector("#texto-mensaje").innerHTML = resMsg[i].mensaje;
+                        $cuadro.querySelector("#borrar-mensaje").addEventListener("click", async (e) => {
+                            await fetch("/b/saydel/" + salaActual + "/" + el.orden, {
+                                method: "POST",
+                                headers: {
+                                    "Content-type": "application/json; charset=utf-8"
+                                },
+                                body: JSON.stringify({})
+                            });
+                            console.log("borrar " + el.orden);
+                            e.remove();
+                        });
+                        //hacer que se pueda editar y borrar el mensaje
+
+
+
+
+
+
+
+
+
+
+                        $fragment.innerHTML = $cuadro.innerHTML + $fragment.innerHTML;
+                        i++;
+                    });
+                    document.getElementById("chat").innerHTML = $fragment.innerHTML;
+                }
 
             }
             tenerMensajes();
@@ -227,6 +284,7 @@
                     },
                     body: JSON.stringify(bodyy)
                 });
+                tenerMensajes();
             }
             const mandarArchivo = async () => {//enviar un archivo
                 
@@ -239,15 +297,21 @@
 
                 
             }
+            $cajaTexto.addEventListener("keydown", (e) => {
+                if($cajaTexto.value.length > 1024){
+                    document.getElementById("error-length").classList.remove("hidden");
+                } else {
+                    document.getElementById("error-length").classList.add("hidden");
+                }
+            });
             document.getElementById("mandar-mensaje").addEventListener("click", (e) => {
                 e.stopPropagation();
-                console.log("el click");
                 if($cajaTexto.value != ""){
                     mandarTexto($cajaTexto.value);
                     $cajaTexto.value = "";
                 }
             });
-            document.addEventListener("keydown", (e) => {
+            $cajaTexto.addEventListener("keydown", (e) => {
                 if(e.code == "Enter" && $cajaTexto.value != ""){
                     mandarTexto($cajaTexto.value);
                     $cajaTexto.value = "";
@@ -301,7 +365,7 @@
                 e.preventDefault();
             });
 
-            let cont = setTimeout(() => {
+            let cont = setInterval(() => {
                 document.querySelectorAll('[data-usrid]').forEach((el) => {
                     el.addEventListener("click", function(e) {
                         e.preventDefault();
@@ -309,7 +373,7 @@
                         miniperfil(e, elId);
                     })
                 });
-            }, 100);
+            }, 1000);
         });
     } else {
         window.location.href == "/err404";

@@ -16,7 +16,7 @@
 
 
     }
-    if(window.location.pathname != "/room" && !window.location.pathname.startsWith("/goRoom") && window.location.pathname != "/roomEdit" && window.location.pathname != "/roomDel" && window.location.pathname != "/roomExit"){
+    if(window.location.pathname != "/room" && !window.location.pathname.startsWith("/goRoom") && window.location.pathname != "/roomEdit" && window.location.pathname != "/roomDel" && window.location.pathname != "/roomExit" && window.location.pathname != "/roomAll"){
         localStorage.setItem("room", "no");
     }
     if(localStorage.getItem("reload-time") === NaN || localStorage.getItem("reload-time") < 500 || localStorage.getItem("reload-time") > 1000){

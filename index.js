@@ -103,6 +103,9 @@ app.get("/roomExit", (req, res) => {
 app.get("/goRoom*", (req, res) => {
     res.send(formarPagina('goRoom.html'));
 });
+app.get("/roomAll", (req, res) => {
+    res.send(formarPagina('roomAll.html'));
+});
 app.get("/about", (req, res) => {
     res.send(formarPagina('about.html'));
 });
@@ -724,19 +727,17 @@ app.get("/b/roomMsg/:sala/:limit", async (req, res) => {//conseguir x numero de 
             if(data.mensajes.length > 0){
                 let dataFinal = [];
                 let ii = 0;
-                for(let i = data.mensajes.length - 1; i > 0; i--){
+                for(let i = data.mensajes.length; i >= 0; i--){
                     ii++;
                     if(ii < limit){
                         dataFinal.push(data.mensajes[i]);
-                        console.log("agnade ", data.mensajes[i]);
                     } else {
                         break;
                     }
                 }
-                console.log("devuelve ", dataFinal);
+                dataFinal.splice(0, 1);
                 res.json(dataFinal);
             } else {
-                console.log("devuelve nada");
                 res.json([]);
             }
         })
@@ -752,7 +753,7 @@ app.post("/b/say/:sala", async (req, res) => {//decir algo en una sala, muchos d
     console.log("DECIR MENSAJE ");
     const {sala} = req.params;
     const {urlFoto, idUsuario, mensaje, nombre} = req.body;
-    if(sala != undefined && urlFoto != undefined && idUsuario != undefined && mensaje != undefined && nombre != undefined){
+    if(sala != undefined && urlFoto != undefined && idUsuario != undefined && mensaje != undefined && nombre != undefined && mensaje.length < 1024){
         Sala.findById(sala)
         .then((data) => {
             const dataFinal = {
@@ -767,7 +768,6 @@ app.post("/b/say/:sala", async (req, res) => {//decir algo en una sala, muchos d
             mensajesn.push(dataFinal);
             Sala.updateOne({_id: sala}, {$set: {mensajes: mensajesn}})
             .then((data2) => {
-                console.log(data2.mensajes);
                 res.status(200);
             })
             .catch((err) => {
@@ -816,7 +816,7 @@ app.post("/b/saydel/:sala/:numero", async (req, res) => {//borrar un mensaje de 
     }
 });
 app.put("/b/say/:sala/:numero", async (req, res) => {//editar un mensaje de una sala
-    debug.log("EDITAR MENSAJE");
+    console.log("EDITAR MENSAJE");
     const {sala, numero} = req.params.sala;
     const {nuevoTexto} = req.body;
     if(sala != undefined && numero != undefined && nuevoTexto != undefined && nuevoTexto != ""){
