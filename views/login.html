@@ -74,7 +74,16 @@
             console.log(err);
             window.location.href = "/err404";
         }
-        
+    });
+    document.addEventListener("keydown", (e) => {
+        if(e.code == "Enter"){
+            try{
+                enviar($nombre.value, $contrasegna.value);
+            } catch (err){
+                console.log(err);
+                window.location.href = "/err404";
+            }
+        }
     });
 
     

@@ -716,13 +716,37 @@ app.post("/b/roomdel", async (req, res) => {//borrar una sala, se necesita el id
 
 
 app.get("/b/roomMsg/:sala/:limit", async (req, res) => {//conseguir x numero de mensajes de una sala
-    console.log("CONSEGUIR MENSAJES");
-
-
-
-    
-
-
+    //console.log("CONSEGUIR MENSAJES (endpoint repetitivo)");
+    const { sala, limit } = req.params;
+    if(sala != undefined && limit != undefined){
+        Sala.findById(sala)
+        .then((data) => {
+            if(data.mensajes.length > 0){
+                let dataFinal = [];
+                let ii = 0;
+                for(let i = data.mensajes.length - 1; i > 0; i--){
+                    ii++;
+                    if(ii < limit){
+                        dataFinal.push(data.mensajes[i]);
+                        console.log("agnade ", data.mensajes[i]);
+                    } else {
+                        break;
+                    }
+                }
+                console.log("devuelve ", dataFinal);
+                res.json(dataFinal);
+            } else {
+                console.log("devuelve nada");
+                res.json([]);
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            res.redirect("/err404");//la sala no existe
+        });
+    } else {
+        res.redirect("/err404");
+    }
 });
 app.post("/b/say/:sala", async (req, res) => {//decir algo en una sala, muchos datos necesitados
     console.log("DECIR MENSAJE ");
@@ -759,11 +783,70 @@ app.post("/b/say/:sala", async (req, res) => {//decir algo en una sala, muchos d
         res.redirect("/err404");
     }
 });
-app.post("/b/saydel/:id", async (req, res) => {//borrar un mensaje de una sala
-    
+app.post("/b/saydel/:sala/:numero", async (req, res) => {//borrar un mensaje de una sala
+    console.log("BORRAR MENSAJE");
+    const {sala, numero} = req.params.sala;
+    if(sala != undefined && numero != undefined){
+        Sala.findById(sala)
+        .then((data) => {
+            let nuevoMensajes = data.mensajes;
+            let indiceBorrar = 0;
+            for(let i = 0; i < nuevoMensajes.length; i++){
+                if(nuevoMensajes[i].numero == numero){
+                    indiceBorrar = i;
+                    break;
+                }
+            }
+            nuevoMensajes.splice(indiceBorrar, 1);
+            Sala.updateOne({_id: sala}, {$set: {mensajes: nuevoMensajes}})
+            .then((data2) => {
+                res.status(200);
+            })
+            .catch((err) => {
+                console.log(err);
+                res.redirect("/err404");
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.redirect("/err404");
+        });
+    } else {
+        res.redirect("/err404");
+    }
 });
-app.put("/b/say/:id", async (req, res) => {//editar un mensaje de una sala
-    
+app.put("/b/say/:sala/:numero", async (req, res) => {//editar un mensaje de una sala
+    debug.log("EDITAR MENSAJE");
+    const {sala, numero} = req.params.sala;
+    const {nuevoTexto} = req.body;
+    if(sala != undefined && numero != undefined && nuevoTexto != undefined && nuevoTexto != ""){
+        Sala.findById(sala)
+        .then((data) => {
+            let nuevoMensajes = data.mensajes;
+            let index = 0;
+            for(let i = 0; i < nuevoMensajes.length; i++){
+                if(nuevoMensajes[i].numero == numero){
+                    index = i;
+                    break;
+                }
+            }
+            nuevoMensajes[index].mensaje = nuevoTexto;
+            Sala.updateOne({_id: sala}, {$set: {mensajes: nuevoMensajes}})
+            .then((data2) => {
+                res.status(200);
+            })
+            .catch((err) => {
+                console.log(err);
+                res.redirect("/err404");
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.redirect("/err404");
+        });
+    } else {
+        res.redirect("/err404");
+    }
 });
 
 

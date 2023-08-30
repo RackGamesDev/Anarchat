@@ -118,6 +118,18 @@
             enviar(nombre, contrasegna);
         }
     });
+    document.addEventListener("keydown", (e) => {
+        if(e.code == "Enter"){
+            const nombre = $nombre.value;
+            const contrasegna = $contrasegna.value;
+            const contrasegna2 = $contrasegna2.value;
+            if(nombre.length < 7 || nombre.length > 32 || contrasegna.length < 7 || contrasegna.length > 32 || contrasegna2.length < 7 || contrasegna != contrasegna2 || nombre == contrasegna || nombre == contrasegna2){
+                $cajaError.classList.remove("hidden");
+            } else {
+                enviar(nombre, contrasegna);
+            }
+        }
+    });
     
 
     let rand = Math.floor(Math.random() * 15);

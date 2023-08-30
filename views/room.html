@@ -55,7 +55,7 @@
     <button id="mandar-mensaje"><img src="https://imgur.com/b8vGsmf.png" alt="Send"></button>
     <button id="mandar-archivo"><img src="https://imgur.com/0o9W5Xu.png" alt="Send"></button>
 </div>
-
+<p>If you need to see more messages at once or change the reload time you can go to <a href="/settings">settings</a></p>
 <template id="template-mensaje">
     <div class="mensaje">
         <div class="mensaje-persona" id="mensaje-persona">
@@ -195,10 +195,12 @@
             //poner mensajes:
             const chunkLimit = localStorage.getItem("chunk-limit");
             const reloadTime = localStorage.getItem("reload-time");
+            const $zonaMensajes = document.getElementById("chat");
             const tenerMensajes = async () => {//ver mensajes
-                console.log("ver mensajes");
-                
-
+                $zonaMensajes.innerHTML = "";
+                let reqMsg = await fetch("/b/roomMsg/" + salaActual + "/" + chunkLimit);
+                let resMsg = await reqMsg.json();
+                console.log(resMsg);
 
 
             }

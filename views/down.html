@@ -20,7 +20,7 @@
         localStorage.setItem("room", "no");
     }
     if(localStorage.getItem("reload-time") === NaN || localStorage.getItem("reload-time") < 500 || localStorage.getItem("reload-time") > 1000){
-        localStorage.setItem("reload-time", 1000);
+        localStorage.setItem("reload-time", 2000);
     }
     if(localStorage.getItem("max-public") === NaN || localStorage.getItem("max-public") < 1){
         localStorage.setItem("max-public", 100);
