@@ -420,6 +420,10 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 #opciones-sala{/*caja con opciones para la sala*/
     margin: 10px;
 }
+#copiar-enlace{
+    height: 20px;
+    margin-top: 14px;
+}
 #confirmacion-borrar-sala{/*i want to destroy this place*/
     width: 290px;
 }
@@ -461,11 +465,12 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     display: flex;
     flex-direction: row;
     margin: 10px;
+    margin-bottom: 0;
     border: 1px solid var(--colorBorde);
     background-color: var(--colorFondo2);
     overflow: hidden;
     justify-content: stretch;
-    position: fixed;
+    
     width: 100%;
 }
 #s-nombre-sala{/*sitio con el nombre de la sala*/
@@ -486,15 +491,22 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     border: 1px solid var(--colorBorde);
     background-color: var(--colorFondo);
     overflow: scroll;
-    width: 70%;
+    width: 80%;
     max-height: 120%;
+}
+#pre-chat{
+    display: flex;
+    flex-direction: row;
+    margin-top: 0;
 }
 #cosas-sala{/*el cuadro principal del chat*/
     border: 2px solid var(--colorBorde);
     display: flex;
     margin: 10px;
     flex-direction: row;
-    height: 70%;
+    height: 60vh;
+    /* position: fixed; */
+    width: 98%;
 }
 [data-usrkick]{/*boton para expulsar*/
     margin: 8px;
@@ -512,7 +524,7 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     border: 1px solid var(--colorBorde);
     background-color: var(--colorFondo2);
     width: 30%;
-    height: 100%;
+    height: 96%;
     text-align: start;
     padding: 10px;
     overflow-x: hidden;
@@ -580,6 +592,9 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     word-wrap: break-word;
     margin: 5px;
 }
+#mensaje-persona input{/*inputs por cada mensaje*/
+    margin-left: 5px;
+}
 #menasje-fecha{/*texto con la fecha*/
     font-size: 0.7rem;
     margin-top: 0;
@@ -598,6 +613,8 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 }
 #chat{/*caja de los mensajes*/
     width: 100%;
+    height: 100%;
+    overflow-y: scroll;
 }
 
 
@@ -658,7 +675,8 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     #fundador-sala{
         font-size: 0.9rem;
     }
-    #miembro-persona>a[data-usrid]{
-        margin-top: 20px;
+    #miembros{
+        display: none;
+        position: absolute;
     }
 }

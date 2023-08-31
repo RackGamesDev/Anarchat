@@ -106,6 +106,9 @@ app.get("/goRoom*", (req, res) => {
 app.get("/roomAll", (req, res) => {
     res.send(formarPagina('roomAll.html'));
 });
+app.get("/autoJoin*", (req, res) => {
+    res.send(formarPagina('autoJoin.html'));
+});
 app.get("/about", (req, res) => {
     res.send(formarPagina('about.html'));
 });

@@ -1,0 +1,203 @@
+<h1 class="centrar">Here you can see al the messages ever in the room, this page may be slower</h1>
+<p id="mostrar-nombre">Reading room: </p>
+
+<div id="cosas-sala">
+    <div id="chat">
+
+        
+
+    </div>
+</div>
+
+<div id="template-mensaje" class="hidden">
+    <div class="mensaje" id="template-mensaje-contenido">
+        <div class="mensaje-persona" id="mensaje-persona">
+            <img class="imagen-mensaje" id="imagen-mensaje" src="https://imgur.com/esukGVq.png" alt="X">
+            <a href="#" id="usuario-mensaje" data-usrid="">X</a>
+            <input type="button" value="Edit" id="editar-mensaje" class="boton-normal" data-btnedit="">
+            <input type="button" value="Delete" id="borrar-mensaje" class="boton-normal" data-btndel="">
+            <i id="aviso-borrar" class="hidden" data-aviso-del="">If the message is not deleted inmediatly, refresh the page in a few seconds...</i>
+            <div class="hidden" id="caja-edicion-mensaje" data-editbox="">
+                <input type="text" value="" placeholder="Press enter to edit" id="texto-editar" data-btnedit-txt="">
+                <i id="aviso-editar" class="hidden" data-aviso-ed="">If the message is not edited inmediatly, refresh the page in a few seconds...</i>
+            </div>
+        </div>
+        <i id="menasje-fecha">x</i>
+        <div class="mensaje-texto" id="mensaje-texto">
+            <p id="texto-mensaje">X</p>
+        </div>
+        <div id="descarga-archivo" class="descarga-archivo hidden">
+            <a id="link-descarga" href="#">X</a>
+        </div>
+        <br>
+    </div>
+</div>
+
+
+<script>
+    document.getElementById("btn-rooms").classList.add("barra-item-activado");
+    document.getElementById("logo-arriba").remove();
+    document.querySelector("title").innerHTML = "Anarchat - Room messages";
+    if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != "no"){
+        document.addEventListener("DOMContentLoaded", async () => {//cargar y ver mensajes
+
+            const miniperfil = async (e, id) => {//abrir miniperfil
+                document.getElementById("ver-perfil").classList.remove("hidden");
+                document.getElementById("ver-perfil").classList.add("animacion-abrir-miniperfil");
+                document.getElementById("ver-perfil").classList.remove("animacion-cerrar-miniperfil");
+                let req = await fetch("/b/userProfile/" + id);
+                let res = await req.json();
+                document.getElementById("miniperfil-foto").src = res.urlFoto;
+                document.getElementById("miniperfil-foto-enlace").href = res.urlFoto;
+                document.getElementById("miniperfil-nombre").innerHTML = res.nombre;
+                document.getElementById("miniperfil-descripcion").innerHTML = res.descripcion;
+            }
+            document.getElementById("miniperfil-cerrar").addEventListener("click", () => {
+                let timerCerrar = setTimeout(() => {
+                    document.getElementById("ver-perfil").classList.add("hidden");
+                }, 300);
+                document.getElementById("ver-perfil").classList.remove("animacion-abrir-miniperfil");
+                document.getElementById("ver-perfil").classList.add("animacion-cerrar-miniperfil");
+            });
+
+            const salaActual = localStorage.getItem("room");
+            const usuarioActual = localStorage.getItem("user");
+
+            let req = await fetch("/b/roomData/" + salaActual);
+            let res = await req.json();
+            document.getElementById("mostrar-nombre").innerHTML = "Reading room: " + res.nombre;
+            let reqFounder = await fetch("/b/founder/" + salaActual);
+            let resFounder = await reqFounder.json();
+
+
+            //poner mensajes:
+            let recibiendo = "true";
+            const chunkSize = localStorage.getItem("chunk-size");
+            const reloadTime = localStorage.getItem("reload-time");
+            const $zonaMensajes = document.getElementById("chat");
+            const tenerMensajes = async () => {//ver mensajes
+                //$zonaMensajes.innerHTML = "";
+                let reqMsg = await fetch("/b/roomMsg/" + salaActual + "/" + chunkSize);
+                let resMsg = await reqMsg.json();
+                //console.log(resMsg);
+                if(resMsg.length > 0 && recibiendo == "true"){
+                    const $fragment = document.createElement("div");
+                    const $contenidoBase = document.getElementById("template-mensaje-contenido");
+                    let i = 0;
+                    resMsg.forEach((el) => {
+                        const $cuadro = document.createElement("div");
+                        $cuadro.classList.add("mensaje");
+                        $cuadro.innerHTML = $contenidoBase.innerHTML;
+
+                        $cuadro.querySelector("#imagen-mensaje").src = resMsg[i].urlFoto;
+                        $cuadro.querySelector("#usuario-mensaje").innerHTML = resMsg[i].nombre;
+                        let date = new Date(resMsg[i].fecha);
+                        $cuadro.querySelector("#menasje-fecha").innerHTML = date.toUTCString();
+                        $cuadro.querySelector("#usuario-mensaje").setAttribute("data-usrid", resMsg[i].idUsuario);
+                        $cuadro.querySelector("#texto-mensaje").innerHTML = resMsg[i].mensaje;
+                        if(resMsg[i].idUsuario == resFounder._id){
+                            $cuadro.querySelector("#usuario-mensaje").classList.add("del-fundador");
+                        }
+                        if(usuarioActual == resFounder._id || usuarioActual == resMsg[i].idUsuario){
+                            $cuadro.querySelector("#borrar-mensaje").setAttribute("data-btndel", el.orden);
+                            $cuadro.querySelector("#caja-edicion-mensaje").setAttribute("data-editbox", el.orden);
+                            $cuadro.querySelector("#texto-editar").setAttribute("data-btnedit-txt", el.orden);
+                            $cuadro.querySelector("#editar-mensaje").setAttribute("data-btnedit", el.orden);
+                            $cuadro.querySelector("#aviso-borrar").setAttribute("data-aviso-del", el.orden);
+                            $cuadro.querySelector("#aviso-editar").setAttribute("data-aviso-ed", el.orden);
+                        } else {
+                            $cuadro.querySelector("#caja-edicion-mensaje").remove();
+                            $cuadro.querySelector("#borrar-mensaje").remove();
+                            $cuadro.querySelector("#editar-mensaje").remove();
+                        }
+                        $fragment.innerHTML = $cuadro.innerHTML + $fragment.innerHTML;
+                        i++;
+                    });
+                    document.getElementById("chat").innerHTML = $fragment.innerHTML;
+                }
+
+            }
+            tenerMensajes();
+
+
+            if(recibiendo == "true"){
+                document.querySelectorAll('[data-usrid]').forEach((el) => {//agregar el miniperfil a los usuarios
+                    let elClone = el.cloneNode(true);
+                    el.parentNode.replaceChild(elClone, el);
+                });
+                document.querySelectorAll('[data-usrid]').forEach((el) => {
+                    el.addEventListener("click", function(e){
+                        e.preventDefault();
+                        const elId = this.getAttribute("data-usrid");
+                        miniperfil(e, elId);
+                        console.log("mini");
+                    });
+                })
+
+
+                document.querySelectorAll('[data-btndel]').forEach((el) => {//agregar funcion a los botones de borrar
+                    let elClone = el.cloneNode(true);
+                    el.parentNode.replaceChild(elClone, el);
+                });
+                document.querySelectorAll('[data-btndel]').forEach((el) => {
+                    el.addEventListener("click", async function(e) {
+                        document.querySelector('[data-aviso-del="' + el.getAttribute("data-btndel") + '"]').classList.remove("hidden");
+                        await fetch("/b/saydel/" + salaActual + "/" + el.getAttribute("data-btndel"), {//borrar mensaje
+                            method: "POST",
+                            headers: {
+                                "Content-type": "application/json; charset=utf-8"
+                            },
+                            body: JSON.stringify({})
+                        });
+                        el.remove();
+                        tenerMensajes();
+                        location.reload();
+                    });
+                });
+
+
+                document.querySelectorAll('[data-btnedit]').forEach((el) => {//agregar funcion al primer boton de editar
+                    let elClone = el.cloneNode(true);
+                    el.parentNode.replaceChild(elClone, el);
+                });
+                document.querySelectorAll('[data-btnedit]').forEach((el) => {//editar mensaje
+                    el.addEventListener("click", function(e) {
+                        document.querySelector('[data-editbox="' + el.getAttribute("data-btnedit") + '"]').classList.remove("hidden");
+                        document.querySelector('[data-editbox="' + el.getAttribute("data-btnedit") + '"]').focus();
+                        recibiendo = "false";
+                        el.classList.add("hidden");
+                    });
+                });
+
+
+                document.querySelectorAll('[data-btnedit-txt]').forEach((el) => {//agregar funcion de enter a los textos de editar
+                    let elClone = el.cloneNode(true);
+                    el.parentNode.replaceChild(elClone, el);
+                });
+                document.querySelectorAll('[data-btnedit-txt]').forEach((el) => {
+                    el.addEventListener("keydown", async (e) => {
+                        if(e.code == "Enter"){
+                            document.querySelector('[data-aviso-ed="' + el.getAttribute("data-btnedit-txt") + '"]').classList.remove("hidden");
+                            recibiendo = "true";
+                            //location.reload();
+                            await fetch("/b/say/" + salaActual + "/" + el.getAttribute("data-btnedit-txt"), {
+                                method: "PUT",
+                                headers: {
+                                    "Content-type": "application/json; charset=utf-8"
+                                },
+                                body: JSON.stringify({nuevoTexto: el.value})
+                            });
+                            //el.parentElement.querySelector("#texto-mensaje").innerHTML = el.value;
+                        }
+                    });
+                });
+            }
+
+
+
+        });
+    
+    } else {
+        location.href = "/err404";
+    }
+</script>

@@ -26,15 +26,16 @@
         X
     </div>
 </div>
-<br><br><br><br><br><br><br><br>
-<div id="caja-id-sala">
-    <p id="id-sala" class="hidden">id: sadfasdfasdfasdf</p>
-    <input id="check-ver-id" type="checkbox"><p>Visible invitation ID</p>
-</div>
-<div id="opciones-sala">
-    <br>
-    <input type="button" id="salir-sala" value="Exit room">
-    <input type="button" id="editar-sala" value="Edit room details">
+<div id="pre-chat">
+    <div id="caja-id-sala">
+        <p id="id-sala" class="hidden">id: sadfasdfasdfasdf</p>
+        <input id="check-ver-id" type="checkbox"><p>Visible invitation ID</p>
+        <input type="button" id="copiar-enlace" value="Copy address" class="boton-normal">
+    </div>
+    <div id="opciones-sala">
+        <input type="button" id="salir-sala" value="Exit room">
+        <input type="button" id="editar-sala" value="Edit room details">
+    </div>
 </div>
 
 <div id="cosas-sala">
@@ -50,16 +51,18 @@
 
     </div>
 </div>
-<div id="inputs-sala">
-    <input type="text" id="escribir-mensaje" placeholder="Send something">
-    <button id="mandar-mensaje"><img src="https://imgur.com/b8vGsmf.png" alt="Send"></button>
-    <button id="mandar-archivo"><img src="https://imgur.com/0o9W5Xu.png" alt="Send"></button>
-</div>
-<div style="margin: 10px;">
-    <p id="error-length" class="txt-rojo hidden">Your message won't be sent if it lengths more than 1024 characters</p>
-    <p>If you need to see more messages at once or change the reload time you can go to <a href="/settings">settings</a></p>
-    <p>Or if you need to see all the messages at once (non-realtime) you can go to <a href="/roomAll">All the messages</a></p>
-    <p>This services may be slow so it can be required to refresh the page if some information is missing</p>
+<div id="extra-chat">
+    <div id="inputs-sala">
+        <input type="text" id="escribir-mensaje" placeholder="Send something">
+        <button id="mandar-mensaje"><img src="https://imgur.com/b8vGsmf.png" alt="Send"></button>
+        <button id="mandar-archivo"><img src="https://imgur.com/0o9W5Xu.png" alt="Send"></button>
+    </div>
+    <div style="margin: 10px;">
+        <p id="error-length" class="txt-rojo hidden">Your message won't be sent if it lengths more than 1024 characters</p>
+        <p>If you need to see more messages at once or change the reload time you can go to <a href="/settings">settings</a></p>
+        <p>Or if you need to see all the messages at once (non-realtime) you can go to <a href="/roomAll">All the messages</a></p>
+        <p>This services may be slow so it can be required to refresh the page if some information is missing</p>
+    </div>
 </div>
 
 
@@ -100,7 +103,6 @@
 
 
 
-
 <script>
     document.getElementById("btn-rooms").classList.add("barra-item-activado");
     document.getElementById("logo-arriba").remove();
@@ -130,6 +132,11 @@
 
             const salaActual = localStorage.getItem("room");
             const usuarioActual = localStorage.getItem("user");
+            document.getElementById("copiar-enlace").addEventListener("click", (e) => {//copiar enlace
+                let copiar = window.location.origin + "/autoJoin?room=" + salaActual;
+                navigator.clipboard.writeText(copiar);
+                console.log(copiar);
+            });
 
             let req = await fetch("/b/roomData/" + salaActual);
             let res = await req.json();
@@ -183,7 +190,6 @@
             } else {
                 $botonSalir.remove();
             }
-            
 
             //poner miembros (se deberia hacer con fragmento):
             if(res.publica != "true"){
@@ -259,17 +265,6 @@
                             $cuadro.querySelector("#borrar-mensaje").remove();
                             $cuadro.querySelector("#editar-mensaje").remove();
                         }
-                        
-
-
-
-
-
-
-
-
-
-
                         $fragment.innerHTML = $cuadro.innerHTML + $fragment.innerHTML;
                         i++;
                     });
@@ -278,7 +273,6 @@
 
             }
             tenerMensajes();
-            
 
 
             let reqYo = await fetch("/b/userProfile/" + usuarioActual);

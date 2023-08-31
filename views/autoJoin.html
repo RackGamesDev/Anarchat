@@ -1,0 +1,27 @@
+<p>loading...</p>
+<script>
+    document.getElementById("logo-arriba").remove();
+    document.querySelector("title").innerHTML = "Anarchat - Room messages";
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const elId = urlParams.get("room");
+    if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != "no" && elId != undefined && elId != ""){
+        document.addEventListener("DOMContentLoaded", async () => {
+            let req = await fetch("/b/join/" + localStorage.getItem("user"), {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json; charset=utf-8"
+                },
+                body: JSON.stringify({sala: elId})
+            });
+            let res = await req.json();
+            if(res.stat == 400){
+                location.href = "/";
+            } else if(res.stat == 200){
+                window.location.href = "/rooms";
+            }
+        });
+    } else {
+        location.href = "/";
+    }
+</script>
