@@ -521,7 +521,7 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 #miembros>div{/*cada cuadro de miembro*/
     margin-bottom: 20px;
 }
-#nombre-miembro-fundador{/*texto para el miembro fundador en el nombre*/
+#nombre-miembro-fundador, .del-fundador{/*texto para el miembro fundador en el nombre*/
     color: var(--colorLink);
 }
 #imagen-miembro{/*la foto de perfil de un miembro*/
@@ -579,6 +579,11 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     width: 95%;
     word-wrap: break-word;
     margin: 5px;
+}
+#menasje-fecha{/*texto con la fecha*/
+    font-size: 0.7rem;
+    margin-top: 0;
+    margin-left: 8px;
 }
 #usuario-mensaje{/*nombre del usuario*/
     text-decoration: none;
@@ -652,5 +657,8 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     }
     #fundador-sala{
         font-size: 0.9rem;
+    }
+    #miembro-persona>a[data-usrid]{
+        margin-top: 20px;
     }
 }

@@ -44,7 +44,7 @@
 
     </div>
     <div id="miembros">
-        <h2>Members</h2><hr>
+        <h2>Members</h2>
 
         
 
@@ -56,9 +56,10 @@
     <button id="mandar-archivo"><img src="https://imgur.com/0o9W5Xu.png" alt="Send"></button>
 </div>
 <div style="margin: 10px;">
+    <p id="error-length" class="txt-rojo hidden">Your message won't be sent if it lengths more than 1024 characters</p>
     <p>If you need to see more messages at once or change the reload time you can go to <a href="/settings">settings</a></p>
     <p>Or if you need to see all the messages at once (non-realtime) you can go to <a href="/roomAll">All the messages</a></p>
-    <p id="error-length" class="txt-rojo hidden">Your message won't be sent if it lengths more than 1024 characters</p>
+    <p>This services may be slow so it can be required to refresh the page if some information is missing</p>
 </div>
 
 
@@ -69,13 +70,15 @@
         <div class="mensaje-persona" id="mensaje-persona">
             <img class="imagen-mensaje" id="imagen-mensaje" src="https://imgur.com/esukGVq.png" alt="X">
             <a href="#" id="usuario-mensaje" data-usrid="">X</a>
-            <input type="button" value="Edit" id="editar-mensaje" class="boton-normal">
-            <input type="button" value="Delete" id="borrar-mensaje" class="boton-normal">
-            <div class="hidden" id="caja-edicion-mensaje">
-                <input type="text" value="" placeholder="Press enter to edit" id="texto-editar">
-                <input type="button" value="Edit" id="editar-mensaje-final" class="boton-normal">
+            <input type="button" value="Edit" id="editar-mensaje" class="boton-normal" data-btnedit="">
+            <input type="button" value="Delete" id="borrar-mensaje" class="boton-normal" data-btndel="">
+            <i id="aviso-borrar" class="hidden" data-aviso-del="">If the message is not deleted inmediatly, refresh the page in a few seconds...</i>
+            <div class="hidden" id="caja-edicion-mensaje" data-editbox="">
+                <input type="text" value="" placeholder="Press enter to edit" id="texto-editar" data-btnedit-txt="">
+                <i id="aviso-editar" class="hidden" data-aviso-ed="">If the message is not edited inmediatly, refresh the page in a few seconds...</i>
             </div>
         </div>
+        <i id="menasje-fecha">x</i>
         <div class="mensaje-texto" id="mensaje-texto">
             <p id="texto-mensaje">X</p>
         </div>
@@ -202,7 +205,14 @@
                     } else {
                         $cuadros.querySelector("button").remove();
                     }
-                    document.getElementById("miembros").innerHTML += $cuadros.innerHTML;
+                    if(re != resFounder._id){
+                        document.getElementById("miembros").innerHTML += $cuadros.innerHTML;
+                    } else {
+                        const $cuadroMiembros = document.getElementById("miembros");
+                        $cuadroMiembros.innerHTML = $cuadros.innerHTML + "<hr>" + $cuadroMiembros.innerHTML;
+                        $cuadroMiembros.innerHTML = "<h2>Founder</h2>" + $cuadroMiembros.innerHTML;
+                    }
+                    
                 });
             //document.getElementById("miembros").innerHTML += fragmentoMiembros.innerHTML;
             }
@@ -218,7 +228,7 @@
                 //$zonaMensajes.innerHTML = "";
                 let reqMsg = await fetch("/b/roomMsg/" + salaActual + "/" + chunkSize);
                 let resMsg = await reqMsg.json();
-                console.log(resMsg);
+                //console.log(resMsg);
                 if(resMsg.length > 0 && recibiendo == "true"){
                     const $fragment = document.createElement("div");
                     const $contenidoBase = document.getElementById("template-mensaje-contenido");
@@ -230,20 +240,26 @@
 
                         $cuadro.querySelector("#imagen-mensaje").src = resMsg[i].urlFoto;
                         $cuadro.querySelector("#usuario-mensaje").innerHTML = resMsg[i].nombre;
+                        let date = new Date(resMsg[i].fecha);
+                        $cuadro.querySelector("#menasje-fecha").innerHTML = date.toUTCString();
                         $cuadro.querySelector("#usuario-mensaje").setAttribute("data-usrid", resMsg[i].idUsuario);
                         $cuadro.querySelector("#texto-mensaje").innerHTML = resMsg[i].mensaje;
-                        $cuadro.querySelector("#borrar-mensaje").addEventListener("click", async (e) => {
-                            await fetch("/b/saydel/" + salaActual + "/" + el.orden, {
-                                method: "POST",
-                                headers: {
-                                    "Content-type": "application/json; charset=utf-8"
-                                },
-                                body: JSON.stringify({})
-                            });
-                            console.log("borrar " + el.orden);
-                            e.remove();
-                        });
-                        //hacer que se pueda editar y borrar el mensaje
+                        if(resMsg[i].idUsuario == resFounder._id){
+                            $cuadro.querySelector("#usuario-mensaje").classList.add("del-fundador");
+                        }
+                        if(usuarioActual == resFounder._id || usuarioActual == resMsg[i].idUsuario){
+                            $cuadro.querySelector("#borrar-mensaje").setAttribute("data-btndel", el.orden);
+                            $cuadro.querySelector("#caja-edicion-mensaje").setAttribute("data-editbox", el.orden);
+                            $cuadro.querySelector("#texto-editar").setAttribute("data-btnedit-txt", el.orden);
+                            $cuadro.querySelector("#editar-mensaje").setAttribute("data-btnedit", el.orden);
+                            $cuadro.querySelector("#aviso-borrar").setAttribute("data-aviso-del", el.orden);
+                            $cuadro.querySelector("#aviso-editar").setAttribute("data-aviso-ed", el.orden);
+                        } else {
+                            $cuadro.querySelector("#caja-edicion-mensaje").remove();
+                            $cuadro.querySelector("#borrar-mensaje").remove();
+                            $cuadro.querySelector("#editar-mensaje").remove();
+                        }
+                        
 
 
 
@@ -262,7 +278,7 @@
 
             }
             tenerMensajes();
-            let recargarChat = setInterval(tenerMensajes, reloadTime);
+            
 
 
             let reqYo = await fetch("/b/userProfile/" + usuarioActual);
@@ -271,6 +287,7 @@
             const miFoto = resYo.urlFoto;
             const $cajaTexto = document.getElementById("escribir-mensaje");
             const mandarTexto = async (elTexto) => {//enviar un mensaje
+                console.log("premandar");
                 const bodyy = {
                     urlFoto: miFoto,
                     idUsuario: usuarioActual,
@@ -284,6 +301,7 @@
                     },
                     body: JSON.stringify(bodyy)
                 });
+                console.log("mandar");
                 tenerMensajes();
             }
             const mandarArchivo = async () => {//enviar un archivo
@@ -322,7 +340,7 @@
                 mandarArchivo();
             });
 
-            let botonesHechar = setTimeout(() => {
+            let botonesHechar = setTimeout(() => {//agregar funcion a los botones de hechar usuario
                 if(res.idFundador == usuarioActual && res.publica != "true"){
                     document.querySelector('[data-usrkick="' + usuarioActual + '"]').remove();
                     let botones = document.querySelectorAll("[data-usrkick]");
@@ -365,15 +383,82 @@
                 e.preventDefault();
             });
 
-            let cont = setInterval(() => {
-                document.querySelectorAll('[data-usrid]').forEach((el) => {
-                    el.addEventListener("click", function(e) {
-                        e.preventDefault();
-                        const elId = this.getAttribute("data-usrid");
-                        miniperfil(e, elId);
+            let cont = setInterval(() => {//eventos para botones dinamicos
+                if(recibiendo == "true"){
+                    document.querySelectorAll('[data-usrid]').forEach((el) => {//agregar el miniperfil a los usuarios
+                        let elClone = el.cloneNode(true);
+                        el.parentNode.replaceChild(elClone, el);
+                    });
+                    document.querySelectorAll('[data-usrid]').forEach((el) => {
+                        el.addEventListener("click", function(e){
+                            e.preventDefault();
+                            const elId = this.getAttribute("data-usrid");
+                            miniperfil(e, elId);
+                            console.log("mini");
+                        });
                     })
-                });
+    
+    
+                    document.querySelectorAll('[data-btndel]').forEach((el) => {//agregar funcion a los botones de borrar
+                        let elClone = el.cloneNode(true);
+                        el.parentNode.replaceChild(elClone, el);
+                    });
+                    document.querySelectorAll('[data-btndel]').forEach((el) => {
+                        el.addEventListener("click", async function(e) {
+                            document.querySelector('[data-aviso-del="' + el.getAttribute("data-btndel") + '"]').classList.remove("hidden");
+                            await fetch("/b/saydel/" + salaActual + "/" + el.getAttribute("data-btndel"), {//borrar mensaje
+                                method: "POST",
+                                headers: {
+                                    "Content-type": "application/json; charset=utf-8"
+                                },
+                                body: JSON.stringify({})
+                            });
+                            el.remove();
+                            tenerMensajes();
+                            location.reload();
+                        });
+                    });
+    
+    
+                    document.querySelectorAll('[data-btnedit]').forEach((el) => {//agregar funcion al primer boton de editar
+                        let elClone = el.cloneNode(true);
+                        el.parentNode.replaceChild(elClone, el);
+                    });
+                    document.querySelectorAll('[data-btnedit]').forEach((el) => {//editar mensaje
+                        el.addEventListener("click", function(e) {
+                            document.querySelector('[data-editbox="' + el.getAttribute("data-btnedit") + '"]').classList.remove("hidden");
+                            document.querySelector('[data-editbox="' + el.getAttribute("data-btnedit") + '"]').focus();
+                            recibiendo = "false";
+                            el.classList.add("hidden");
+                        });
+                    });
+    
+    
+                    document.querySelectorAll('[data-btnedit-txt]').forEach((el) => {//agregar funcion de enter a los textos de editar
+                        let elClone = el.cloneNode(true);
+                        el.parentNode.replaceChild(elClone, el);
+                    });
+                    document.querySelectorAll('[data-btnedit-txt]').forEach((el) => {
+                        el.addEventListener("keydown", async (e) => {
+                            if(e.code == "Enter"){
+                                document.querySelector('[data-aviso-ed="' + el.getAttribute("data-btnedit-txt") + '"]').classList.remove("hidden");
+                                recibiendo = "true";
+                                //location.reload();
+                                await fetch("/b/say/" + salaActual + "/" + el.getAttribute("data-btnedit-txt"), {
+                                    method: "PUT",
+                                    headers: {
+                                        "Content-type": "application/json; charset=utf-8"
+                                    },
+                                    body: JSON.stringify({nuevoTexto: el.value})
+                                });
+                                //el.parentElement.querySelector("#texto-mensaje").innerHTML = el.value;
+                            }
+                        });
+                    });
+                }
             }, 1000);
+
+            let recargarChat = setInterval(tenerMensajes, reloadTime);
         });
     } else {
         window.location.href == "/err404";

@@ -785,14 +785,14 @@ app.post("/b/say/:sala", async (req, res) => {//decir algo en una sala, muchos d
 });
 app.post("/b/saydel/:sala/:numero", async (req, res) => {//borrar un mensaje de una sala
     console.log("BORRAR MENSAJE");
-    const {sala, numero} = req.params.sala;
+    const {sala, numero} = req.params;
     if(sala != undefined && numero != undefined){
         Sala.findById(sala)
         .then((data) => {
             let nuevoMensajes = data.mensajes;
             let indiceBorrar = 0;
             for(let i = 0; i < nuevoMensajes.length; i++){
-                if(nuevoMensajes[i].numero == numero){
+                if(nuevoMensajes[i].orden == numero){
                     indiceBorrar = i;
                     break;
                 }
@@ -817,20 +817,19 @@ app.post("/b/saydel/:sala/:numero", async (req, res) => {//borrar un mensaje de 
 });
 app.put("/b/say/:sala/:numero", async (req, res) => {//editar un mensaje de una sala
     console.log("EDITAR MENSAJE");
-    const {sala, numero} = req.params.sala;
+    const {sala, numero} = req.params;
     const {nuevoTexto} = req.body;
     if(sala != undefined && numero != undefined && nuevoTexto != undefined && nuevoTexto != ""){
         Sala.findById(sala)
         .then((data) => {
+            console.log("voy a editar " + numero);
             let nuevoMensajes = data.mensajes;
-            let index = 0;
             for(let i = 0; i < nuevoMensajes.length; i++){
-                if(nuevoMensajes[i].numero == numero){
-                    index = i;
+                if(nuevoMensajes[i].orden == numero){
+                    nuevoMensajes[i].mensaje = nuevoTexto;
                     break;
                 }
             }
-            nuevoMensajes[index].mensaje = nuevoTexto;
             Sala.updateOne({_id: sala}, {$set: {mensajes: nuevoMensajes}})
             .then((data2) => {
                 res.status(200);
