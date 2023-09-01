@@ -57,6 +57,11 @@
         <button id="mandar-mensaje"><img src="https://imgur.com/b8vGsmf.png" alt="Send"></button>
         <button id="mandar-archivo"><img src="https://imgur.com/0o9W5Xu.png" alt="Send"></button>
     </div>
+    <div class="centrar hidden" id="aviso-archivo">
+        <h3>If you want to send an image, audio or video just paste a html tag with the url of the file, like from <a href="https://imgur.com/">Imgur</a> or <a href="https://www.youtube.com/">Youtube</a></h3>
+        <h3>If you want to send another type of file we recomend you services like <a href="https://www.mediafire.com/">Mediafire</a> or <a href="https://mega.io/">Mega</a></h3>
+        <p>The free service of Anarchat cannot hold a file database, sorry <div>¯\_(ツ)_/¯</div></p><br>
+    </div>
     <div style="margin: 10px;">
         <p id="error-length" class="txt-rojo hidden">Your message won't be sent if it lengths more than 1024 characters</p>
         <p>If you need to see more messages at once or change the reload time you can go to <a href="/settings">settings</a></p>
@@ -85,9 +90,9 @@
         <div class="mensaje-texto" id="mensaje-texto">
             <p id="texto-mensaje">X</p>
         </div>
-        <div id="descarga-archivo" class="descarga-archivo hidden">
+    <!--<div id="descarga-archivo" class="descarga-archivo hidden">
             <a id="link-descarga" href="#">X</a>
-        </div>
+        </div>-->
         <br>
     </div>
 </div>
@@ -282,8 +287,21 @@
             const miNombre = resYo.nombre;
             const miFoto = resYo.urlFoto;
             const $cajaTexto = document.getElementById("escribir-mensaje");
+            function verUrl(msg) {
+                let url;
+                try{
+                    url = new URL(msg);
+                }catch(err){
+                    return false;
+                }
+                return true;
+            }
+
             const mandarTexto = async (elTexto) => {//enviar un mensaje
                 console.log("premandar");
+                if(verUrl(elTexto)){
+                    elTexto = '<a href="' + elTexto + '" target="_blank">' + elTexto + "<a>";
+                }
                 const bodyy = {
                     urlFoto: miFoto,
                     idUsuario: usuarioActual,
@@ -300,16 +318,13 @@
                 console.log("mandar");
                 tenerMensajes();
             }
-            const mandarArchivo = async () => {//enviar un archivo
-                
+            const mandarArchivo = async () => {//enviar un archivo (NO HAY SERVICIO DE ARCHIVOS)
+                document.getElementById("aviso-archivo").classList.remove("hidden");
+                document.getElementById("mandar-archivo").classList.add("hidden");
 
 
 
-
-
-
-
-                
+  
             }
             $cajaTexto.addEventListener("keydown", (e) => {
                 if($cajaTexto.value.length > 1024){

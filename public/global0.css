@@ -515,6 +515,13 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     color: var(--colorFondo);
     cursor: pointer;
 }
+#aviso-archivo{/*caja con los avisos de que no se pueden mandar archivos*/
+    margin-left: 10px;
+    margin-right: 10px;
+}
+#aviso-archivo>p{/*la letra pequegna de ese aviso*/
+    font-size: 0.8rem;
+}
 #chat{/*caja del chat*/
     background-color: var(--colorFondo);
     width: 70%;
