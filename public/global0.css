@@ -692,3 +692,14 @@ form input[type="checkbox"]{/*todos los checkbox input*/
         position: absolute;
     }
 }
+
+#palanca{
+    border: none;
+}
+#palanca:hover{
+    cursor: pointer;
+}
+.palanca-no{
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}

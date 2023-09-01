@@ -15,11 +15,15 @@
     <br><br>
     <h3>Message chunk size</h3>
     <p>Define how much messages will be loaded at once on the chat (1-32)</p>
-    <input type="number" id="chunk-size" value="16">
+    <input type="number" id="chunk-size" value="16"> 
     <br><br>
     <input type="button" value="Apply" id="boton-settings">
     <br><br>
     <img src="https://imgur.com/esukGVq.png" alt="img">
+    <br><br>
+    <h3>Secret setting</h3>
+    <p>What???</p>
+    <img src="https://imgur.com/Gw7Prdx.png" id="palanca" class="" alt="It doesn't work">
 </div>
 
 <script>
@@ -56,7 +60,23 @@
                     location.href = "/account";
                 }
             });
-        })
+
+            const $palanca = document.getElementById("palanca");
+            if(localStorage.getItem("palanca") != "true"){
+                $palanca.classList.add("palanca-no");
+            } else {
+                $palanca.classList.remove("palanca-no");
+            }
+            $palanca.addEventListener("click", (e) => {
+                if($palanca.classList.contains("palanca-no")){
+                    $palanca.classList.remove("palanca-no");
+                    localStorage.setItem("palanca", "true");
+                } else {
+                    $palanca.classList.add("palanca-no");
+                    localStorage.setItem("palanca", "false");
+                }
+            });
+        });
     } else {
         location.href = "/err404";
     }

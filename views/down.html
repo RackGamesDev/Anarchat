@@ -28,6 +28,9 @@
     if(localStorage.getItem("chunk-size") === NaN || localStorage.getItem("chunk-size") < 1 || localStorage.getItem("chunk-size") > 32){
         localStorage.setItem("chunk-size", 16);
     }
+    if(localStorage.getItem("palanca") == undefined){
+        localStorage.setItem("palanca", "false");
+    }
 </script>
 </body>
 </html>
