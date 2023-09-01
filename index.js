@@ -727,6 +727,7 @@ app.get("/b/roomMsg/:sala/:limit", async (req, res) => {//conseguir x numero de 
     if(sala != undefined && limit != undefined){
         Sala.findById(sala)
         .then((data) => {
+            let limite = data.mensajes.length - limit;//que funcione
             if(data.mensajes.length > 0){
                 let dataFinal = [];
                 let ii = 0;
@@ -743,6 +744,22 @@ app.get("/b/roomMsg/:sala/:limit", async (req, res) => {//conseguir x numero de 
             } else {
                 res.json([]);
             }
+        })
+        .catch((err) => {
+            console.log(err);
+            res.redirect("/err404");//la sala no existe
+        });
+    } else {
+        res.redirect("/err404");
+    }
+});
+app.get("/b/roomMsgAll/:sala", async (req, res) => {//devuelve todos los mensajes de una sala, va lento
+    console.log("CONSEGUIR TODOS LOS MENSAJES");
+    const {sala} = req.params;
+    if(sala != undefined){
+        Sala.findById(sala)
+        .then((data) => {
+            res.json(data.mensajes.reverse());
         })
         .catch((err) => {
             console.log(err);

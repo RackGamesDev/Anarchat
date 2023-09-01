@@ -520,6 +520,11 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     width: 70%;
     height: 100%;
 }
+.chat-grande{/*correccion al chat para cuando se vean todos los mensajes a la vez*/
+    display: block !important;
+    height: 100% !important;
+    
+}
 #miembros{/*caja de miembros*/
     border: 1px solid var(--colorBorde);
     background-color: var(--colorFondo2);

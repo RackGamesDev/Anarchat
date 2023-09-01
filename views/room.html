@@ -231,7 +231,9 @@
             const reloadTime = localStorage.getItem("reload-time");
             const $zonaMensajes = document.getElementById("chat");
             const tenerMensajes = async () => {//ver mensajes
-                //$zonaMensajes.innerHTML = "";
+                if($zonaMensajes.childElementCount > chunkSize + 2){
+                    $zonaMensajes.innerHTML = "";
+                }
                 let reqMsg = await fetch("/b/roomMsg/" + salaActual + "/" + chunkSize);
                 let resMsg = await reqMsg.json();
                 //console.log(resMsg);

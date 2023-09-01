@@ -1,13 +1,34 @@
-<h1 class="centrar">Here you can see al the messages ever in the room, this page may be slower</h1>
-<p id="mostrar-nombre">Reading room: </p>
+<div class="centrar">
+    <h2>You are seeing every message of the room <i id="nombre-sala">X</i></h2>
+    <p>As the page has to load every message, this may be slow and won't update in real time</p>
+    <p><a href="/room">Back to the page</a></p>
+</div>
+<div id="ver-perfil" class="hidden">
+    <div>
+        <br>
+        <a href="" id="miniperfil-foto-enlace" target="_blank"><img src="https://imgur.com/Wega2Bu.png" alt="x" id="miniperfil-foto"></a>
+        <h2 id="miniperfil-nombre">nombre</h2>
+        <div id="miniperfil-descripcion">
+            asfdasdfaswdf
+        </div>
+        <br>
+        <input type="button" value="Close" id="miniperfil-cerrar" class="boton-normal">
+    </div>
+</div>
 
-<div id="cosas-sala">
-    <div id="chat">
+
+
+<div id="cosas-sala" class="chat-grande">
+    <div id="chat" class="chat-grande">
 
         
 
     </div>
 </div>
+<p class="centrar">Here you reached the newest message, congrulations!</p>
+<br>
+
+
 
 <div id="template-mensaje" class="hidden">
     <div class="mensaje" id="template-mensaje-contenido">
@@ -32,15 +53,24 @@
         <br>
     </div>
 </div>
+<template id="template-miembro">
+    <div class="un-miembro">
+        <div class="miembro-persona" id="miembro-persona">
+            <img class="imagen-miembro" id="imagen-miembro" src="" alt="X">
+            <a href="#" id="usuario-miembro" data-usrid="">X</a><button data-usrkick="">Kick</button>
+        </div>
+        
+    </div>
+</template>
+
 
 
 <script>
     document.getElementById("btn-rooms").classList.add("barra-item-activado");
     document.getElementById("logo-arriba").remove();
-    document.querySelector("title").innerHTML = "Anarchat - Room messages";
-    if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != "no"){
-        document.addEventListener("DOMContentLoaded", async () => {//cargar y ver mensajes
 
+    if(localStorage.getItem("user") != undefined && localStorage.getItem("user") != "no" && localStorage.getItem("room") != undefined && localStorage.getItem("room") != "no"){
+        document.addEventListener("DOMContentLoaded", async () => {
             const miniperfil = async (e, id) => {//abrir miniperfil
                 document.getElementById("ver-perfil").classList.remove("hidden");
                 document.getElementById("ver-perfil").classList.add("animacion-abrir-miniperfil");
@@ -60,16 +90,27 @@
                 document.getElementById("ver-perfil").classList.add("animacion-cerrar-miniperfil");
             });
 
+
+
             const salaActual = localStorage.getItem("room");
             const usuarioActual = localStorage.getItem("user");
-
             let req = await fetch("/b/roomData/" + salaActual);
             let res = await req.json();
-            document.getElementById("mostrar-nombre").innerHTML = "Reading room: " + res.nombre;
+            document.getElementById("nombre-sala").innerHTML = res.nombre;
+
+            //$nombreSala.href = "/seeUser/" + res.idFundador;
+            const $zonaMiembros = document.getElementById("miembros");
+            let reqMiembros = await fetch("/b/roomMembers/" + salaActual);
+            let resMiembros = await reqMiembros.json();
             let reqFounder = await fetch("/b/founder/" + salaActual);
             let resFounder = await reqFounder.json();
 
 
+            //poner miembros (se deberia hacer con fragmento):
+            
+
+
+            
             //poner mensajes:
             let recibiendo = "true";
             const chunkSize = localStorage.getItem("chunk-size");
@@ -77,7 +118,7 @@
             const $zonaMensajes = document.getElementById("chat");
             const tenerMensajes = async () => {//ver mensajes
                 //$zonaMensajes.innerHTML = "";
-                let reqMsg = await fetch("/b/roomMsg/" + salaActual + "/" + chunkSize);
+                let reqMsg = await fetch("/b/roomMsgAll/" + salaActual);
                 let resMsg = await reqMsg.json();
                 //console.log(resMsg);
                 if(resMsg.length > 0 && recibiendo == "true"){
@@ -120,84 +161,88 @@
             tenerMensajes();
 
 
-            if(recibiendo == "true"){
-                document.querySelectorAll('[data-usrid]').forEach((el) => {//agregar el miniperfil a los usuarios
-                    let elClone = el.cloneNode(true);
-                    el.parentNode.replaceChild(elClone, el);
+            let reqYo = await fetch("/b/userProfile/" + usuarioActual);
+            let resYo = await reqYo.json();
+            const miNombre = resYo.nombre;
+            const miFoto = resYo.urlFoto;
+
+
+            document.querySelectorAll('[data-usrid]').forEach((el) => {//agregar el miniperfil a los usuarios
+                let elClone = el.cloneNode(true);
+                el.parentNode.replaceChild(elClone, el);
+            });
+            document.querySelectorAll('[data-usrid]').forEach((el) => {
+                el.addEventListener("click", function(e){
+                    e.preventDefault();
+                    const elId = this.getAttribute("data-usrid");
+                    miniperfil(e, elId);
+                    console.log("mini");
                 });
-                document.querySelectorAll('[data-usrid]').forEach((el) => {
-                    el.addEventListener("click", function(e){
-                        e.preventDefault();
-                        const elId = this.getAttribute("data-usrid");
-                        miniperfil(e, elId);
-                        console.log("mini");
+            })
+
+
+            document.querySelectorAll('[data-btndel]').forEach((el) => {//agregar funcion a los botones de borrar
+                let elClone = el.cloneNode(true);
+                el.parentNode.replaceChild(elClone, el);
+            });
+            document.querySelectorAll('[data-btndel]').forEach((el) => {
+                el.addEventListener("click", async function(e) {
+                    document.querySelector('[data-aviso-del="' + el.getAttribute("data-btndel") + '"]').classList.remove("hidden");
+                    await fetch("/b/saydel/" + salaActual + "/" + el.getAttribute("data-btndel"), {//borrar mensaje
+                        method: "POST",
+                        headers: {
+                            "Content-type": "application/json; charset=utf-8"
+                        },
+                        body: JSON.stringify({})
                     });
-                })
-
-
-                document.querySelectorAll('[data-btndel]').forEach((el) => {//agregar funcion a los botones de borrar
-                    let elClone = el.cloneNode(true);
-                    el.parentNode.replaceChild(elClone, el);
+                    el.remove();
+                    tenerMensajes();
+                    location.reload();
                 });
-                document.querySelectorAll('[data-btndel]').forEach((el) => {
-                    el.addEventListener("click", async function(e) {
-                        document.querySelector('[data-aviso-del="' + el.getAttribute("data-btndel") + '"]').classList.remove("hidden");
-                        await fetch("/b/saydel/" + salaActual + "/" + el.getAttribute("data-btndel"), {//borrar mensaje
-                            method: "POST",
+            });
+
+
+            document.querySelectorAll('[data-btnedit]').forEach((el) => {//agregar funcion al primer boton de editar
+                let elClone = el.cloneNode(true);
+                el.parentNode.replaceChild(elClone, el);
+            });
+            document.querySelectorAll('[data-btnedit]').forEach((el) => {//editar mensaje
+                el.addEventListener("click", function(e) {
+                    console.log("editar");
+                    document.querySelector('[data-editbox="' + el.getAttribute("data-btnedit") + '"]').classList.remove("hidden");
+                    document.querySelector('[data-editbox="' + el.getAttribute("data-btnedit") + '"]').focus();
+                    recibiendo = "false";
+                    el.classList.add("hidden");
+                });
+            });
+
+
+            document.querySelectorAll('[data-btnedit-txt]').forEach((el) => {//agregar funcion de enter a los textos de editar
+                let elClone = el.cloneNode(true);
+                el.parentNode.replaceChild(elClone, el);
+            });
+            document.querySelectorAll('[data-btnedit-txt]').forEach((el) => {
+                console.log("encuentra");
+                el.addEventListener("keydown", async (e) => {
+                    if(e.code == "Enter"){
+                        document.querySelector('[data-aviso-ed="' + el.getAttribute("data-btnedit-txt") + '"]').classList.remove("hidden");
+                        recibiendo = "true";
+                        //location.reload();
+                        await fetch("/b/say/" + salaActual + "/" + el.getAttribute("data-btnedit-txt"), {
+                            method: "PUT",
                             headers: {
                                 "Content-type": "application/json; charset=utf-8"
                             },
-                            body: JSON.stringify({})
+                            body: JSON.stringify({nuevoTexto: el.value})
                         });
-                        el.remove();
-                        tenerMensajes();
-                        location.reload();
-                    });
+                        //el.parentElement.querySelector("#texto-mensaje").innerHTML = el.value;
+                    }
                 });
-
-
-                document.querySelectorAll('[data-btnedit]').forEach((el) => {//agregar funcion al primer boton de editar
-                    let elClone = el.cloneNode(true);
-                    el.parentNode.replaceChild(elClone, el);
-                });
-                document.querySelectorAll('[data-btnedit]').forEach((el) => {//editar mensaje
-                    el.addEventListener("click", function(e) {
-                        document.querySelector('[data-editbox="' + el.getAttribute("data-btnedit") + '"]').classList.remove("hidden");
-                        document.querySelector('[data-editbox="' + el.getAttribute("data-btnedit") + '"]').focus();
-                        recibiendo = "false";
-                        el.classList.add("hidden");
-                    });
-                });
-
-
-                document.querySelectorAll('[data-btnedit-txt]').forEach((el) => {//agregar funcion de enter a los textos de editar
-                    let elClone = el.cloneNode(true);
-                    el.parentNode.replaceChild(elClone, el);
-                });
-                document.querySelectorAll('[data-btnedit-txt]').forEach((el) => {
-                    el.addEventListener("keydown", async (e) => {
-                        if(e.code == "Enter"){
-                            document.querySelector('[data-aviso-ed="' + el.getAttribute("data-btnedit-txt") + '"]').classList.remove("hidden");
-                            recibiendo = "true";
-                            //location.reload();
-                            await fetch("/b/say/" + salaActual + "/" + el.getAttribute("data-btnedit-txt"), {
-                                method: "PUT",
-                                headers: {
-                                    "Content-type": "application/json; charset=utf-8"
-                                },
-                                body: JSON.stringify({nuevoTexto: el.value})
-                            });
-                            //el.parentElement.querySelector("#texto-mensaje").innerHTML = el.value;
-                        }
-                    });
-                });
-            }
-
-
-
+            });
+   
         });
-    
     } else {
-        location.href = "/err404";
+        window.location.href == "/err404";
     }
+    
 </script>
