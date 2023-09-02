@@ -104,7 +104,7 @@
             }
             if(resUsr.tienePublica == "true"){
                 $avisoPublica.classList.remove("hidden");
-                $checkPublica.checked == false;
+                //$checkPublica.checked == false;
                 document.getElementById("check-publica").classList.add("hidden");
             } else {
                 if(res.publica == "true"){
@@ -143,6 +143,9 @@
                 } else {
                     if($urlFoto.value == "" || $urlFoto.value == undefined){
                         $urlFoto.value = "https://imgur.com/Wega2Bu.png";
+                    }
+                    if(res.publica == "true"){
+                        $checkPublica.checked = true;
                     }
                     const bodyp = {
                         nombre: $nombre.value,

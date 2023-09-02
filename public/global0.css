@@ -22,6 +22,30 @@
     --colorCargando: rgba(0, 0, 0, 0.2);
     --colorLink: #00a3ee;
 }
+.rooot{
+    --colorBarraNo: #425c6d;/*fondo de los items de la barra cuando no estan seleccionados*/
+    --colorBarraSi: #7ea2b9;/*fondo de los items de la barra cuando si estan seleccionados*/
+    --colorLetraBarraNo: white;/*letra de los items de la barra cuando no estan seleccionados*/
+    --colorLetraBarraSi: black;/*letra de los items de la barra cuando si estan seleccionados*/
+    --colorBarra: #6096ba;/*color de fondo de la barra de navegacion*/
+    --colorBarraSeleccionado: #2fcfcf;/*color de fondo del item seleccionado de la barra*/
+
+    --colorFondoAbajo: #141414;/*el fondo de abajo del todo*/
+    --colorLetraAbajo: white;/*la letra del fondo de abajo del todo*/
+
+    --colorFondo: white;/*color de fondo*/
+    --colorFondo2: #e2efff;/*color de fondo de otras cosas*/
+    --colorLetra1: black;/*color de letra tipo 1*/
+    --colorLetra2: #181818;/*color de letra tipo 2*/
+    --colorLetra3: white;/*color de letra tipo 2*/
+    --colorBorde: black;/*el color de los bordes*/
+
+    --colorBoton: #3e4142;/*color de fondo de los botones*/
+    --colorError: red;/*color para cosas malas*/
+    --colorErrorLigero: #5c0000;/*botones peligrosos*/
+    --colorCargando: rgba(0, 0, 0, 0.2);
+    --colorLink: #00a3ee;
+}
 html, body {
     margin: 0;
     padding: 0;
@@ -629,6 +653,56 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     overflow-y: scroll;
 }
 
+
+.arriba-about>img{/*imagen de about*/
+    border: none !important;
+    width: 40%;
+    height: 40%;
+    margin-bottom: 10px;
+}
+#about{/*caja principal de about*/
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    transform: translateX(5%);
+}
+#about>div{/*ambos divs de about*/
+    border: 1px solid var(--colorBorde);
+}
+#temas-about{/*parte de temas*/
+    width: 20%;
+}
+#info-about{/*parte de informacoin*/
+    width: 80%;
+    overflow: scroll;
+    padding-left: 10px;
+}
+#temas-about>input{/*botones de temas*/
+    width: calc(100% - 5px);
+    margin: 0;
+    height: 50px;
+    border-radius: 0;
+    font-size: 1.8rem;
+    text-align: center;
+    cursor: pointer;
+    background-color: var(--colorBarraNo);
+    border: 1px solid var(--colorBorde);
+    color: var(--colorLetra3);
+    user-select: none;
+    -moz-user-select: none;
+
+    transition-property: color background-color;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+}
+#temas-about>input:hover{/*botones de temas con el raton por encima*/
+    background-color: var(--colorBarraSi);
+    color: var(--colorLetra3);
+}
+.about-seleccionado{/*solo para la seccion seleccionada*/
+    text-decoration: underline;
+    font-weight: 500;
+}
 
 
 

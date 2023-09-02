@@ -1,7 +1,100 @@
-<img src="https://imgur.com/LksEQiF.png" alt="x">
+<div class="centrar arriba-about">
+    <br>
+    <img src="https://imgur.com/LksEQiF.png" alt="x"><br>
+</div>
+<div id="about"><br>
+    <div id="temas-about">
+        <input type="text" data-seccion="0" value="General" id="about-tema0" class="about-seleccionado"><br>
+        <input type="text" data-seccion="1" value="Rules" id="about-tema1" class=""><br>
+        <input type="text" data-seccion="2" value="Security" id="about-tema2" class=""><br>
+        <input type="text" data-seccion="3" value="Issues" id="about-tema3" class=""><br>
+        <input type="text" data-seccion="4" value="Credits" id="about-tema4" class=""><br>
+        <input type="text" data-seccion="5" value="Mentions" id="about-tema4" class=""><br>
+        <input type="text" data-seccion="6" value="Contact" id="about-tema4" class=""><br>
+    </div>
+    <div id="info-about">
+
+    </div>
+</div>
+<div class="hidden" data-info="0" id="about-info0">
+    <h2>Anarchat info</h2>
+    <p>Anarchat is a free chatting service, free means no needed money and no rules</p>
+    <p>It is developed by Yester/RackGames and is ready to use to all the public, wherever an whenever</p>
+    <p>Click on the other buttons to read more...</p>
+</div>
+<div class="hidden" data-info="1" id="about-info1">
+    <h2>Anarchat rules</h2>
+    <h3>Users:</h3>
+    <p>To create an user you choose a passwoard and a name and you can log in later writting both name and password.</p>
+    <p>The name length must be between 8 and 32 characters just like the password, wich must be different of the name.</p>
+    <p>Each person can create as much accounts as they want.</p>
+    <p>Each account has a profile image definied by an image url, name, password and a description with a max length of 128 characters. The only parameter private to the user is the password.</p>
+    <h3>Rooms:</h3>
+    <p>There are two types of room, private and public</p>
+    <p>Private rooms have a list of members including the founder. Only they can read and write messages.</p>
+    <p>On public rooms any user on the world can read and write messages, so, theese rooms doesn't have a member list. Each user can create only one pulbic room.</p>
+    <p>on both types of rooms each user can edit and delete their messages while the founder can delete and edit any.</p>
+    <h3>Invitations:</h3>
+    <p>For private rooms the founder can create invitation links and codes, if the founder activates the Public Code option, the users can also create invitation links and codes.</p>
+    <img src="https://imgur.com/NOyYCLo.png" alt="img">
+</div>
+<div class="hidden" data-info="2" id="about-info2">
+    <h2>Anarchat security</h2>
+    <p>As the name claims, Anarchat is as free as possible. If you don't want your account or rooms to be scammed just be cautionous about your password and invitations.</p>
+    <p>Remember to deal with the consequences...</p>
+    <img src="https://imgur.com/fjGqkru.png" alt="img">
+</div>
+<div class="hidden" data-info="3" id="about-info3">
+    <h3>Anarchat issues</h3>
+    <p>As Anarchat is only using free services (ej: database, host, etc...), the entire service may be slow.</p>
+    <p>If an action doesn't execute inmediately (ej: deleting, creating, loading, etc...) just be patient, or refresh the page.</p>
+    <p>We apologise the slowness...</p>
+    <img src="https://imgur.com/wF7937y.png" alt="img">
+</div>
+<div class="hidden" data-info="4" id="about-info4">
+    <h3>Creator</h3>
+    <p>Anarchat is created by Yester/RackGames almost entirely, <b>for more information visit the Rack Games </b><a href="https://rack-games.itch.io/">itch.io</a> <b>and</b> <a href="https://gamejolt.com/@Rack-Games">gamejolt</a> <b>sites.</b></p>
+    <h3>Services supporting Anarchat</h3>
+    <p>Anarchat wouldn't be possible without theese services:</p>
+    <img src="https://imgur.com/yLjhYCv.png" alt="img">
+</div>
+<div class="hidden" data-info="5" id="about-info5">
+    <h2>Mentions</h2>
+    <p>As the previous section said, Anarchat wouldn't be possible without theese services:</p>
+    <img src="https://imgur.com/yLjhYCv.png" alt="img">
+</div>
+<div class="hidden" data-info="6" id="about-info6">
+    <h2>Contact</h2>
+    <p>If you have any issue, sugestion or wathever, remember, <b class="txt-rojo texto-gigante">DON'T CONTACT ANYONE, ANARCHAT MUST BE UNSUPERVISED</b></p>
+</div>
+
+
+
+<div class="centrar">
+    <br><br><br>
+    <img src="https://imgur.com/meq8cMo.png" alt="img">
+</div>
+
+<a href="/s">secret site...</a>
 
 <script>
     document.getElementById("btn-about").classList.add("barra-item-activado");
     document.getElementById("logo-arriba").remove();
     document.querySelector("title").innerHTML = "Anarchat - About";
+    document.addEventListener("DOMContentLoaded", () => {
+        const $botones = document.querySelectorAll("[data-seccion]");
+        const $infos = document.querySelectorAll("[data-info]");
+        const $ponerInfo = document.getElementById("info-about");
+        $ponerInfo.innerHTML = $infos[0].innerHTML;
+
+        $botones.forEach((el) => {
+            el.addEventListener("click", (e) => {
+                $botones.forEach((el2) => {
+                    el2.classList.remove("about-seleccionado");
+                });
+                el.classList.add("about-seleccionado");
+                $ponerInfo.innerHTML = $infos[el.getAttribute("data-seccion")].innerHTML;
+            });
+        });
+    });
 </script>

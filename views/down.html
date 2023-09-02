@@ -1,20 +1,53 @@
     </main>
 <footer id="footer">
-    <p>Anarchat is a Yester/RackGames product and can be used in any way, for more information visit the <a href="https://anarchat.vercel.app/about">about section</a></p>
+    <p id="info-footer">Anarchat is a Yester/RackGames product and can be used in any way, for more information visit the <a href="/about">about section</a></p>
 </footer>
 
 <script>
     //tema oscuro o claro
+    let r = document.querySelector(":root");
     if(localStorage.getItem("dark") == "false" || localStorage.getItem("dark") == undefined){
         console.log("MODO CLARO");
-
-
-
+        r.style.setProperty("--colorBarraNo", "#425c6d");
+        r.style.setProperty("--colorBarraSi", "#7ea2b9");
+        r.style.setProperty("--colorLetraBarraNo", "white");
+        r.style.setProperty("--colorLetraBarraSi", "black");
+        r.style.setProperty("--colorBarra", "#6096ba");
+        r.style.setProperty("--colorBarraSeleccionado", "#2fcfcf");
+        r.style.setProperty("--colorFondoAbajo", "#141414");
+        r.style.setProperty("--colorLetraAbajo", "white");
+        r.style.setProperty("--colorFondo", "white");
+        r.style.setProperty("--colorFondo2", "#e2efff");
+        r.style.setProperty("--colorLetra1", "black");
+        r.style.setProperty("--colorLetra2", "#181818");
+        r.style.setProperty("--colorLetra3", "white");
+        r.style.setProperty("--colorBorde", "black");
+        r.style.setProperty("--colorBoton", "#3e4142");
+        r.style.setProperty("--colorError", "red");
+        r.style.setProperty("--colorErrorLigero", "#5c0000");
+        r.style.setProperty("--colorCargando", "rgba(0, 0, 0, 0.2)");
+        r.style.setProperty("--colorLink", "#00a3ee");
     } else{
-        console.log("MODO OSCURO");
-
-
-
+        console.log("MODO OSCURO");//PONER VARIABLES COMPROBAR CSS
+        r.style.setProperty("--colorBarraNo", "");
+        r.style.setProperty("--colorBarraSi", "");
+        r.style.setProperty("--colorLetraBarraNo", "");
+        r.style.setProperty("--colorLetraBarraSi", "");
+        r.style.setProperty("--colorBarra", "");
+        r.style.setProperty("--colorBarraSeleccionado", "");
+        r.style.setProperty("--colorFondoAbajo", "");
+        r.style.setProperty("--colorLetraAbajo", "");
+        r.style.setProperty("--colorFondo", "");
+        r.style.setProperty("--colorFondo2", "");
+        r.style.setProperty("--colorLetra1", "");
+        r.style.setProperty("--colorLetra2", "");
+        r.style.setProperty("--colorLetra3", "");
+        r.style.setProperty("--colorBorde", "");
+        r.style.setProperty("--colorBoton", "");
+        r.style.setProperty("--colorError", "");
+        r.style.setProperty("--colorErrorLigero", "");
+        r.style.setProperty("--colorCargando", "");
+        r.style.setProperty("--colorLink", "");
     }
     if(window.location.pathname != "/room" && !window.location.pathname.startsWith("/goRoom") && window.location.pathname != "/roomEdit" && window.location.pathname != "/roomDel" && window.location.pathname != "/roomExit" && window.location.pathname != "/roomAll"){
         localStorage.setItem("room", "no");
@@ -30,6 +63,9 @@
     }
     if(localStorage.getItem("palanca") == undefined){
         localStorage.setItem("palanca", "false");
+    }
+    if(window.location.pathname == "/about"){
+        document.getElementById("info-footer").innerHTML = "Anarchat is a Yester/RackGames product and can be used in any way. You are reading the about section";
     }
 </script>
 </body>

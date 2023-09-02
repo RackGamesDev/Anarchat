@@ -58,6 +58,11 @@ const formarPagina = (pagina) => {//devuelve una pagina entera, juntando la cabe
 }
 
 //en esta parte van las paginas
+app.get("/s", (req, res) => {
+    const fileUp = path.join(process.cwd(), 'views', 's.html');
+    const stringified = readFileSync(fileUp, 'utf8');
+    res.send(stringified);
+});
 app.get("/", (req, res) => {//inicio
     res.send(formarPagina('inicio.html'));
 });
@@ -599,7 +604,12 @@ app.put("/b/roomEdit/:room/:user", async (req, res) => {//editar una sala
             Sala.findById(room)
             .then((data2) => {//buscar la sala
                 if(data2.idFundador == user){
-                    Sala.updateOne({_id: room}, {$set: {nombre, descripcion, urlFoto, verID, publica}})//actualizar sala
+                    let terminaPublica = "false";
+                    if(publica == true){
+                        terminaPublica = "true";
+                    }
+                    console.log(terminaPublica);
+                    Sala.updateOne({_id: room}, {$set: {nombre, descripcion, urlFoto, verID, publica: terminaPublica}})//actualizar sala
                     .then((data3) => {
                         //res.status(200);
                         res.redirect("/room");
