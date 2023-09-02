@@ -29,25 +29,30 @@
         r.style.setProperty("--colorLink", "#00a3ee");
     } else{
         console.log("MODO OSCURO");//PONER VARIABLES COMPROBAR CSS
-        r.style.setProperty("--colorBarraNo", "");
-        r.style.setProperty("--colorBarraSi", "");
-        r.style.setProperty("--colorLetraBarraNo", "");
-        r.style.setProperty("--colorLetraBarraSi", "");
-        r.style.setProperty("--colorBarra", "");
-        r.style.setProperty("--colorBarraSeleccionado", "");
-        r.style.setProperty("--colorFondoAbajo", "");
-        r.style.setProperty("--colorLetraAbajo", "");
-        r.style.setProperty("--colorFondo", "");
-        r.style.setProperty("--colorFondo2", "");
-        r.style.setProperty("--colorLetra1", "");
-        r.style.setProperty("--colorLetra2", "");
-        r.style.setProperty("--colorLetra3", "");
-        r.style.setProperty("--colorBorde", "");
-        r.style.setProperty("--colorBoton", "");
-        r.style.setProperty("--colorError", "");
-        r.style.setProperty("--colorErrorLigero", "");
-        r.style.setProperty("--colorCargando", "");
-        r.style.setProperty("--colorLink", "");
+        r.style.setProperty("--colorBarraNo", "#6f98b3");
+        r.style.setProperty("--colorBarraSi", "#36434b");
+        r.style.setProperty("--colorLetraBarraNo", "white");
+        r.style.setProperty("--colorLetraBarraSi", "white");
+        r.style.setProperty("--colorBarra", "#45555f");
+        r.style.setProperty("--colorBarraSeleccionado", "#4deeee");
+        r.style.setProperty("--colorFondoAbajo", "#141414");
+        r.style.setProperty("--colorLetraAbajo", "white");
+        r.style.setProperty("--colorFondo", "#1b1b1b");
+        r.style.setProperty("--colorFondo2", "#3d3d3d");
+        r.style.setProperty("--colorLetra1", "white");
+        r.style.setProperty("--colorLetra2", "#181818");
+        r.style.setProperty("--colorLetra3", "white");
+        r.style.setProperty("--colorBorde", "rgba(206, 206, 206, 0.74)");
+        r.style.setProperty("--colorBoton", "#3e4142");
+        r.style.setProperty("--colorError", "#6d0000");
+        r.style.setProperty("--colorErrorLigero", "#5c0000");
+        r.style.setProperty("--colorCargando", "rgba(0, 0, 0, 0.6)");
+        r.style.setProperty("--colorLink", "#60cdff");
+        //try{
+        //    document.getElementById("logo-principal").remove();
+        //} catch(err) {
+        //    console.log(err);
+        //}
     }
     if(window.location.pathname != "/room" && !window.location.pathname.startsWith("/goRoom") && window.location.pathname != "/roomEdit" && window.location.pathname != "/roomDel" && window.location.pathname != "/roomExit" && window.location.pathname != "/roomAll"){
         localStorage.setItem("room", "no");

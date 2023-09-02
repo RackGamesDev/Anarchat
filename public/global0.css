@@ -1,28 +1,29 @@
+/* .rooot{
+    --colorBarraNo: #6f98b3;
+    --colorBarraSi: #36434b;
+    --colorLetraBarraNo: white;
+    --colorLetraBarraSi: white;
+    --colorBarra: #45555f;
+    --colorBarraSeleccionado: #4deeee;
+
+    --colorFondoAbajo: #141414;
+    --colorLetraAbajo: white;
+
+    --colorFondo: #1b1b1b;
+    --colorFondo2: #3d3d3d;
+    --colorLetra1: white;
+    --colorLetra2: #181818;
+    --colorLetra3: white;
+    --colorBorde: rgba(206, 206, 206, 0.74);
+
+    --colorBoton: #3e4142;
+    --colorError: #6d0000;
+    --colorErrorLigero: #5c0000;
+    --colorCargando: rgba(0, 0, 0, 0.6);
+    --colorLink: #60cdff;
+} 
+eso para el modo oscuro*/
 :root{
-    --colorBarraNo: #425c6d;/*fondo de los items de la barra cuando no estan seleccionados*/
-    --colorBarraSi: #7ea2b9;/*fondo de los items de la barra cuando si estan seleccionados*/
-    --colorLetraBarraNo: white;/*letra de los items de la barra cuando no estan seleccionados*/
-    --colorLetraBarraSi: black;/*letra de los items de la barra cuando si estan seleccionados*/
-    --colorBarra: #6096ba;/*color de fondo de la barra de navegacion*/
-    --colorBarraSeleccionado: #2fcfcf;/*color de fondo del item seleccionado de la barra*/
-
-    --colorFondoAbajo: #141414;/*el fondo de abajo del todo*/
-    --colorLetraAbajo: white;/*la letra del fondo de abajo del todo*/
-
-    --colorFondo: white;/*color de fondo*/
-    --colorFondo2: #e2efff;/*color de fondo de otras cosas*/
-    --colorLetra1: black;/*color de letra tipo 1*/
-    --colorLetra2: #181818;/*color de letra tipo 2*/
-    --colorLetra3: white;/*color de letra tipo 2*/
-    --colorBorde: black;/*el color de los bordes*/
-
-    --colorBoton: #3e4142;/*color de fondo de los botones*/
-    --colorError: red;/*color para cosas malas*/
-    --colorErrorLigero: #5c0000;/*botones peligrosos*/
-    --colorCargando: rgba(0, 0, 0, 0.2);
-    --colorLink: #00a3ee;
-}
-.rooot{
     --colorBarraNo: #425c6d;/*fondo de los items de la barra cuando no estan seleccionados*/
     --colorBarraSi: #7ea2b9;/*fondo de los items de la barra cuando si estan seleccionados*/
     --colorLetraBarraNo: white;/*letra de los items de la barra cuando no estan seleccionados*/
@@ -53,7 +54,7 @@ html, body {
 }
 main{
     min-height: 100%;
-    
+    color: var(--colorLetra3);
 }
 #fondo{
     background-color: var(--colorFondo);
@@ -73,6 +74,10 @@ main img:not(.noimagen){
 .noimagen{
     border: none;
     background-color: transparent;
+}
+input[type="text"], input[type="password"], input[type="number"]{
+    background-color: var(--colorFondo2);
+    border: 1px solid var(--colorBorde);
 }
 #logo-principal{/*imagen del logo de la pagina principal*/
     height: 100%;
@@ -297,9 +302,14 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     align-items: start;
     justify-content: start;
     text-align: start;
-    background-color: var(--colorFondo);
+    /*background-color: var(--colorFondo);*/
+    color: black;
+    background-color: white;
     border: 2px solid var(--colorBorde);
     overflow: scroll;
+}
+#borrar-descripcion{/*boton para borrar la descripcion del perfil*/
+    color: black;
 }
 #display-foto-perfil, .display-foto-perfil{/*la imagen puesta en el perfil*/
     size: 128px;
@@ -376,6 +386,8 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     text-align: start;
     border: 1px solid var(--colorBorde);
     transform:translateX(32%);
+    color: black;
+    background-color: white;
 }
 #sitio-codigo{/*input para el codigo para unirse a una sala*/
     width: 70%;
@@ -396,6 +408,9 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     animation-timing-function: ease-in-out;
     animation-iteration-count: 1;
     /* animation-direction: alternate; */
+}
+#miniperfil-cerrar{/*boton de cerrar miniperfil*/
+    color: black;
 }
 @keyframes cerrar-miniperfil{/*animacion para el cuadro del perfil cerrar*/
     0%{
@@ -464,8 +479,14 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     max-height: 500px;
     text-align: start;
 }
+#copiar-enlace{/*boton de copiar enlace*/
+    color: black;
+}
 #caja-room-edit input[type="text"]{/*textbox de edicion de la sala*/
     width: 60%;
+}
+#delete-description, #update-imagen, #actualiza-imagen{/*boton de borrar descripcion editar sala y de update image*/
+    color: black;
 }
 #caja-room-edit #mostrar-imagen{/*imagen al editar la sala*/
     margin: 5px;
@@ -587,7 +608,7 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 #mandar-mensaje,#mandar-archivo{/*botones del chat*/
     height: 32px;
     width: 32px;
-    background-color: var(--colorBarraNo);
+    background-color: #2e2e2e;
     border: 1px solid var(--colorBorde);
 }
 #mandar-mensaje>img,#mandar-archivo>img{/*iconos del chat*/
@@ -615,6 +636,9 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+#editar-mensaje, #borrar-mensaje{/*botones para los mensajes*/
+    color: black;
 }
 .imagen-mensaje{/*foto de perfil*/
     border: 1px solid var(--colorBorde);
