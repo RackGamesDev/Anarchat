@@ -605,19 +605,19 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 #inputs-sala{/*caja con los inputs*/
     margin: 10px;
 }
-#mandar-mensaje,#mandar-archivo{/*botones del chat*/
+#mandar-mensaje,#mandar-archivo,#mandar-imagen{/*botones del chat*/
     height: 32px;
     width: 32px;
     background-color: #2e2e2e;
     border: 1px solid var(--colorBorde);
 }
-#mandar-mensaje>img,#mandar-archivo>img{/*iconos del chat*/
+#mandar-mensaje>img,#mandar-archivo>img,#mandar-imagen>img{/*iconos del chat*/
     border: none;
     width: 90%;
     height: 90%;
     padding: 2px;
 }
-#mandar-mensaje>img:hover,#mandar-archivo>img:hover{/*iconos del chat cuando pasas el raton*/
+#mandar-mensaje>img:hover,#mandar-archivo>img:hover,#mandar-imagen>img:hover{/*iconos del chat cuando pasas el raton*/
     cursor: pointer;
 }
 #escribir-mensaje{/*textbox del mensaje*/
@@ -631,6 +631,10 @@ form input[type="checkbox"]{/*todos los checkbox input*/
     width: 100%;
     flex-direction: column;
     margin: 5px;
+}
+#texto-mensaje>*:not(p){/*cualquier cosa en el mensaje*/
+    max-width: 60%;
+    max-height: 300px;
 }
 .mensaje-persona{/*zona con la info de la persona*/
     display: flex;

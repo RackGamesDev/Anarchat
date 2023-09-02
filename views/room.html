@@ -52,10 +52,13 @@
     </div>
 </div>
 <div id="extra-chat">
+    
     <div id="inputs-sala">
+        <p class="hidden" id="aviso-imagen">Paste an image from Imgur or another service typing at the end ".png" or wathever the extension is</p>
         <input type="text" id="escribir-mensaje" placeholder="Send something">
         <button id="mandar-mensaje"><img src="https://imgur.com/b8vGsmf.png" alt="Send"></button>
-        <button id="mandar-archivo"><img src="https://imgur.com/0o9W5Xu.png" alt="Send"></button>
+        <button id="mandar-archivo"><img src="https://imgur.com/0o9W5Xu.png" alt="File"></button>
+        <button id="mandar-imagen"><img src="https://imgur.com/Y9JWrXh.png" alt="Png"></button>
     </div>
     <div class="centrar hidden" id="aviso-archivo">
         <h3>If you want to send an image, audio or video just paste a html tag with the url of the file, like from <a href="https://imgur.com/">Imgur</a> or <a href="https://www.youtube.com/">Youtube</a></h3>
@@ -232,6 +235,7 @@
             
             //poner mensajes:
             let recibiendo = "true";
+            let mandandoImagen = "false";
             const chunkSize = localStorage.getItem("chunk-size");
             const reloadTime = localStorage.getItem("reload-time");
             const $zonaMensajes = document.getElementById("chat");
@@ -299,6 +303,9 @@
 
             const mandarTexto = async (elTexto) => {//enviar un mensaje
                 console.log("premandar");
+                if(mandandoImagen == "true"){
+                    elTexto = '<img src="' + elTexto + '" alt="' + elTexto + '">'
+                }
                 if(verUrl(elTexto)){
                     elTexto = '<a href="' + elTexto + '" target="_blank">' + elTexto + "<a>";
                 }
@@ -308,6 +315,8 @@
                     mensaje: elTexto,
                     nombre: miNombre
                 }
+                document.getElementById("aviso-imagen").classList.remove("hidden");
+                mandandoImagen = "false";
                 await fetch("/b/say/" + localStorage.getItem("room"), {
                     method: "POST",
                     headers: {
@@ -348,7 +357,13 @@
             });
             document.getElementById("mandar-archivo").addEventListener("click", (e) => {
                 e.stopPropagation();
+                document.getElementById("aviso-imagen").classList.add("hidden");
                 mandarArchivo();
+            });
+            document.getElementById("mandar-imagen").addEventListener("click", (e) => {//dar a mandar imagen
+                e.stopPropagation();
+                document.getElementById("aviso-imagen").classList.remove("hidden");
+                mandandoImagen = "true";
             });
 
             let botonesHechar = setTimeout(() => {//agregar funcion a los botones de hechar usuario
