@@ -125,8 +125,8 @@ app.get("/settings", (req, res) => {
 import ruta from './routes/rutas.js'
 app.use("/", ruta);
 import rutaRecursos from './routes/recursos.js';
-import { debug } from 'console';
-import { verify } from 'crypto';
+//import { debug } from 'console';
+//import { verify } from 'crypto';
 app.use("/", rutaRecursos);
 
 
@@ -779,7 +779,7 @@ app.get("/b/roomMsgAll/:sala", async (req, res) => {//devuelve todos los mensaje
         res.redirect("/err404");
     }
 });
-app.post("/b/say/:sala", async (req, res) => {//decir algo en una sala, muchos datos necesitados
+app.post("/b/say/:sala", async (req, res) => {//decir algo en una sala
     console.log("DECIR MENSAJE ");
     const {sala} = req.params;
     const {urlFoto, idUsuario, mensaje, nombre} = req.body;
