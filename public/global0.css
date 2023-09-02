@@ -682,7 +682,7 @@ form input[type="checkbox"]{/*todos los checkbox input*/
 }
 
 
-.arriba-about>img{/*imagen de about*/
+.arriba-about img{/*imagen de about*/
     border: none !important;
     width: 40%;
     height: 40%;
