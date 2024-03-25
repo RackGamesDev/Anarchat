@@ -10,7 +10,8 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 //este script esta hecho para proporcionar media a la pagina
 rutaRecursos.get('/public/global0.css', (req, res) => {
     const file = path.join(process.cwd(), 'public', 'global0.css');
-    const stringified = readFileSync(file, 'utf8');
+    //const stringified = readFileSync(file, 'utf8');
+    const stringified = readFileSync(file);
     res.end(stringified);
 });
 
