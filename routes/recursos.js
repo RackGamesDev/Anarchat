@@ -11,7 +11,7 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 rutaRecursos.get('/public/global0.css', (req, res) => {
     const file = path.join(process.cwd(), 'public', 'global0.css');
     //const stringified = readFileSync(file, 'utf8');
-    const stringified = readFileSync(file);
+    const stringified = readFileSync(file, 'text/css');
     res.end(stringified);
 });
 
