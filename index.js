@@ -1,4 +1,4 @@
-//---------------------------------------------------------importar y crear app:
+//---------------------------------------------------------Importar y crear app:
 
 import dotenv from 'dotenv';
 try{
@@ -22,7 +22,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 
-//---------------------------------------------------------conectar a la base de datos:
+//---------------------------------------------------------Conectar a la base de datos:
 
 import mongoose from 'mongoose';//conexion a mongodb
 const user = process.env.MONGODB_USER || 'usuario';
@@ -44,9 +44,9 @@ import Mensaje from './models/mensaje.js';
 
 
 
-//---------------------------------------------------------ofrecer paginas:
+//---------------------------------------------------------Ofrecer paginas:
 
-const formarPagina = (pagina) => {//devuelve una pagina entera, juntando la cabecera, lo principal y el footer
+const formarPagina = (pagina) => {//Devuelve una pagina entera, juntando la cabecera, lo principal y el footer
     const fileUp = path.join(process.cwd(), 'views', 'up.html');
     const stringifiedUp = readFileSync(fileUp, 'utf8');
     const fileDown = path.join(process.cwd(), 'views', 'down.html');
@@ -57,13 +57,13 @@ const formarPagina = (pagina) => {//devuelve una pagina entera, juntando la cabe
     return final;
 }
 
-//en esta parte van las paginas
+//En esta parte van las paginas
 app.get("/s", (req, res) => {
     const fileUp = path.join(process.cwd(), 'views', 's.html');
     const stringified = readFileSync(fileUp, 'utf8');
     res.send(stringified);
 });
-app.get("/", (req, res) => {//inicio
+app.get("/", (req, res) => {//Inicio
     res.send(formarPagina('inicio.html'));
 });
 app.get("/account", (req, res) => {
@@ -130,10 +130,10 @@ import rutaRecursos from './routes/recursos.js';
 app.use("/", rutaRecursos);
 
 
-//---------------------------------------------------------endpoints para backend:
+//---------------------------------------------------------Endpoints para backend:
 //EN ESTA PARTE VAN LOS ENDPOINTS:
 
-app.get("/b/user/:id", async (req, res) => {//conseguir los datos de un usuario, sin contrasegna
+app.get("/b/user/:id", async (req, res) => {//Conseguir los datos de un usuario, sin contrasegna
     console.log("GET USUARIO DATOS");
     //const cual = req.query.id;
     const { id } = req.params;
@@ -151,7 +151,7 @@ app.get("/b/user/:id", async (req, res) => {//conseguir los datos de un usuario,
         res.redirect("/err404");
     }
 });
-app.get("/b/userProfile/:id", async (req, res) => {//conseguir los datos de un usuario para el miniperfil
+app.get("/b/userProfile/:id", async (req, res) => {//Conseguir los datos de un usuario para el miniperfil
     console.log("GET USUARIO DATOS PERFIL");
     const { id } = req.params;
     if(id != undefined){
@@ -168,7 +168,7 @@ app.get("/b/userProfile/:id", async (req, res) => {//conseguir los datos de un u
         res.redirect("/err404");
     }
 });
-app.post("/b/user", async (req, res) => {//crear un usuario
+app.post("/b/user", async (req, res) => {//Crear un usuario
     console.log("CREAR USUARIO");
     req.body.tienePublica = "false";
     const user = Usuario(req.body);
@@ -191,7 +191,7 @@ app.post("/b/user", async (req, res) => {//crear un usuario
     }
     //INICIAR SESION
 });
-app.post("/b/userdel/:id", async (req, res) => {//eliminar un usuario, hace falta la contrasegna
+app.post("/b/userdel/:id", async (req, res) => {//Eliminar un usuario, hace falta la contrasegna
     console.log("ELIMINAR USUARIO");
     const { id } = req.params;
     const { contrasegna } = req.body;
@@ -199,11 +199,11 @@ app.post("/b/userdel/:id", async (req, res) => {//eliminar un usuario, hace falt
         Usuario.findById(id)
         .then((data) => {
             if(data.contrasegna == contrasegna){
-                data.salas.forEach((laSala) => {//borrar todas las salas
+                data.salas.forEach((laSala) => {//Borrar todas las salas
                     Sala.findById(laSala)
                     .then((data2) => {
-                        if(data2.idFundador == id && data2.publica != "true"){//en la sala publica
-                            data2.idMiembros.forEach((elMiembro) => {//sacar a los miembros
+                        if(data2.idFundador == id && data2.publica != "true"){//En la sala publica
+                            data2.idMiembros.forEach((elMiembro) => {//Sacar a los miembros
                                 if(elMiembro != id){
                                     Usuario.findById(elMiembro)
                                     .then((data3) => {
@@ -223,12 +223,12 @@ app.post("/b/userdel/:id", async (req, res) => {//eliminar un usuario, hace falt
                                 }
                                 
                             });
-                            Sala.deleteOne({_id: laSala})//borrar su sala
+                            Sala.deleteOne({_id: laSala})//Borrar su sala
                             .catch((err) => {
                                 console.log(err);
                                 res.redirect("/err404");
                             });
-                        } else if(data2.publica != "true"){//en la sala privada
+                        } else if(data2.publica != "true"){//En la sala privada
                             const nuevoMiembros = data2.idMiembros;
                             let index = data2.idMiembros.indexOf(laSala);
                             nuevoMiembros.splice(index, 1);
@@ -238,7 +238,7 @@ app.post("/b/userdel/:id", async (req, res) => {//eliminar un usuario, hace falt
                                 res.redirect("/err404");
                             });
                         }
-                        if(data2.publica == "true" && data2.idFundador == id){//borrar su sala publica
+                        if(data2.publica == "true" && data2.idFundador == id){//Borrar su sala publica
                             Sala.deleteOne({_id: laSala})
                             .catch((err) => {
                                 console.log(err);
@@ -250,7 +250,7 @@ app.post("/b/userdel/:id", async (req, res) => {//eliminar un usuario, hace falt
                         console.log(err);
                         res.redirect("/err404");
                     });
-                    Usuario.deleteOne({_id: id})//y borrar el usuario
+                    Usuario.deleteOne({_id: id})//Y borrar el usuario
                     .then(() => {
                         res.status(200);
                     })
@@ -273,7 +273,7 @@ app.post("/b/userdel/:id", async (req, res) => {//eliminar un usuario, hace falt
     }
     res.send("ok");
 });
-app.put("/b/user/:id", async (req, res) => {//actualizar cualquier dato que no sea ni el id ni la contrasegna del usuario
+app.put("/b/user/:id", async (req, res) => {//Actualizar cualquier dato que no sea ni el id ni la contrasegna del usuario
     console.log("ACTUALIZAR USUARIO");
     const { id } = req.params;
     const { nombre, descripcion, urlFoto, modoOscuro } = req.body;
@@ -290,7 +290,7 @@ app.put("/b/user/:id", async (req, res) => {//actualizar cualquier dato que no s
         res.redirect("/err404");
     }
 });
-app.post("/b/userlogin", async (req, res) => {//hacer login, comprueba si el usuario existe y en tal caso lo devuelve
+app.post("/b/userlogin", async (req, res) => {//Hacer login, comprueba si el usuario existe y en tal caso lo devuelve
     console.log("LOGIN");
     const { nombre, contrasegna } = req.body;
     if(nombre != undefined && contrasegna != undefined){
@@ -305,7 +305,7 @@ app.post("/b/userlogin", async (req, res) => {//hacer login, comprueba si el usu
         res.redirect("/err404");
     }
 });
-app.get("/b/userp/:id", async (req, res) => {//recibe la contrasegna de un usuario, cuidado
+app.get("/b/userp/:id", async (req, res) => {//Recibe la contrasegna de un usuario, cuidado
     console.log("DAR CONTRASEGNA USUARIO");
     const { id } = req.params;
     if(id != undefined){
@@ -322,7 +322,7 @@ app.get("/b/userp/:id", async (req, res) => {//recibe la contrasegna de un usuar
         res.redirect("/err404");
     }
 });
-app.put("/b/userp/:id", async (req, res) => {//actualizar contrasegna del usuario, necesita haber iniciado sesion
+app.put("/b/userp/:id", async (req, res) => {//Actualizar contrasegna del usuario, necesita haber iniciado sesion
     console.log("ACTUALIZAR CONTRASEGNA USUARIO");
     const { id } = req.params;
     const { nuevaContrasegna, viejaContrasegna } = req.body;
@@ -352,7 +352,7 @@ app.put("/b/userp/:id", async (req, res) => {//actualizar contrasegna del usuari
         res.redirect("/err404");
     }
 });
-app.put("/b/userpb/:id", async (req, res) => {//cambiar si el usuario ya a creado su sala publica o no
+app.put("/b/userpb/:id", async (req, res) => {//Cambiar si el usuario ya a creado su sala publica o no
     console.log("CAMBIAR POSIBILIDAD PUBLICA");
     const { id } = req.params;
     const { deja } = req.body;
@@ -369,7 +369,7 @@ app.put("/b/userpb/:id", async (req, res) => {//cambiar si el usuario ya a cread
         res.redirect("/err404");
     }
 });
-app.get("/b/userpb/:id", async (req, res) => {//saber si el usuario hizo ya su sala o no
+app.get("/b/userpb/:id", async (req, res) => {//Saber si el usuario hizo ya su sala o no
     console.log("RECIBIR USUARIO PUBLICA");
     const { id } = req.params;
     if(id != undefined){
@@ -388,7 +388,7 @@ app.get("/b/userpb/:id", async (req, res) => {//saber si el usuario hizo ya su s
 
 
 
-app.get("/b/roomMembers/:sala", async (req, res) => {//devuelve los miembros de la sala
+app.get("/b/roomMembers/:sala", async (req, res) => {//Devuelve los miembros de la sala
     console.log("CONSEGUIR MIEMBROS SALA");
     const { sala } = req.params;
     if(sala != undefined){
@@ -405,7 +405,7 @@ app.get("/b/roomMembers/:sala", async (req, res) => {//devuelve los miembros de 
         res.redirect("/err404");
     }
 });
-app.get("/b/roomData/:sala", async (req, res)=>{//conseguir informacion de perfilado de una sala
+app.get("/b/roomData/:sala", async (req, res)=>{//Conseguir informacion de perfilado de una sala
     console.log("CONSEGUIR PERFILADO SALA");
     const { sala } = req.params;
     if(sala != undefined){
@@ -431,11 +431,11 @@ app.get("/b/roomData/:sala", async (req, res)=>{//conseguir informacion de perfi
         res.redirect("/err404");
     }
 });
-app.get("/b/rooms/:id", async (req, res) => {//conseguir la informacion basica de todas las salas de un usuario
+app.get("/b/rooms/:id", async (req, res) => {//Conseguir la informacion basica de todas las salas de un usuario
     console.log("CONSEGUIR ID SALAS USUARIO");
     const { id } = req.params;
     if(id != undefined){
-        //conseguir array de salas del usuario
+        //Conseguir array de salas del usuario
         Usuario.findById(id)
         .then((data) => {
             res.json({salas: data.salas});
@@ -448,7 +448,7 @@ app.get("/b/rooms/:id", async (req, res) => {//conseguir la informacion basica d
         res.redirect("/err404");
     }
 });
-app.get("/b/founder/:sala", async (req, res) => {//conseguir el fundador de una sala
+app.get("/b/founder/:sala", async (req, res) => {//Conseguir el fundador de una sala
     console.log("CONSEGUIR FUNDADOR SALA");
     const { sala } = req.params;
     if(sala != undefined){
@@ -472,27 +472,27 @@ app.get("/b/founder/:sala", async (req, res) => {//conseguir el fundador de una 
         res.redirect("/err404");
     }
 });
-app.post("/b/room/:id", async (req, res) => {//crear una sala
+app.post("/b/room/:id", async (req, res) => {//Crear una sala
     console.log("CREAR SALA");
     const { id } = req.params;
     const { nombre, idFundador, publica, urlFoto, descripcion, verID } = req.body;
     if(nombre != undefined && idFundador != undefined && publica != undefined && urlFoto != undefined && descripcion != undefined && id != undefined && verID != undefined){
-        //crear sala
+        //Crear sala
         const sala = Sala(req.body);
         sala.save()
             .then((data1) => {
-                //recibir usuario
+                //Recibir usuario
                 Usuario.findById(id)
                 .then((data2) => {
                     let susSalas = data2.salas;
-                    //recibir id de la nueva sala
+                    //Recibir id de la nueva sala
                     Sala.findById(data1._id)
                     .then((data3) => {
                         susSalas.push(data3._id);
-                        //unir al usuario con la sala
+                        //Unir al usuario con la sala
                         Usuario.updateOne({_id: id}, {$set: {salas: susSalas}})
                         .then((data4) => {
-                            //unir a la sala con el usuario
+                            //Unir a la sala con el usuario
                             Sala.updateOne({_id: data3._id}, {$set: {idMiembros: [id]}})
                             .then((data5)=>{
                                 res.status(200);
@@ -526,28 +526,28 @@ app.post("/b/room/:id", async (req, res) => {//crear una sala
     }
     res.redirect("/rooms");
 });
-app.post("/b/join/:id", async (req, res) => {//unirse a una sala, hace falta el id de sala y el de usuario
+app.post("/b/join/:id", async (req, res) => {//Unirse a una sala, hace falta el id de sala y el de usuario
     console.log("UNIRSE A SALA");
     const { id } = req.params;
     const { sala } = req.body;
     if(id != undefined && sala != undefined){
-        //ver si la sala existe
+        //Ver si la sala existe
         Sala.findById(sala)
         .then((data) => {
             if(data.idMiembros.includes(id) || data.publica == "true"){
-                res.json({stat: 400});//el usuario ya esta dentro o es publica
+                res.json({stat: 400});//El usuario ya esta dentro o es publica
             } else {
                 let miembros = data.idMiembros;
                 miembros.push(id);
                 //unir a la sala
                 Sala.updateOne({_id: sala}, {$set: {idMiembros: miembros}})
                 .then((data2) => {
-                    //recibir salas del usuario
+                    //Recibir salas del usuario
                     Usuario.findById(id)
                     .then((data3) => {
                         let salasn = data3.salas;
                         salasn.push(sala);
-                        //unir sala
+                        //Unir sala
                         Usuario.updateOne({_id: id}, {$set: {salas: salasn}})
                         .then((data4) => {
                             console.log("va");
@@ -571,13 +571,13 @@ app.post("/b/join/:id", async (req, res) => {//unirse a una sala, hace falta el 
         })
         .catch((err) => {
             console.log(err);
-            res.json({stat: 400});//la sala no existe
+            res.json({stat: 400});//La sala no existe
         });
     } else {
         res.redirect("/err404");
     }
 });
-app.get("/roomsPublic/:limit", (req, res) => {//consigue todas las salas publicas de la base de datos
+app.get("/roomsPublic/:limit", (req, res) => {//Consigue todas las salas publicas de la base de datos
     console.log("CONSEGUIR SALAS PUBLICAS TODAS");
     const { limit } = req.params;
     if(limit != NaN){
@@ -588,28 +588,28 @@ app.get("/roomsPublic/:limit", (req, res) => {//consigue todas las salas publica
         })
         .catch((err) => {
             console.log(err);
-            res.json({stat: 400});//la sala no existe
+            res.json({stat: 400});//La sala no existe
         });
     } else {
         res.redirect("/err404");
     }
 });
-app.put("/b/roomEdit/:room/:user", async (req, res) => {//editar una sala
+app.put("/b/roomEdit/:room/:user", async (req, res) => {//Editar una sala
     console.log("EDITAR SALA");
     const { nombre, descripcion, urlFoto, verID, publica } = req.body;
     const { room, user } = req.params;
     if(nombre != undefined && descripcion != undefined && urlFoto != undefined && verID != undefined && publica != undefined && room != undefined && user != undefined){
         Usuario.findById(user)
-        .then((data1) => {//buscar usuario
+        .then((data1) => {//Buscar usuario
             Sala.findById(room)
-            .then((data2) => {//buscar la sala
+            .then((data2) => {//Buscar la sala
                 if(data2.idFundador == user){
                     let terminaPublica = "false";
                     if(publica == true){
                         terminaPublica = "true";
                     }
                     console.log(terminaPublica);
-                    Sala.updateOne({_id: room}, {$set: {nombre, descripcion, urlFoto, verID, publica: terminaPublica}})//actualizar sala
+                    Sala.updateOne({_id: room}, {$set: {nombre, descripcion, urlFoto, verID, publica: terminaPublica}})//Actualizar sala
                     .then((data3) => {
                         //res.status(200);
                         res.redirect("/room");
@@ -619,76 +619,76 @@ app.put("/b/roomEdit/:room/:user", async (req, res) => {//editar una sala
                         res.redirect("/err404");
                     });
                 } else {
-                    res.redirect("/err404");//el usuario no es el fundador
+                    res.redirect("/err404");//El usuario no es el fundador
                 }
             })
             .catch((err) => {
                 console.log(err);
-                res.redirect("/err404");//sala no existe
+                res.redirect("/err404");//Sala no existe
             });
         })
         .catch((err) => {
             console.log(err);
-            res.redirect("/err404");//usuario no existe
+            res.redirect("/err404");//Usuario no existe
         });
     } else {
         res.redirect("/err404");
     }
 });
-app.put("/b/exit", async (req, res) => {//salir de una sala, por haber sido expulsado o salir manualmente, no se puede salir siendo el fundador
+app.put("/b/exit", async (req, res) => {//Salir de una sala, por haber sido expulsado o salir manualmente, no se puede salir siendo el fundador
     console.log("SALIR DE SALA");
     const { usuario, sala } = req.body;
     if(usuario != undefined && sala != undefined){
-        Usuario.findById(usuario)//encontrar al usuario que se va a salir
+        Usuario.findById(usuario)//Encontrar al usuario que se va a salir
         .then((data) => {
             let nuevoSalas = data.salas;
             let index1 = data.salas.indexOf(sala);
             nuevoSalas.splice(index1, 1);
-            Usuario.updateOne({_id: usuario}, {$set: {salas: nuevoSalas}})//quitar la sala del usuario
+            Usuario.updateOne({_id: usuario}, {$set: {salas: nuevoSalas}})//Quitar la sala del usuario
             .then((data2) => {
-                Sala.findById(sala)//encontrar la sala de la que se va a salir
+                Sala.findById(sala)//Encontrar la sala de la que se va a salir
                 .then((data3) => {
                     let nuevoMiembros = data3.idMiembros;
                     let index2 = data3.idMiembros.indexOf(usuario);
                     nuevoMiembros.splice(index2, 1);
-                    Sala.updateOne({_id: sala}, {$set: {idMiembros: nuevoMiembros}})//quitar el usuario de la sala
+                    Sala.updateOne({_id: sala}, {$set: {idMiembros: nuevoMiembros}})//Quitar el usuario de la sala
                     .then((data4) => {
                         res.redirect("/rooms");
                     })
                     .catch((err) => {
                         console.log(err);
-                        res.json({stat: 400});//la sala no existe
+                        res.json({stat: 400});//La sala no existe
                     });
                 })
                 .catch((err) => {
                     console.log(err);
-                    res.json({stat: 400});//la sala no existe
+                    res.json({stat: 400});//La sala no existe
                 });
             })
             .catch((err) => {
                 console.log(err);
-                res.json({stat: 400});//la sala no existe
+                res.json({stat: 400});//La sala no existe
             });
         })
         .catch((err) => {
             console.log(err);
-            res.json({stat: 400});//la sala no existe
+            res.json({stat: 400});//La sala no existe
         });
     } else {
         res.redirect("/err404");
     }
 });
-app.post("/b/roomdel", async (req, res) => {//borrar una sala, se necesita el id de usuario y de sala y que el usuario sea el fundador
+app.post("/b/roomdel", async (req, res) => {//Borrar una sala, se necesita el id de usuario y de sala y que el usuario sea el fundador
     console.log("BORRAR SALA");
     const { sala, usuario } = req.body;
     if(sala != undefined && usuario != undefined){
-        Sala.findById(sala)//conseguir detalles de la sala
+        Sala.findById(sala)//Conseguir detalles de la sala
         .then((data1) => {
             if(data1.idFundador == usuario){
-                data1.idMiembros.forEach((e) => {//salir a cada usuario de la sala
+                data1.idMiembros.forEach((e) => {//Salir a cada usuario de la sala
                     Usuario.findById(e)
                     .then((usr) => {
-                        if(data1.publica){//dejar al usuario hacer mas salas publicas
+                        if(data1.publica){//Dejar al usuario hacer mas salas publicas
                             Usuario.updateOne({_id: usr._id}, {$set: {tienePublica: "false"}})
                             .catch((err) => {
                                 console.log(err);
@@ -709,7 +709,7 @@ app.post("/b/roomdel", async (req, res) => {//borrar una sala, se necesita el id
                         res.redirect("/err404");
                     });
                 });
-                Sala.deleteOne({_id: sala})//borrar ya la sala
+                Sala.deleteOne({_id: sala})//Borrar ya la sala
                 .then((data2) => {
                     res.status(200);
                 })
@@ -718,12 +718,12 @@ app.post("/b/roomdel", async (req, res) => {//borrar una sala, se necesita el id
                     res.redirect("/err404");
                 });
             } else {
-                res.redirect("/err404");//el usuari no es fundador
+                res.redirect("/err404");//El usuari no es fundador
             }
         })
         .catch((err) => {
             console.log(err);
-            res.redirect("/err404");//la sala no existe o el usuario no es fundador
+            res.redirect("/err404");//La sala no existe o el usuario no es fundador
         });
     } else {
         res.redirect("/err404");
@@ -731,13 +731,13 @@ app.post("/b/roomdel", async (req, res) => {//borrar una sala, se necesita el id
 });
 
 
-app.get("/b/roomMsg/:sala/:limit", async (req, res) => {//conseguir x numero de mensajes de una sala
+app.get("/b/roomMsg/:sala/:limit", async (req, res) => {//Conseguir x numero de mensajes de una sala
     //console.log("CONSEGUIR MENSAJES (endpoint repetitivo)");
     const { sala, limit } = req.params;
     if(sala != undefined && limit != undefined){
         Sala.findById(sala)
         .then((data) => {
-            let limite = data.mensajes.length - limit;//que funcione
+            let limite = data.mensajes.length - limit;//Que funcione
             if(data.mensajes.length > 0){
                 let dataFinal = [];
                 let ii = 0;
@@ -757,13 +757,13 @@ app.get("/b/roomMsg/:sala/:limit", async (req, res) => {//conseguir x numero de 
         })
         .catch((err) => {
             console.log(err);
-            res.redirect("/err404");//la sala no existe
+            res.redirect("/err404");//La sala no existe
         });
     } else {
         res.redirect("/err404");
     }
 });
-app.get("/b/roomMsgAll/:sala", async (req, res) => {//devuelve todos los mensajes de una sala, va lento
+app.get("/b/roomMsgAll/:sala", async (req, res) => {//Devuelve todos los mensajes de una sala, va lento
     console.log("CONSEGUIR TODOS LOS MENSAJES");
     const {sala} = req.params;
     if(sala != undefined){
@@ -773,13 +773,13 @@ app.get("/b/roomMsgAll/:sala", async (req, res) => {//devuelve todos los mensaje
         })
         .catch((err) => {
             console.log(err);
-            res.redirect("/err404");//la sala no existe
+            res.redirect("/err404");//La sala no existe
         });
     } else {
         res.redirect("/err404");
     }
 });
-app.post("/b/say/:sala", async (req, res) => {//decir algo en una sala
+app.post("/b/say/:sala", async (req, res) => {//Decir algo en una sala
     console.log("DECIR MENSAJE ");
     const {sala} = req.params;
     const {urlFoto, idUsuario, mensaje, nombre} = req.body;
@@ -807,13 +807,13 @@ app.post("/b/say/:sala", async (req, res) => {//decir algo en una sala
         })
         .catch((err) => {
             console.log(err);
-            res.redirect("/err404");//la sala no existe o el usuario no es fundador
+            res.redirect("/err404");//Sa sala no existe o el usuario no es fundador
         });
     } else {
         res.redirect("/err404");
     }
 });
-app.post("/b/saydel/:sala/:numero", async (req, res) => {//borrar un mensaje de una sala
+app.post("/b/saydel/:sala/:numero", async (req, res) => {//Borrar un mensaje de una sala
     console.log("BORRAR MENSAJE");
     const {sala, numero} = req.params;
     if(sala != undefined && numero != undefined){
@@ -845,7 +845,7 @@ app.post("/b/saydel/:sala/:numero", async (req, res) => {//borrar un mensaje de 
         res.redirect("/err404");
     }
 });
-app.put("/b/say/:sala/:numero", async (req, res) => {//editar un mensaje de una sala
+app.put("/b/say/:sala/:numero", async (req, res) => {//Editar un mensaje de una sala
     console.log("EDITAR MENSAJE");
     const {sala, numero} = req.params;
     const {nuevoTexto} = req.body;
@@ -886,7 +886,7 @@ app.put("/b/say/:sala/:numero", async (req, res) => {//editar un mensaje de una 
 
 
 
-//---------------------------------------------------------lanzar servidor:
+//---------------------------------------------------------Lanzar servidor:
 app.get("/b", (req, res) => {
     console.log("no");
     res.send(formarPagina('err404.html'));
