@@ -1,4 +1,4 @@
-###llegar a los htmls:
+###Llegar a los htmls:
 GET / HTTP/1.1
 ###
 GET /s HTTP/1.1
@@ -42,13 +42,13 @@ GET /settings HTTP/1.1
 
 
 
-###recibir datos basicos de usuario sin contrasegna
+###Recibir datos basicos de usuario sin contrasegna
 GET /b/user/:id HTTP/1.1
 
-###recibir datos basicos de usuario para el miniperfil
+###Recibir datos basicos de usuario para el miniperfil
 GET /b/userProfile/:id
 
-###crear usuario
+###Crear usuario
 POST /b/user HTTP/1.1
 Content-Type: application/json
 
@@ -61,7 +61,7 @@ Content-Type: application/json
     "salas":[""]
 }
 
-###borrar usuario y todo lo que ello implica
+###Borrar usuario y todo lo que ello implica
 POST /b/userDel/:id HTTP/1.1
 Content-Type: application/json
 
@@ -69,7 +69,7 @@ Content-Type: application/json
     "contrasegna":"X"
 }
 
-###editar usuario
+###Editar usuario
 PUT /b/user/:id HTTP/1.1
 Content-Type: application/json
 
@@ -80,7 +80,7 @@ Content-Type: application/json
     "modoOscuro":"X"
 }
 
-###hacer login
+###Hacer login
 POST /b/userLogin HTTP/1.1
 Content-Type: application/json
 
@@ -89,10 +89,10 @@ Content-Type: application/json
     "contrasegna":"X"
 }
 
-###recibir contrasegna
+###Recibir contrasegna
 GET /b/userp/:id HTTP/1.1
 
-###editar contrasegna
+###Editar contrasegna
 PUT /b/userp/:id HTTP/1.1
 Content-Type: application/json
 
@@ -101,7 +101,7 @@ Content-Type: application/json
     "viejaContrasegna": "X2"
 }
 
-###cambiar si el usuario ha creado su sala privada
+###Cambiar si el usuario ha creado su sala privada
 PUT /b/userpb/:id HTTP/1.1
 Content-Type: application/json
 
@@ -109,22 +109,22 @@ Content-Type: application/json
     "deja":"X"
 }
 
-###saber si el usuario ya hizo su sala publica
+###Saber si el usuario ya hizo su sala publica
 GET /b/userpb/:id HTTP/1.1
 
-###devuelve los miembros de la sala
+###Devuelve los miembros de la sala
 GET /b/roomMembers/:sala HTTP/1.1
 
-###informacion de perfilado de sala
+###Informacion de perfilado de sala
 GET /b/roomData/:sala HTTP/1.1
 
-###devuelve las salas de un usuario
+###Devuelve las salas de un usuario
 GET /b/rooms/:id HTTP/1.1
 
-###devuelve el fundador de una sala
+###Devuelve el fundador de una sala
 GET /b/founder/:sala HTTP/1.1
 
-###crear sala
+###Crear sala
 POST /b/room/:id HTTP/1.1
 Content-Type: application/json
 
@@ -137,7 +137,7 @@ Content-Type: application/json
     "verID":"X"
 }
 
-###unirse a una sala
+###Unirse a una sala
 POST /b/join/:id HTTP/1.1
 Content-Type: application/json
 
@@ -145,10 +145,10 @@ Content-Type: application/json
     "sala":"X"
 }
 
-###devuelve todas las salas publicas de la base de datos (lento)
+###Devuelve todas las salas publicas de la base de datos (lento)
 GET /roomsPublic/:limit HTTP/1.1
 
-###edidar sala
+###Edidar sala
 PUT /b/roomEdit/:room/:user HTTP/1.1
 Content-Type: application/json
 
@@ -160,7 +160,7 @@ Content-Type: application/json
     "publica":"X"
 }
 
-###salir de sala
+###Salir de sala
 PUT /b/exit HTTP/1.1
 Content-Type: application/json
 
@@ -169,7 +169,7 @@ Content-Type: application/json
     "sala":"X"
 }
 
-###borrar sala y todo lo que ello implica
+###Borrar sala y todo lo que ello implica
 POST /b/roomdel HTTP/1.1
 Content-Type: application/json
 
@@ -178,13 +178,13 @@ Content-Type: application/json
     "usuario":"X"
 }
 
-###conseguir x mensajes de una sala en un orden correcto
+###Conseguir x mensajes de una sala en un orden correcto
 GET /b/roomMsg/:sala/:limit HTTP/1.1
 
-###conseguir todos los mensajes de una sala en un orden correcto (lento)
+###Conseguir todos los mensajes de una sala en un orden correcto (lento)
 GET /b/roomMsgAll/:sala HTTP/1.1
 
-###decir un mensaje en una sala
+###Decir un mensaje en una sala
 POST /b/say/:sala HTTP/1.1
 Content-Type: application/json
 
@@ -195,7 +195,7 @@ Content-Type: application/json
     "urlFoto":"X"
 }
 
-###borrar un mensaje de una sala
+###Borrar un mensaje de una sala
 POST /b/saydel/:sala/:numero HTTP/1.1
 Content-Type: application/json
 
@@ -203,7 +203,7 @@ Content-Type: application/json
     
 }
 
-###editar un mensaje de una sala
+###Editar un mensaje de una sala
 PUT /b/say/:sala/:numero HTTP/1.1
 Content-Type: application/json
 
